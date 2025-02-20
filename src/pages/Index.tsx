@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -7,6 +6,7 @@ import { Leaf, Moon, Heart, Timer, LogOut } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { DailyChallenges } from "@/components/DailyChallenges";
 
 const Index = () => {
   const [mounted, setMounted] = useState(false);
@@ -113,12 +113,7 @@ const Index = () => {
           <h2 className="text-3xl md:text-4xl font-light mb-16 text-gray-900">
             Today's Invitation to Slowness
           </h2>
-          <Card className="p-8 bg-sand-50 border-sand-100 shadow-sm">
-            <p className="text-xl text-gray-700 leading-relaxed">
-              "Take a moment to pause. Close your eyes, take three deep breaths, and notice the
-              stillness that surrounds you."
-            </p>
-          </Card>
+          <DailyChallenges />
         </div>
       </section>
 
