@@ -7,6 +7,7 @@ import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { DailyChallenges } from "@/components/DailyChallenges";
+import { SabbathPlanner } from "@/components/SabbathPlanner";
 
 const Index = () => {
   const [mounted, setMounted] = useState(false);
@@ -114,6 +115,21 @@ const Index = () => {
             Today's Invitation to Slowness
           </h2>
           <DailyChallenges />
+        </div>
+      </section>
+
+      {/* Sabbath Planner Section */}
+      <section className="py-24 px-4 bg-sage-50">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-16">
+            <span className="inline-block px-3 py-1 text-sm bg-sage-100 text-sage-700 rounded-full mb-6">
+              Weekly Rest
+            </span>
+            <h2 className="text-3xl md:text-4xl font-light text-gray-900">
+              Your Digital Sabbath
+            </h2>
+          </div>
+          <SabbathPlanner />
         </div>
       </section>
 

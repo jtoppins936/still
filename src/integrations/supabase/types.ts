@@ -129,6 +129,66 @@ export type Database = {
         }
         Relationships: []
       }
+      reflective_activities: {
+        Row: {
+          category: string
+          created_at: string | null
+          description: string
+          duration_minutes: number
+          id: string
+          title: string
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          description: string
+          duration_minutes: number
+          id?: string
+          title: string
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          description?: string
+          duration_minutes?: number
+          id?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      sabbath_preferences: {
+        Row: {
+          created_at: string | null
+          duration_hours: number
+          id: string
+          is_active: boolean
+          start_day: string
+          start_time: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          duration_hours?: number
+          id?: string
+          is_active?: boolean
+          start_day?: string
+          start_time?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          duration_hours?: number
+          id?: string
+          is_active?: boolean
+          start_day?: string
+          start_time?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       saved_auctions: {
         Row: {
           auction_id: string
@@ -187,6 +247,44 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      user_activities: {
+        Row: {
+          activity_id: string
+          completed: boolean | null
+          created_at: string | null
+          id: string
+          scheduled_for: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          activity_id: string
+          completed?: boolean | null
+          created_at?: string | null
+          id?: string
+          scheduled_for?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          activity_id?: string
+          completed?: boolean | null
+          created_at?: string | null
+          id?: string
+          scheduled_for?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_activities_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "reflective_activities"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_challenges: {
         Row: {
