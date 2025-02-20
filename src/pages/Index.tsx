@@ -1,15 +1,38 @@
-
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Leaf, Moon, Heart, Timer } from "lucide-react";
+import { Leaf, Moon, Heart, Timer, LogOut } from "lucide-react";
+import { useAuth } from "@/components/AuthProvider";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 
 const Index = () => {
   const [mounted, setMounted] = useState(false);
+  const { session } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Goodbye",
+        description: "You have been signed out.",
+      });
+      navigate("/auth");
+    }
+  };
 
   const benefits = [
     {
@@ -36,6 +59,28 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
+      {/* Auth button */}
+      <div className="absolute top-4 right-4 z-10">
+        {session ? (
+          <Button
+            onClick={handleLogout}
+            variant="outline"
+            className="bg-white"
+          >
+            <LogOut className="w-4 h-4 mr-2" />
+            Sign Out
+          </Button>
+        ) : (
+          <Button
+            onClick={() => navigate("/auth")}
+            variant="outline"
+            className="bg-white"
+          >
+            Sign In
+          </Button>
+        )}
+      </div>
+
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center px-4">
         <div className="absolute inset-0 bg-sand-50 -z-10" />
@@ -50,9 +95,10 @@ const Index = () => {
             Embrace minimalism, eliminate hurry, and cultivate inner peace through intentional living.
           </p>
           <Button
+            onClick={() => !session && navigate("/auth")}
             className="bg-sage-600 hover:bg-sage-700 text-white px-8 py-6 rounded-full text-lg transition-all duration-300"
           >
-            Begin Your Journey
+            {session ? "Begin Your Journey" : "Sign Up to Begin"}
           </Button>
         </div>
       </section>
@@ -115,9 +161,10 @@ const Index = () => {
             Join us in creating a more intentional and peaceful way of living.
           </p>
           <Button
+            onClick={() => !session && navigate("/auth")}
             className="bg-sage-600 hover:bg-sage-700 text-white px-8 py-6 rounded-full text-lg transition-all duration-300"
           >
-            Get Started Now
+            {session ? "Continue Your Journey" : "Sign Up Now"}
           </Button>
         </div>
       </section>
