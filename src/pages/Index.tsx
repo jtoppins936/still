@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -9,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { DailyChallenges } from "@/components/DailyChallenges";
 import { SabbathPlanner } from "@/components/SabbathPlanner";
+import { DeclutterSection } from "@/components/DeclutterSection";
 
 const Index = () => {
   const [mounted, setMounted] = useState(false);
@@ -116,6 +116,24 @@ const Index = () => {
             Today's Invitation to Slowness
           </h2>
           <DailyChallenges />
+        </div>
+      </section>
+
+      {/* Declutter Section */}
+      <section className="py-24 px-4 bg-white">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-16">
+            <span className="inline-block px-3 py-1 text-sm bg-sage-100 text-sage-700 rounded-full mb-6">
+              Mindful Reduction
+            </span>
+            <h2 className="text-3xl md:text-4xl font-light mb-4 text-gray-900">
+              Daily Declutter Challenge
+            </h2>
+            <p className="text-lg text-gray-600 mb-8">
+              Choose one thing to let go of today, whether it's a physical item or a commitment that no longer serves you.
+            </p>
+          </div>
+          <DeclutterSection />
         </div>
       </section>
 

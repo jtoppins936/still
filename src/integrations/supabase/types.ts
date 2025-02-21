@@ -102,6 +102,39 @@ export type Database = {
         }
         Relationships: []
       }
+      declutter_items: {
+        Row: {
+          category: string
+          completed: boolean | null
+          created_at: string | null
+          id: string
+          item_name: string
+          reflection: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          category: string
+          completed?: boolean | null
+          created_at?: string | null
+          id?: string
+          item_name: string
+          reflection?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          category?: string
+          completed?: boolean | null
+          created_at?: string | null
+          id?: string
+          item_name?: string
+          reflection?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string | null
