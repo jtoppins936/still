@@ -40,7 +40,16 @@ export const DeclutterSection = () => {
       return;
     }
 
-    setItems(data || []);
+    // Transform and validate the data to match DeclutterItem type
+    const transformedData = (data || []).map(item => ({
+      id: item.id,
+      item_name: item.item_name,
+      category: item.category as "HOME" | "LIFE",
+      completed: item.completed || false,
+      reflection: item.reflection
+    }));
+
+    setItems(transformedData);
   };
 
   const addItem = async () => {
