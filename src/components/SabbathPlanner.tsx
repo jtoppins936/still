@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
@@ -8,6 +7,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { ReflectiveActivities } from "./ReflectiveActivities";
+import { BlockingStats } from "./BlockingStats";
+import { BlockingSchedule } from "./BlockingSchedule";
 
 export const SabbathPlanner = () => {
   const [isBlocking, setIsBlocking] = useState(false);
@@ -80,7 +81,7 @@ export const SabbathPlanner = () => {
         </CardHeader>
         <CardContent>
           <p className="text-gray-600 mb-6">
-            Set aside 24 hours weekly for rest and reflection by automatically blocking work-related apps.
+            Set aside time weekly for rest and reflection by automatically blocking work-related apps.
           </p>
           <Button 
             onClick={toggleAppBlocking}
@@ -94,14 +95,11 @@ export const SabbathPlanner = () => {
             <Timer className="w-4 h-4 mr-2" />
             {isBlocking ? "Updating..." : preferences?.is_active ? "Disable App Blocking" : "Enable App Blocking"}
           </Button>
-          <p className="text-sm text-gray-500 mt-4">
-            {preferences?.is_active 
-              ? "Apps will be blocked from Friday 6 PM for 24 hours" 
-              : "No apps are currently being blocked"}
-          </p>
         </CardContent>
       </Card>
       
+      <BlockingSchedule />
+      <BlockingStats />
       <ReflectiveActivities />
     </div>
   );

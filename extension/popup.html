@@ -44,6 +44,11 @@
       color: #4B5563;
       font-size: 0.9em;
     }
+    .schedule {
+      border: 1px solid #E5E7EB;
+      padding: 12px;
+      border-radius: 4px;
+    }
     .premium-notice {
       background-color: #FEF3C7;
       border: 1px solid #FCD34D;
@@ -51,6 +56,23 @@
       border-radius: 4px;
       margin-top: 16px;
       font-size: 0.9em;
+    }
+    .stats-preview {
+      background-color: #F3F4F6;
+      padding: 12px;
+      border-radius: 4px;
+      text-align: center;
+      color: #6B7280;
+    }
+    .upgrade-button {
+      background-color: #F59E0B;
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      margin-top: 8px;
+    }
+    .upgrade-button:hover {
+      background-color: #D97706;
     }
   </style>
 </head>
@@ -66,8 +88,41 @@
       <button id="addSiteButton">Add</button>
     </div>
 
+    <div class="schedule">
+      <h3>Schedule (Premium)</h3>
+      <p>Set custom blocking schedules for different days</p>
+      <select id="scheduleDay" disabled>
+        <option>Monday</option>
+        <option>Tuesday</option>
+        <option>Wednesday</option>
+        <option>Thursday</option>
+        <option>Friday</option>
+        <option>Saturday</option>
+        <option>Sunday</option>
+      </select>
+      <input type="time" id="startTime" disabled>
+      <input type="time" id="endTime" disabled>
+    </div>
+
+    <div class="stats-preview">
+      <h3>Statistics (Premium)</h3>
+      <p>Unlock detailed insights about your digital sabbath journey</p>
+      <ul>
+        <li>View blocking history</li>
+        <li>Track most blocked sites</li>
+        <li>Analyze usage patterns</li>
+      </ul>
+    </div>
+
     <div class="premium-notice">
-      🌟 Upgrade to Premium for detailed statistics and unlimited custom blocks.
+      🌟 Upgrade to Premium for $5/month to unlock:
+      <ul>
+        <li>Unlimited custom blocked sites</li>
+        <li>Detailed statistics and insights</li>
+        <li>Custom scheduling</li>
+        <li>Priority support</li>
+      </ul>
+      <a href="https://example.com/upgrade" class="button upgrade-button">Upgrade to Premium</a>
     </div>
   </div>
   <script src="popup.js"></script>

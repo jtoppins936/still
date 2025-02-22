@@ -72,6 +72,96 @@ export type Database = {
         }
         Relationships: []
       }
+      blocked_sites: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          site_domain: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          site_domain: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          site_domain?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      blocking_schedules: {
+        Row: {
+          created_at: string | null
+          days_of_week: string[]
+          end_time: string
+          id: string
+          is_active: boolean | null
+          start_time: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          days_of_week: string[]
+          end_time: string
+          id?: string
+          is_active?: boolean | null
+          start_time: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          days_of_week?: string[]
+          end_time?: string
+          id?: string
+          is_active?: boolean | null
+          start_time?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      blocking_statistics: {
+        Row: {
+          blocked_count: number | null
+          created_at: string | null
+          id: string
+          site_domain: string
+          total_time_blocked: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          blocked_count?: number | null
+          created_at?: string | null
+          id?: string
+          site_domain: string
+          total_time_blocked?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          blocked_count?: number | null
+          created_at?: string | null
+          id?: string
+          site_domain?: string
+          total_time_blocked?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       daily_challenges: {
         Row: {
           category: string
