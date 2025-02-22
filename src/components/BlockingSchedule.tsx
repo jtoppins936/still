@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/components/AuthProvider";
 
 const DAYS_OF_WEEK = [
   "Monday",
@@ -24,6 +25,7 @@ export const BlockingSchedule = () => {
   const [endTime, setEndTime] = useState("17:00");
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { session } = useAuth();
 
   const { data: schedules, isLoading } = useQuery({
     queryKey: ["blocking-schedules"],
@@ -39,12 +41,18 @@ export const BlockingSchedule = () => {
 
   const createSchedule = useMutation({
     mutationFn: async () => {
+      if (!session?.user?.id) {
+        throw new Error("You must be logged in to create a schedule");
+      }
+
       const { error } = await supabase
         .from("blocking_schedules")
         .insert({
+          user_id: session.user.id,
           days_of_week: selectedDays,
           start_time: startTime,
           end_time: endTime,
+          is_active: true
         });
 
       if (error) throw error;
