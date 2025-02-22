@@ -5,7 +5,7 @@
   <title>Still - Digital Sabbath</title>
   <style>
     body {
-      width: 300px;
+      width: 350px;
       padding: 16px;
       font-family: system-ui, -apple-system, sans-serif;
     }
@@ -29,13 +29,46 @@
       margin-top: 8px;
       text-align: center;
     }
+    .add-site {
+      display: flex;
+      gap: 8px;
+    }
+    .add-site input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #D1D5DB;
+      border-radius: 4px;
+    }
+    .countdown {
+      text-align: center;
+      color: #4B5563;
+      font-size: 0.9em;
+    }
+    .premium-notice {
+      background-color: #FEF3C7;
+      border: 1px solid #FCD34D;
+      padding: 12px;
+      border-radius: 4px;
+      margin-top: 16px;
+      font-size: 0.9em;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>Digital Sabbath</h2>
-    <button id="toggleButton">Enable Website Blocking</button>
+    <button id="toggleButton">Enable 24h Website Blocking</button>
     <p class="status" id="status">Blocking is currently disabled</p>
+    <div id="countdown" class="countdown"></div>
+    
+    <div class="add-site">
+      <input type="text" id="newSite" placeholder="Add site to block (e.g. example.com)">
+      <button id="addSiteButton">Add</button>
+    </div>
+
+    <div class="premium-notice">
+      🌟 Upgrade to Premium for detailed statistics and unlimited custom blocks.
+    </div>
   </div>
   <script src="popup.js"></script>
 </body>
