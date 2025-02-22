@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Still - Digital Sabbath</title>
+  <style>
+    body {
+      width: 300px;
+      padding: 16px;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    button {
+      background-color: #4B5563;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #374151;
+    }
+    .status {
+      margin-top: 8px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Digital Sabbath</h2>
+    <button id="toggleButton">Enable Website Blocking</button>
+    <p class="status" id="status">Blocking is currently disabled</p>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
