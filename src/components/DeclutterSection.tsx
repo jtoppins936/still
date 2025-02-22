@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,12 @@ export const DeclutterSection = () => {
   const [newItem, setNewItem] = useState("");
   const [category, setCategory] = useState<"HOME" | "LIFE">("HOME");
   const [items, setItems] = useState<DeclutterItem[]>([]);
+
+  useEffect(() => {
+    if (session) {
+      fetchItems();
+    }
+  }, [session]);
 
   const fetchItems = async () => {
     if (!session) return;
