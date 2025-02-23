@@ -8,15 +8,19 @@ export const DailyChallenges = () => {
   const { data: challenges, isLoading, refetch } = useQuery({
     queryKey: ["daily-challenges"],
     queryFn: async () => {
+      const startOfDay = new Date();
+      startOfDay.setHours(0, 0, 0, 0);
+      
       const { data, error } = await supabase
         .from("daily_challenges")
         .select("*")
         .limit(1)
-        .order("created_at", { ascending: false });
+        .order('created_at', { ascending: false });
 
       if (error) throw error;
       return data;
     },
+    staleTime: 24 * 60 * 60 * 1000, // 24 hours
   });
 
   if (isLoading) {

@@ -64,11 +64,11 @@ export const ChallengeCard = ({ challenge, onComplete }: ChallengeCardProps) => 
   };
 
   return (
-    <Card className="p-6 bg-white border-sand-100 shadow-sm hover:shadow-md transition-shadow duration-300">
+    <Card className="p-6 bg-white shadow-sm hover:shadow-md transition-shadow duration-300">
       <div className="flex flex-col space-y-4">
         <div className="flex items-start justify-between">
           <h3 className="text-xl font-medium text-gray-900">{challenge.title}</h3>
-          <span className="flex items-center text-sage-600 text-sm">
+          <span className="flex items-center text-gray-600 text-sm">
             <Timer className="w-4 h-4 mr-1" />
             {challenge.duration_minutes} min
           </span>
@@ -78,7 +78,7 @@ export const ChallengeCard = ({ challenge, onComplete }: ChallengeCardProps) => 
           <Button 
             onClick={handleComplete}
             disabled={isCompleting}
-            className="w-full bg-sage-600 hover:bg-sage-700 text-white"
+            className="w-full"
           >
             <CheckCircle className="w-4 h-4 mr-2" />
             {isCompleting ? "Completing..." : "Complete Challenge"}
