@@ -27,16 +27,21 @@ export const BlockingSchedule = () => {
   const queryClient = useQueryClient();
   const { session } = useAuth();
 
+  // Update query to only fetch user's schedules
   const { data: schedules, isLoading } = useQuery({
-    queryKey: ["blocking-schedules"],
+    queryKey: ["blocking-schedules", session?.user.id],
     queryFn: async () => {
+      if (!session?.user?.id) return [];
+      
       const { data, error } = await supabase
         .from("blocking_schedules")
-        .select("*");
+        .select("*")
+        .eq("user_id", session.user.id);
 
       if (error) throw error;
       return data;
     },
+    enabled: !!session?.user.id,
   });
 
   const createSchedule = useMutation({
@@ -58,11 +63,14 @@ export const BlockingSchedule = () => {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["blocking-schedules"] });
+      queryClient.invalidateQueries({ queryKey: ["blocking-schedules", session?.user.id] });
       toast({
         title: "Schedule created",
         description: "Your blocking schedule has been saved",
       });
+      setSelectedDays([]);
+      setStartTime("09:00");
+      setEndTime("17:00");
     },
     onError: (error) => {
       toast({
@@ -72,6 +80,19 @@ export const BlockingSchedule = () => {
       });
     },
   });
+
+  if (!session) {
+    return (
+      <Card>
+        <CardHeader>
+          <h3 className="text-lg font-medium">Blocking Schedule</h3>
+        </CardHeader>
+        <CardContent>
+          <p className="text-gray-600">Please sign in to manage your blocking schedules.</p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>
