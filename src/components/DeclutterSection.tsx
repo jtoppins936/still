@@ -129,14 +129,8 @@ export const DeclutterSection = () => {
     <div className="max-w-3xl mx-auto">
       {session ? (
         <>
-          <div className="flex gap-4 mb-8">
-            <Input
-              value={newItem}
-              onChange={(e) => setNewItem(e.target.value)}
-              placeholder="Enter something to declutter..."
-              className="flex-1"
-            />
-            <div className="flex gap-2">
+          <div className="space-y-4">
+            <div className="flex gap-2 justify-center">
               <Button
                 variant={category === "HOME" ? "default" : "outline"}
                 onClick={() => setCategory("HOME")}
@@ -152,10 +146,18 @@ export const DeclutterSection = () => {
                 Life
               </Button>
             </div>
-            <Button onClick={addItem}>Add</Button>
+            <div className="flex gap-2">
+              <Input
+                value={newItem}
+                onChange={(e) => setNewItem(e.target.value)}
+                placeholder="Enter something to declutter..."
+                className="flex-1"
+              />
+              <Button onClick={addItem}>Add</Button>
+            </div>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-4 mt-8">
             {items.map((item) => (
               <Card key={item.id} className="p-4">
                 <div className="flex items-center justify-between">
