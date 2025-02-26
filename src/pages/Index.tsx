@@ -62,17 +62,26 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Auth button */}
-      <div className="absolute top-4 right-4 z-10">
+      {/* Auth button and profile link */}
+      <div className="absolute top-4 right-4 z-10 flex items-center space-x-4">
         {session ? (
-          <Button
-            onClick={handleLogout}
-            variant="outline"
-            className="bg-white"
-          >
-            <LogOut className="w-4 h-4 mr-2" />
-            Sign Out
-          </Button>
+          <>
+            <Button
+              onClick={() => navigate("/profile")}
+              variant="outline"
+              className="bg-white"
+            >
+              Profile
+            </Button>
+            <Button
+              onClick={handleLogout}
+              variant="outline"
+              className="bg-white"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Sign Out
+            </Button>
+          </>
         ) : (
           <Button
             onClick={() => navigate("/auth")}

@@ -8,6 +8,7 @@ import { AuthProvider } from "@/components/AuthProvider";
 import { PaywallProvider } from "@/components/PaywallProvider";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import { JournalEntry } from "./components/JournalEntry";
 
@@ -24,6 +25,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<Auth />} />
+              <Route path="/profile" element={<Profile />} />
               <Route path="/journal/nature-walk" element={<JournalEntry type="NATURE_WALK" title="Nature Walk Journal" />} />
               <Route path="/journal/reading-reflection" element={<JournalEntry type="READING_REFLECTION" title="Reading Reflection" />} />
               <Route path="/journal/gratitude" element={<JournalEntry type="GRATITUDE" title="Gratitude Practice" />} />
