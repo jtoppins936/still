@@ -8,7 +8,6 @@ import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { ReflectiveActivities } from "./ReflectiveActivities";
-import { BlockingStats } from "./BlockingStats";
 import { BlockingSchedule } from "./BlockingSchedule";
 
 export const SabbathPlanner = () => {
@@ -143,7 +142,6 @@ export const SabbathPlanner = () => {
       </Card>
       
       <BlockingSchedule />
-      <BlockingStats />
       <ReflectiveActivities />
     </div>
   );
