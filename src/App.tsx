@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useParams } from "react-router-dom";
 import { AuthProvider } from "@/components/AuthProvider";
 import { PaywallProvider, usePaywall } from "@/components/PaywallProvider";
 import Index from "./pages/Index";
@@ -27,6 +27,51 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   }
 
   return <>{children}</>;
+};
+
+// Wrapper component to handle passing props to JournalEntry based on route params
+const JournalEntryWrapper = () => {
+  const { type } = useParams();
+  
+  // Map route parameters to component props
+  const getJournalProps = (type: string) => {
+    const typeMap: Record<string, { type: string; title: string }> = {
+      "nature-walk": {
+        type: "NATURE_WALK",
+        title: "Nature Walk Journal"
+      },
+      "reading-reflection": {
+        type: "READING_REFLECTION",
+        title: "Reading Reflection"
+      },
+      "gratitude": {
+        type: "GRATITUDE",
+        title: "Gratitude Practice"
+      },
+      "art-expression": {
+        type: "ART_EXPRESSION",
+        title: "Art and Expression"
+      },
+      "tea-ceremony": {
+        type: "TEA_CEREMONY",
+        title: "Tea Ceremony"
+      },
+      "sacred-music": {
+        type: "SACRED_MUSIC",
+        title: "Sacred Music"
+      },
+      "meditation": {
+        type: "MEDITATION",
+        title: "Meditation Session"
+      }
+    };
+
+    return typeMap[type || ""] || { type: "GENERAL", title: "Journal Entry" };
+  };
+
+  const journalProps = getJournalProps(type || "");
+
+  return <JournalEntry {...journalProps} />;
 };
 
 const queryClient = new QueryClient();
@@ -54,7 +99,7 @@ const App = () => (
                 path="/journal/:type" 
                 element={
                   <ProtectedRoute>
-                    <JournalEntry />
+                    <JournalEntryWrapper />
                   </ProtectedRoute>
                 } 
               />
