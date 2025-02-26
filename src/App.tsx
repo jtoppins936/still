@@ -10,7 +10,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
-import { JournalEntry } from "./components/JournalEntry";
+import { JournalEntry, type JournalEntryProps } from "@/components/JournalEntry";
 import { useAuth } from "@/components/AuthProvider";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -31,11 +31,11 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
 // Wrapper component to handle passing props to JournalEntry based on route params
 const JournalEntryWrapper = () => {
-  const { type } = useParams();
+  const { type } = useParams<{ type: string }>();
   
   // Map route parameters to component props
-  const getJournalProps = (type: string) => {
-    const typeMap: Record<string, { type: string; title: string }> = {
+  const getJournalProps = (type: string | undefined): JournalEntryProps => {
+    const typeMap: Record<string, JournalEntryProps> = {
       "nature-walk": {
         type: "NATURE_WALK",
         title: "Nature Walk Journal"
@@ -69,7 +69,7 @@ const JournalEntryWrapper = () => {
     return typeMap[type || ""] || { type: "GENERAL", title: "Journal Entry" };
   };
 
-  const journalProps = getJournalProps(type || "");
+  const journalProps = getJournalProps(type);
 
   return <JournalEntry {...journalProps} />;
 };
