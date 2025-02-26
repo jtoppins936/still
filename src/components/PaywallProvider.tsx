@@ -62,7 +62,7 @@ export function PaywallProvider({ children }: { children: React.ReactNode }) {
           user_id: session?.user?.id,
           status: "active",
           tier: "premium",
-          expires_at: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year from now
+          expires_at: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(), // Convert Date to ISO string
         });
 
       if (error) throw error;
