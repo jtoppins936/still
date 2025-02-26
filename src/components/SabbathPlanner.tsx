@@ -35,7 +35,7 @@ export const SabbathPlanner = () => {
   });
 
   useEffect(() => {
-    let intervalId: number;
+    let intervalId: NodeJS.Timeout | null = null;
 
     if (preferences?.is_active) {
       const updateCountdown = () => {
