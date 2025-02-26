@@ -9,10 +9,14 @@ import { useToast } from "@/components/ui/use-toast";
 import { DailyChallenges } from "@/components/DailyChallenges";
 import { SabbathPlanner } from "@/components/SabbathPlanner";
 import { DeclutterSection } from "@/components/DeclutterSection";
+import { usePaywall } from "@/components/PaywallProvider";
+import { PaywallModal } from "@/components/PaywallModal";
 
 const Index = () => {
   const [mounted, setMounted] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
   const { session } = useAuth();
+  const { isSubscribed } = usePaywall();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -35,6 +39,28 @@ const Index = () => {
       });
       navigate("/auth");
     }
+  };
+
+  const handleBeginJourney = () => {
+    if (!session) {
+      navigate("/auth");
+      return;
+    }
+    
+    if (!isSubscribed) {
+      setShowPaywall(true);
+      return;
+    }
+
+    navigate("/profile");
+  };
+
+  const handleProfileClick = () => {
+    if (!isSubscribed) {
+      setShowPaywall(true);
+      return;
+    }
+    navigate("/profile");
   };
 
   const benefits = [
@@ -67,7 +93,7 @@ const Index = () => {
         {session ? (
           <>
             <Button
-              onClick={() => navigate("/profile")}
+              onClick={handleProfileClick}
               variant="outline"
               className="bg-white"
             >
@@ -107,10 +133,10 @@ const Index = () => {
             Embrace minimalism, eliminate hurry, and cultivate inner peace through intentional living.
           </p>
           <Button
-            onClick={() => !session && navigate("/auth")}
+            onClick={handleBeginJourney}
             className="bg-sage-600 hover:bg-sage-700 text-white px-8 py-6 rounded-full text-lg transition-all duration-300"
           >
-            {session ? "Begin Your Journey" : "Sign Up to Begin"}
+            {session ? "Continue Your Journey" : "Begin Your Journey"}
           </Button>
         </div>
       </section>
@@ -208,6 +234,8 @@ const Index = () => {
           </Button>
         </div>
       </section>
+
+      <PaywallModal isOpen={showPaywall} onClose={() => setShowPaywall(false)} />
     </div>
   );
 };
