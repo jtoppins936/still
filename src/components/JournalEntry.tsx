@@ -7,7 +7,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 
-interface JournalEntryProps {
+export interface JournalEntryProps {
   type: string;
   title: string;
 }
