@@ -22,6 +22,7 @@ interface ChallengeCardProps {
 
 export const ChallengeCard = ({ challenge, onComplete }: ChallengeCardProps) => {
   const [isCompleting, setIsCompleting] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
   const { session } = useAuth();
   const { toast } = useToast();
 
@@ -47,6 +48,7 @@ export const ChallengeCard = ({ challenge, onComplete }: ChallengeCardProps) => 
 
       if (error) throw error;
 
+      setIsCompleted(true);
       toast({
         title: "Challenge completed!",
         description: "Great job taking time to slow down.",
@@ -77,11 +79,15 @@ export const ChallengeCard = ({ challenge, onComplete }: ChallengeCardProps) => 
         <div className="pt-4">
           <Button 
             onClick={handleComplete}
-            disabled={isCompleting}
-            className="w-full"
+            disabled={isCompleting || isCompleted}
+            className={`w-full ${
+              isCompleted 
+                ? "bg-green-500 hover:bg-green-600" 
+                : "bg-[#8E9196] hover:bg-[#8A898C]"
+            }`}
           >
             <CheckCircle className="w-4 h-4 mr-2" />
-            {isCompleting ? "Completing..." : "Complete Challenge"}
+            {isCompleting ? "Completing..." : isCompleted ? "Completed!" : "Complete Challenge"}
           </Button>
         </div>
       </div>

@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,7 @@ import { BlockingSchedule } from "./BlockingSchedule";
 
 export const SabbathPlanner = () => {
   const [isBlocking, setIsBlocking] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState<string | null>(null);
   const { session } = useAuth();
   const { toast } = useToast();
 
@@ -31,6 +33,43 @@ export const SabbathPlanner = () => {
     },
     enabled: !!session?.user,
   });
+
+  useEffect(() => {
+    let intervalId: number;
+
+    if (preferences?.is_active) {
+      const updateCountdown = () => {
+        // Get the end time from the schedule
+        const schedule = localStorage.getItem('sabbath_schedule');
+        if (!schedule) return;
+        
+        const { end_time, end_date } = JSON.parse(schedule);
+        const endDateTime = new Date(end_date + 'T' + end_time);
+        const now = new Date();
+        const diff = endDateTime.getTime() - now.getTime();
+
+        if (diff <= 0) {
+          setTimeRemaining(null);
+          // Automatically disable blocking when time is up
+          toggleAppBlocking();
+          return;
+        }
+
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        setTimeRemaining(`${hours}h ${minutes}m`);
+      };
+
+      updateCountdown();
+      intervalId = setInterval(updateCountdown, 60000); // Update every minute
+    } else {
+      setTimeRemaining(null);
+    }
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [preferences?.is_active]);
 
   const toggleAppBlocking = async () => {
     if (!session) {
@@ -88,13 +127,18 @@ export const SabbathPlanner = () => {
             disabled={isBlocking}
             className={`w-full ${
               preferences?.is_active 
-                ? "bg-red-600 hover:bg-red-700" 
+                ? "bg-[#8E9196] hover:bg-[#8A898C]" 
                 : "bg-sage-600 hover:bg-sage-700"
             } text-white`}
           >
             <Timer className="w-4 h-4 mr-2" />
             {isBlocking ? "Updating..." : preferences?.is_active ? "Disable App Blocking" : "Enable App Blocking"}
           </Button>
+          {timeRemaining && (
+            <div className="mt-4 text-center text-sm text-gray-600">
+              Time remaining: {timeRemaining}
+            </div>
+          )}
         </CardContent>
       </Card>
       
