@@ -53,17 +53,17 @@ export function PaywallProvider({ children }: { children: React.ReactNode }) {
   };
 
   const handleSubscribe = async () => {
-    // Here we would integrate with Stripe to handle the payment
-    // For now, we'll just create a subscription record
+    if (!session?.user?.id) return;
+    
     try {
       const { error } = await supabase
         .from("subscriptions")
-        .insert({
-          user_id: session?.user?.id,
+        .insert([{
+          user_id: session.user.id,
           status: "active",
           tier: "premium",
           expires_at: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(), // Convert Date to ISO string
-        });
+        }]);
 
       if (error) throw error;
       
