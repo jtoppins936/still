@@ -10,7 +10,8 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
-import { JournalEntry, type JournalEntryProps } from "@/components/JournalEntry";
+import { JournalEntry } from "@/components/JournalEntry";
+import type { JournalEntryProps } from "@/components/JournalEntry";
 import { useAuth } from "@/components/AuthProvider";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
