@@ -227,7 +227,7 @@ const Index = () => {
             Join us in creating a more intentional and peaceful way of living.
           </p>
           <Button
-            onClick={() => !session && navigate("/auth")}
+            onClick={handleBeginJourney}
             className="bg-sage-600 hover:bg-sage-700 text-white px-8 py-6 rounded-full text-lg transition-all duration-300"
           >
             {session ? "Continue Your Journey" : "Sign Up Now"}
