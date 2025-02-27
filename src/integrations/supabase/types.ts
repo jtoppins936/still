@@ -252,6 +252,80 @@ export type Database = {
         }
         Relationships: []
       }
+      mindfulness_program: {
+        Row: {
+          category: string
+          created_at: string | null
+          day_number: number
+          duration_minutes: number
+          id: string
+          practice: string
+          reflection_prompt: string
+          scripture: string
+          theme: string
+          updated_at: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          day_number: number
+          duration_minutes: number
+          id?: string
+          practice: string
+          reflection_prompt: string
+          scripture: string
+          theme: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          day_number?: number
+          duration_minutes?: number
+          id?: string
+          practice?: string
+          reflection_prompt?: string
+          scripture?: string
+          theme?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      mindfulness_reflections: {
+        Row: {
+          created_at: string | null
+          id: string
+          program_day_id: string
+          reflection_content: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          program_day_id: string
+          reflection_content: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          program_day_id?: string
+          reflection_content?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mindfulness_reflections_program_day_id_fkey"
+            columns: ["program_day_id"]
+            isOneToOne: false
+            referencedRelation: "mindfulness_program"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string | null
@@ -473,6 +547,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_mindfulness_progress: {
+        Row: {
+          created_at: string | null
+          current_day: number | null
+          id: string
+          last_completed_at: string | null
+          selected_category: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          current_day?: number | null
+          id?: string
+          last_completed_at?: string | null
+          selected_category: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          current_day?: number | null
+          id?: string
+          last_completed_at?: string | null
+          selected_category?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       user_preferences: {
         Row: {
