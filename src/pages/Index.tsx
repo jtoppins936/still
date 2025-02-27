@@ -57,10 +57,10 @@ const Index = () => {
       {/* Clean Navigation Section */}
       <section className="py-16 px-4 bg-white">
         <div className="max-w-3xl mx-auto">
-          <nav className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+          <nav className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 place-items-center">
             <button
               onClick={handleMindfulnessClick}
-              className="group p-6 bg-sage-50 rounded-lg transition-all duration-300 hover:bg-sage-100"
+              className="group p-6 bg-sage-50 rounded-lg transition-all duration-300 hover:bg-sage-100 w-full md:w-64"
             >
               <div className="space-y-4">
                 <div className="w-12 h-12 bg-sage-200 rounded-full flex items-center justify-center group-hover:bg-sage-300 transition-colors">
