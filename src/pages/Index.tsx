@@ -45,10 +45,51 @@ const Index = () => {
     navigate("/profile");
   };
 
+  const handleMindfulnessClick = () => {
+    navigate("/mindfulness");
+  };
+
   return (
     <div className="min-h-screen">
       <AuthButtons onProfileClick={handleProfileClick} />
       <HeroSection mounted={mounted} onBeginJourney={handleBeginJourney} />
+
+      {/* Clean Navigation Section */}
+      <section className="py-16 px-4 bg-white">
+        <div className="max-w-3xl mx-auto">
+          <nav className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+            <button
+              onClick={handleMindfulnessClick}
+              className="group p-6 bg-sage-50 rounded-lg transition-all duration-300 hover:bg-sage-100"
+            >
+              <div className="space-y-4">
+                <div className="w-12 h-12 bg-sage-200 rounded-full flex items-center justify-center group-hover:bg-sage-300 transition-colors">
+                  <svg
+                    className="w-6 h-6 text-sage-700"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </div>
+                <div className="space-y-1 text-left">
+                  <h3 className="font-medium text-gray-900">Mindfulness Program</h3>
+                  <p className="text-sm text-gray-600">
+                    Start your 30-day mindfulness journey
+                  </p>
+                </div>
+              </div>
+            </button>
+            {/* Add more navigation items here as needed */}
+          </nav>
+        </div>
+      </section>
 
       {/* Daily Challenge Section */}
       <section className="py-24 px-4 bg-white">
