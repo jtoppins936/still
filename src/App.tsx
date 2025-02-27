@@ -11,6 +11,7 @@ import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import { JournalEntry } from "@/components/JournalEntry";
+import { MindfulnessProgram } from "@/components/mindfulness/MindfulnessProgram";
 import type { JournalEntryProps } from "@/components/JournalEntry";
 import { useAuth } from "@/components/AuthProvider";
 
@@ -95,6 +96,10 @@ const App = () => (
                     <Profile />
                   </ProtectedRoute>
                 } 
+              />
+              <Route 
+                path="/mindfulness" 
+                element={<MindfulnessProgram />} 
               />
               <Route 
                 path="/journal/:type" 
