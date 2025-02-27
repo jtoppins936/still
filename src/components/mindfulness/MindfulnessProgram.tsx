@@ -10,6 +10,7 @@ import { CategorySelector } from "./CategorySelector";
 import { DailyMeditation } from "./DailyMeditation";
 import { ProgressTracker } from "./ProgressTracker";
 import { ScrollText } from "lucide-react";
+import type { UserMindfulnessProgress } from "@/types/mindfulness";
 
 type MindfulnessCategory = 'faith_based' | 'spiritual' | 'neutral';
 
@@ -28,7 +29,7 @@ export const MindfulnessProgram = () => {
         .single();
 
       if (error && error.code !== "PGRST116") throw error;
-      return data;
+      return data as UserMindfulnessProgress;
     },
   });
 

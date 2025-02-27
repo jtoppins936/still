@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/components/AuthProvider";
 import { Book, Clock, PenLine } from "lucide-react";
+import type { MindfulnessProgram } from "@/types/mindfulness";
 
 interface DailyMeditationProps {
   day: number;
@@ -31,7 +32,7 @@ export const DailyMeditation = ({ day, category }: DailyMeditationProps) => {
         .single();
 
       if (error) throw error;
-      return data;
+      return data as MindfulnessProgram;
     },
   });
 
