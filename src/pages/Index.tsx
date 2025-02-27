@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
@@ -50,6 +51,13 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
+      <div className="pt-8 pb-4 flex justify-center">
+        <img 
+          src="/lovable-uploads/d96c4875-c3cb-496c-a2c6-efcd3450efcc.png" 
+          alt="STILL Logo" 
+          className="h-24 w-auto"
+        />
+      </div>
       <AuthButtons onProfileClick={handleProfileClick} />
       <HeroSection mounted={mounted} onBeginJourney={handleBeginJourney} />
 
