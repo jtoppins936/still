@@ -27,7 +27,13 @@ export const ReflectiveActivities = () => {
         .select("*");
 
       if (error) throw error;
-      return data;
+      
+      // Sort activities to put meditation first
+      return data.sort((a, b) => {
+        if (a.title.toLowerCase().includes('meditation')) return -1;
+        if (b.title.toLowerCase().includes('meditation')) return 1;
+        return 0;
+      });
     },
   });
 
@@ -58,6 +64,9 @@ export const ReflectiveActivities = () => {
     );
   }
 
+  const isMeditationActivity = (title: string) => 
+    title.toLowerCase().includes('meditation');
+
   return (
     <>
       <Card className="border-sand-100">
@@ -72,29 +81,51 @@ export const ReflectiveActivities = () => {
             Choose from these mindful activities to enrich your Sabbath experience.
           </p>
           <div className="grid gap-4">
-            {activities?.map((activity) => (
-              <div
-                key={activity.id}
-                className="p-4 rounded-lg border border-gray-100 hover:border-sage-100 transition-colors"
-              >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h4 className="font-medium text-gray-900">{activity.title}</h4>
-                    <p className="text-sm text-gray-600 mt-1">{activity.description}</p>
-                    <span className="inline-block text-sm text-sage-600 mt-2">
-                      {activity.duration_minutes} minutes
-                    </span>
+            {activities?.map((activity) => {
+              const isMeditation = isMeditationActivity(activity.title);
+              return (
+                <div
+                  key={activity.id}
+                  className={`p-4 rounded-lg border transition-colors ${
+                    isMeditation 
+                      ? 'border-purple-200 bg-purple-50 hover:border-purple-300' 
+                      : 'border-gray-100 hover:border-sage-100'
+                  }`}
+                >
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h4 className={`font-medium ${
+                        isMeditation ? 'text-purple-900' : 'text-gray-900'
+                      }`}>
+                        {activity.title}
+                        {isMeditation && (
+                          <span className="ml-2 inline-block px-2 py-1 text-xs font-medium bg-purple-100 text-purple-700 rounded-full">
+                            Premium
+                          </span>
+                        )}
+                      </h4>
+                      <p className={`text-sm mt-1 ${
+                        isMeditation ? 'text-purple-700' : 'text-gray-600'
+                      }`}>
+                        {activity.description}
+                      </p>
+                      <span className={`inline-block text-sm mt-2 ${
+                        isMeditation ? 'text-purple-600' : 'text-sage-600'
+                      }`}>
+                        {activity.duration_minutes} minutes
+                      </span>
+                    </div>
+                    <Button
+                      onClick={() => handleActivityClick(activity.title)}
+                      variant={isMeditation ? "secondary" : "outline"}
+                      className={isMeditation ? "bg-purple-100 hover:bg-purple-200 text-purple-700" : "ml-4"}
+                    >
+                      <Check className="w-4 h-4" />
+                    </Button>
                   </div>
-                  <Button
-                    onClick={() => handleActivityClick(activity.title)}
-                    variant="outline"
-                    className="ml-4"
-                  >
-                    <Check className="w-4 h-4" />
-                  </Button>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </CardContent>
       </Card>
