@@ -15,7 +15,7 @@ export const HeroSection = ({ mounted, onBeginJourney }: HeroSectionProps) => {
       <div className="absolute inset-0 bg-sand-50 -z-10" />
       <div className={`text-center max-w-3xl mx-auto ${mounted ? 'animate-fade-in' : 'opacity-0'}`}>
         <span className="inline-block px-3 py-1 text-sm bg-sage-100 text-sage-700 rounded-full mb-6">
-          Welcome to Still
+          Welcome to STILL
         </span>
         <h1 className="text-4xl md:text-6xl font-light mb-6 text-gray-900">
           Find peace in a hurried world
