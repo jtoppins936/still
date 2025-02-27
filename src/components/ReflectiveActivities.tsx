@@ -124,7 +124,7 @@ export const ReflectiveActivities = () => {
                     </Button>
                   </div>
                 </div>
-              )
+              );
             })}
           </div>
         </CardContent>
