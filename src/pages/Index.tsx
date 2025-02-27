@@ -55,7 +55,7 @@ const Index = () => {
         <img 
           src="/lovable-uploads/d96c4875-c3cb-496c-a2c6-efcd3450efcc.png" 
           alt="STILL Logo" 
-          className="h-24 w-auto"
+          className="h-32 w-auto"
         />
       </div>
       <AuthButtons onProfileClick={handleProfileClick} />
