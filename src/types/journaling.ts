@@ -248,3 +248,226 @@ export const JOURNALING_PROMPTS: JournalingPromptType[] = [
     category: "reflection"
   }
 ];
+
+// Nature Walk Journaling Prompts
+export const NATURE_WALK_PROMPTS: JournalingPromptType[] = [
+  {
+    id: "nw1",
+    day_number: 1,
+    title: "First Impressions",
+    prompt_text: "What was the first thing that caught your attention on today's walk? Describe how it made you feel.",
+    supporting_text: "First impressions often reveal what our mind is naturally drawn to in nature.",
+    category: "nature_walk"
+  },
+  {
+    id: "nw2",
+    day_number: 2,
+    title: "The Sounds of Nature",
+    prompt_text: "Close your eyes for a moment during your walk. What sounds do you hear? How do they make you feel?",
+    supporting_text: "Sound is often overlooked, yet it creates the ambient experience of being in nature.",
+    category: "nature_walk"
+  },
+  {
+    id: "nw3",
+    day_number: 3,
+    title: "Seasonal Changes",
+    prompt_text: "What signs of the current season do you notice on your walk today? How does this season speak to you personally?",
+    category: "nature_walk"
+  },
+  {
+    id: "nw4",
+    day_number: 4,
+    title: "Walking Pace",
+    prompt_text: "How does your walking pace affect what you notice? Try slowing down - what new details emerge?",
+    supporting_text: "Our pace often determines our perspective and what we're able to observe.",
+    category: "nature_walk"
+  },
+  {
+    id: "nw5",
+    day_number: 5,
+    title: "Nature's Patterns",
+    prompt_text: "What patterns do you notice in the natural environment around you? Spirals, symmetry, repetition?",
+    category: "nature_walk"
+  },
+  {
+    id: "nw6",
+    day_number: 6,
+    title: "Weather Awareness",
+    prompt_text: "How does today's weather affect your walk experience? How does it influence your mood and energy?",
+    category: "nature_walk"
+  },
+  {
+    id: "nw7",
+    day_number: 7,
+    title: "Small Wonders",
+    prompt_text: "Find the smallest natural object that catches your attention. Why did it stand out to you?",
+    supporting_text: "Sometimes the tiniest elements in nature hold the most fascinating details.",
+    category: "nature_walk"
+  },
+  {
+    id: "nw8",
+    day_number: 8,
+    title: "Nature and Memory",
+    prompt_text: "Does anything on your walk today trigger a childhood memory or past experience? What emotions arise?",
+    category: "nature_walk"
+  },
+  {
+    id: "nw9",
+    day_number: 9,
+    title: "Colors in Nature",
+    prompt_text: "What color dominates your walk today? How does this color affect your emotional state?",
+    category: "nature_walk"
+  },
+  {
+    id: "nw10",
+    day_number: 10,
+    title: "Textures Around You",
+    prompt_text: "Touch different natural elements on your walk (bark, leaves, stones). How would you describe these textures?",
+    category: "nature_walk"
+  },
+  {
+    id: "nw11",
+    day_number: 11,
+    title: "Signs of Life",
+    prompt_text: "What evidence of animal life do you notice today? Tracks, sounds, movements, or the animals themselves?",
+    category: "nature_walk"
+  },
+  {
+    id: "nw12",
+    day_number: 12,
+    title: "Natural Boundaries",
+    prompt_text: "Notice the transitions in your walking environment - where one ecosystem or landscape meets another. What thoughts arise at these boundaries?",
+    category: "nature_walk"
+  },
+  {
+    id: "nw13",
+    day_number: 13,
+    title: "Light and Shadow",
+    prompt_text: "How does light play through your walking path today? Notice the shadows, highlights, and how they change your perception.",
+    category: "nature_walk"
+  },
+  {
+    id: "nw14",
+    day_number: 14,
+    title: "Walking Meditation",
+    prompt_text: "For part of your walk, synchronize your breathing with your steps. How does this change your experience?",
+    supporting_text: "Walking meditation helps ground us in the present moment through rhythmic movement.",
+    category: "nature_walk"
+  },
+  {
+    id: "nw15",
+    day_number: 15,
+    title: "Nature's Resilience",
+    prompt_text: "Find an example of nature's resilience on your walk - perhaps a plant growing through concrete or recovery after a storm. What does this teach you?",
+    category: "nature_walk"
+  },
+  {
+    id: "nw16",
+    day_number: 16,
+    title: "Water Elements",
+    prompt_text: "If there's water on your route (stream, pond, rain), pause and observe it. How does water change the surrounding environment?",
+    category: "nature_walk"
+  },
+  {
+    id: "nw17",
+    day_number: 17,
+    title: "The Familiar Path",
+    prompt_text: "If you're walking a familiar route, what's one thing you've never noticed before today? Why might you have missed it previously?",
+    category: "nature_walk"
+  },
+  {
+    id: "nw18",
+    day_number: 18,
+    title: "Nature's Invitation",
+    prompt_text: "What element of nature seems to be inviting your attention today? What might it be teaching you?",
+    supporting_text: "Nature often speaks to us in subtle ways if we're receptive to its messages.",
+    category: "nature_walk"
+  },
+  {
+    id: "nw19",
+    day_number: 19,
+    title: "Sky Awareness",
+    prompt_text: "Spend time looking up during your walk. How does the sky appear today? How does observing the sky affect your perspective?",
+    category: "nature_walk"
+  },
+  {
+    id: "nw20",
+    day_number: 20,
+    title: "Natural Cycles",
+    prompt_text: "What evidence of natural cycles do you observe today? (growth, decay, rebirth, day/night, seasons)",
+    category: "nature_walk"
+  },
+  {
+    id: "nw21",
+    day_number: 21,
+    title: "Nature's Movement",
+    prompt_text: "Observe the different movements in nature today - swaying trees, flowing water, flying birds, crawling insects. Which movement resonates with you?",
+    category: "nature_walk"
+  },
+  {
+    id: "nw22",
+    day_number: 22,
+    title: "Human Impact",
+    prompt_text: "Notice both positive and negative human impacts on your walking environment. What feelings arise as you observe these?",
+    category: "nature_walk"
+  },
+  {
+    id: "nw23",
+    day_number: 23,
+    title: "Nature's Wisdom",
+    prompt_text: "If the natural world around you could offer you advice about your current life situation, what would it say?",
+    supporting_text: "Nature often reflects back to us the wisdom we already hold within.",
+    category: "nature_walk"
+  },
+  {
+    id: "nw24",
+    day_number: 24,
+    title: "Walking Without Destination",
+    prompt_text: "Today, walk without a specific destination or route in mind. How does this change your observation and experience?",
+    category: "nature_walk"
+  },
+  {
+    id: "nw25",
+    day_number: 25,
+    title: "Nature's Scents",
+    prompt_text: "What aromas can you detect on your walk? How do these smells affect your mood or trigger memories?",
+    category: "nature_walk"
+  },
+  {
+    id: "nw26",
+    day_number: 26,
+    title: "Grounding Exercise",
+    prompt_text: "Find a spot to stand barefoot on natural ground. How does this direct connection to the earth feel?",
+    supporting_text: "Grounding practices help reconnect us energetically with the earth.",
+    category: "nature_walk"
+  },
+  {
+    id: "nw27",
+    day_number: 27,
+    title: "Nature's Contrasts",
+    prompt_text: "What contrasting elements do you notice on your walk today? (rough/smooth, dark/light, movement/stillness)",
+    category: "nature_walk"
+  },
+  {
+    id: "nw28",
+    day_number: 28,
+    title: "Sit Spot Practice",
+    prompt_text: "Find a spot to sit quietly for 5-10 minutes. How does your perception change when you're still versus walking?",
+    category: "nature_walk"
+  },
+  {
+    id: "nw29",
+    day_number: 29,
+    title: "Seasonal Eating",
+    prompt_text: "Notice any edible plants, fruits, or herbs on your walk (even if in gardens). How might eating seasonally connect you more to your environment?",
+    category: "nature_walk"
+  },
+  {
+    id: "nw30",
+    day_number: 30,
+    title: "Journey Reflection",
+    prompt_text: "Reflecting on your 30 days of nature walk journaling, how has your relationship with the natural world shifted? What practices will you continue?",
+    supporting_text: "Regular nature connection practices can fundamentally change how we perceive and interact with the world.",
+    category: "nature_walk"
+  }
+];

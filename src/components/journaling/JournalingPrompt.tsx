@@ -7,23 +7,25 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
-import { Book, PenLine } from "lucide-react";
-import { JOURNALING_PROMPTS } from "@/types/journaling";
+import { Book, PenLine, Footprints } from "lucide-react";
+import { JOURNALING_PROMPTS, NATURE_WALK_PROMPTS } from "@/types/journaling";
 
 interface JournalingPromptProps {
   day: number;
+  journalType: "regular" | "nature_walk";
   onComplete: () => void;
 }
 
-export const JournalingPrompt = ({ day, onComplete }: JournalingPromptProps) => {
+export const JournalingPrompt = ({ day, journalType, onComplete }: JournalingPromptProps) => {
   const [content, setContent] = useState("");
   const [saving, setSaving] = useState(false);
   const { session } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // Get prompt for the current day
-  const prompt = JOURNALING_PROMPTS.find(p => p.day_number === day) || JOURNALING_PROMPTS[0];
+  // Get prompt for the current day based on journal type
+  const prompts = journalType === "regular" ? JOURNALING_PROMPTS : NATURE_WALK_PROMPTS;
+  const prompt = prompts.find(p => p.day_number === day) || prompts[0];
 
   const saveJournalEntry = async () => {
     if (!session || !prompt || !content.trim()) return;
@@ -35,13 +37,14 @@ export const JournalingPrompt = ({ day, onComplete }: JournalingPromptProps) => 
         .from("journal_entries")
         .insert({
           user_id: session.user.id,
-          entry_type: "prompt_response",
+          entry_type: journalType === "regular" ? "prompt_response" : "nature_walk",
           content: content,
           // Store the prompt info in the content for now
           prompt_info: JSON.stringify({
             day_number: prompt.day_number,
             title: prompt.title,
-            prompt_text: prompt.prompt_text
+            prompt_text: prompt.prompt_text,
+            journal_type: journalType
           })
         });
 
@@ -95,7 +98,11 @@ export const JournalingPrompt = ({ day, onComplete }: JournalingPromptProps) => 
       <CardContent className="space-y-6">
         <div className="space-y-2">
           <div className="flex items-center space-x-2">
-            <Book className="w-4 h-4 text-purple-600" />
+            {journalType === "regular" ? (
+              <Book className="w-4 h-4 text-purple-600" />
+            ) : (
+              <Footprints className="w-4 h-4 text-green-600" />
+            )}
             <h4 className="font-medium">Today's Prompt</h4>
           </div>
           <p className="text-gray-600 pl-6">
@@ -116,7 +123,9 @@ export const JournalingPrompt = ({ day, onComplete }: JournalingPromptProps) => 
           <Textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder="Write your journal entry here..."
+            placeholder={journalType === "regular" 
+              ? "Write your journal entry here..." 
+              : "Write about your nature walk experience here..."}
             className="min-h-[300px]"
           />
           <Button 
