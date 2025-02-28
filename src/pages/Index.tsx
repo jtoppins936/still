@@ -48,6 +48,10 @@ const Index = () => {
   const handleMindfulnessClick = () => {
     navigate("/mindfulness");
   };
+  
+  const handleJournalingClick = () => {
+    navigate("/journaling");
+  };
 
   return (
     <div className="min-h-screen">
@@ -63,7 +67,7 @@ const Index = () => {
 
       {/* Clean Navigation Section */}
       <section className="py-16 px-4 bg-white">
-        <div className="max-w-3xl mx-auto flex justify-center">
+        <div className="max-w-3xl mx-auto flex flex-col sm:flex-row justify-center gap-4">
           <button
             onClick={handleMindfulnessClick}
             className="group p-6 bg-sage-50 rounded-lg transition-all duration-300 hover:bg-sage-100 w-full sm:w-80"
@@ -88,6 +92,35 @@ const Index = () => {
                 <h3 className="font-medium text-gray-900">Mindfulness Program</h3>
                 <p className="text-sm text-gray-600">
                   Start your 30-day mindfulness journey
+                </p>
+              </div>
+            </div>
+          </button>
+          
+          <button
+            onClick={handleJournalingClick}
+            className="group p-6 bg-purple-50 rounded-lg transition-all duration-300 hover:bg-purple-100 w-full sm:w-80"
+          >
+            <div className="space-y-4">
+              <div className="w-12 h-12 bg-purple-200 rounded-full flex items-center justify-center group-hover:bg-purple-300 transition-colors">
+                <svg
+                  className="w-6 h-6 text-purple-700"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  />
+                </svg>
+              </div>
+              <div className="space-y-1 text-left">
+                <h3 className="font-medium text-gray-900">Journaling Program</h3>
+                <p className="text-sm text-gray-600">
+                  Begin your 30-day writing practice
                 </p>
               </div>
             </div>
