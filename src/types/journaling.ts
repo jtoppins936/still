@@ -14,7 +14,7 @@ export interface UserJournalingProgress {
   id: string;
   user_id: string;
   current_day: number;
-  last_completed_at?: string;
+  last_completed_at?: string | null;
   created_at?: string;
   updated_at?: string;
 }
@@ -25,11 +25,12 @@ export interface JournalEntry {
   entry_type: string;
   content: string;
   prompt_id?: string;
+  prompt_info?: string;
   created_at?: string;
   updated_at?: string;
 }
 
-// Hardcoded prompts for now until we create the database tables
+// Hardcoded prompts until we create the database tables
 export const JOURNALING_PROMPTS: JournalingPromptType[] = [
   {
     id: "1",

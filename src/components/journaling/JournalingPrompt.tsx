@@ -1,15 +1,14 @@
 
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Book, PenLine } from "lucide-react";
-import { JOURNALING_PROMPTS, type JournalingPromptType } from "@/types/journaling";
+import { JOURNALING_PROMPTS } from "@/types/journaling";
 
 interface JournalingPromptProps {
   day: number;
@@ -38,8 +37,12 @@ export const JournalingPrompt = ({ day, onComplete }: JournalingPromptProps) => 
           user_id: session.user.id,
           entry_type: "prompt_response",
           content: content,
-          // We don't have prompt_id in the table yet, so we'll store it in the content for now
-          // When we create the table schema, we'll add a proper prompt_id field
+          // Store the prompt info in the content for now
+          prompt_info: JSON.stringify({
+            day_number: prompt.day_number,
+            title: prompt.title,
+            prompt_text: prompt.prompt_text
+          })
         });
 
       if (entryError) throw entryError;

@@ -15,12 +15,12 @@ export const JournalingProgram = () => {
   const { session } = useAuth();
   const [currentDay, setCurrentDay] = useState(1);
 
-  // Simulating user progress since we don't have the table yet
+  // Use existing journal_entries table to determine progress
   const { data: userProgress, isLoading: progressLoading } = useQuery({
     queryKey: ["journaling-progress", session?.user.id],
     enabled: !!session,
     queryFn: async () => {
-      // First check if the user has any journal entries to determine progress
+      // Check if the user has any journal entries to determine progress
       const { data: entries, error: entriesError } = await supabase
         .from("journal_entries")
         .select("*")
