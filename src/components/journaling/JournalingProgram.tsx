@@ -13,35 +13,34 @@ import type { UserJournalingProgress } from "@/types/journaling";
 
 export const JournalingProgram = () => {
   const { session } = useAuth();
+  const [currentDay, setCurrentDay] = useState(1);
 
+  // Simulating user progress since we don't have the table yet
   const { data: userProgress, isLoading: progressLoading } = useQuery({
     queryKey: ["journaling-progress", session?.user.id],
     enabled: !!session,
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("user_journaling_progress")
+      // First check if the user has any journal entries to determine progress
+      const { data: entries, error: entriesError } = await supabase
+        .from("journal_entries")
         .select("*")
         .eq("user_id", session?.user.id)
-        .single();
-
-      if (error && error.code !== "PGRST116") throw error;
+        .eq("entry_type", "prompt_response")
+        .order("created_at", { ascending: false });
       
-      if (!data) {
-        // Initialize progress if not found
-        const { data: newProgress, error: insertError } = await supabase
-          .from("user_journaling_progress")
-          .insert({
-            user_id: session?.user.id,
-            current_day: 1
-          })
-          .select("*")
-          .single();
-          
-        if (insertError) throw insertError;
-        return newProgress;
-      }
+      if (entriesError) throw entriesError;
       
-      return data as UserJournalingProgress;
+      // Create a progress object based on entries count
+      const day = entries && entries.length > 0 ? Math.min(entries.length + 1, 30) : 1;
+      
+      setCurrentDay(day);
+      
+      return {
+        id: session?.user.id || "",
+        user_id: session?.user.id || "",
+        current_day: day,
+        last_completed_at: entries && entries.length > 0 ? entries[0].created_at : null
+      } as UserJournalingProgress;
     },
   });
 
@@ -75,19 +74,11 @@ export const JournalingProgram = () => {
             This 30-day journaling program guides you through a journey of self-discovery, 
             mindfulness, and reflection. Each day offers a unique prompt to inspire your writing.
           </p>
-          {userProgress && (
-            <ProgressTracker 
-              currentDay={userProgress.current_day} 
-            />
-          )}
+          <ProgressTracker currentDay={currentDay} />
         </CardContent>
       </Card>
 
-      {userProgress && (
-        <JournalingPrompt 
-          day={userProgress.current_day}
-        />
-      )}
+      <JournalingPrompt day={currentDay} onComplete={() => setCurrentDay(prev => Math.min(prev + 1, 30))} />
     </div>
   );
 };
