@@ -47,7 +47,12 @@ export const ReflectiveActivities = () => {
       return;
     }
 
-    if (!isSubscribed) {
+    // Check if the activity is premium (meditation or journaling)
+    const isPremiumActivity = 
+      activityType.toLowerCase().includes('meditation') || 
+      activityType.toLowerCase().includes('journaling');
+
+    if (isPremiumActivity && !isSubscribed) {
       setShowPaywall(true);
       return;
     }
@@ -64,8 +69,9 @@ export const ReflectiveActivities = () => {
     );
   }
 
-  const isMeditationActivity = (title: string) => 
-    title.toLowerCase().includes('meditation');
+  const isPremiumActivity = (title: string) => 
+    title.toLowerCase().includes('meditation') || 
+    title.toLowerCase().includes('journaling');
 
   return (
     <>
@@ -82,12 +88,12 @@ export const ReflectiveActivities = () => {
           </p>
           <div className="grid gap-4">
             {activities?.map((activity) => {
-              const isMeditation = isMeditationActivity(activity.title);
+              const isPremium = isPremiumActivity(activity.title);
               return (
                 <div
                   key={activity.id}
                   className={`p-4 rounded-lg border transition-colors ${
-                    isMeditation 
+                    isPremium 
                       ? 'border-purple-200 bg-purple-50 hover:border-purple-300' 
                       : 'border-gray-100 hover:border-sage-100'
                   }`}
@@ -95,30 +101,30 @@ export const ReflectiveActivities = () => {
                   <div className="flex justify-between items-start">
                     <div>
                       <h4 className={`font-medium ${
-                        isMeditation ? 'text-purple-900' : 'text-gray-900'
+                        isPremium ? 'text-purple-900' : 'text-gray-900'
                       }`}>
                         {activity.title}
-                        {isMeditation && (
+                        {isPremium && (
                           <span className="ml-2 inline-block px-2 py-1 text-xs font-medium bg-purple-100 text-purple-700 rounded-full">
                             Premium
                           </span>
                         )}
                       </h4>
                       <p className={`text-sm mt-1 ${
-                        isMeditation ? 'text-purple-700' : 'text-gray-600'
+                        isPremium ? 'text-purple-700' : 'text-gray-600'
                       }`}>
                         {activity.description}
                       </p>
                       <span className={`inline-block text-sm mt-2 ${
-                        isMeditation ? 'text-purple-600' : 'text-sage-600'
+                        isPremium ? 'text-purple-600' : 'text-sage-600'
                       }`}>
                         {activity.duration_minutes} minutes
                       </span>
                     </div>
                     <Button
                       onClick={() => handleActivityClick(activity.title)}
-                      variant={isMeditation ? "secondary" : "outline"}
-                      className={isMeditation ? "bg-purple-100 hover:bg-purple-200 text-purple-700" : "ml-4"}
+                      variant={isPremium ? "secondary" : "outline"}
+                      className={isPremium ? "bg-purple-100 hover:bg-purple-200 text-purple-700" : "ml-4"}
                     >
                       <Check className="w-4 h-4" />
                     </Button>
