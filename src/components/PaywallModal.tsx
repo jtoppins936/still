@@ -34,6 +34,8 @@ export function PaywallModal({ isOpen, onClose }: PaywallModalProps) {
               <li>Blocking Statistics</li>
               <li>Mindful Journaling</li>
               <li>Meditation Sessions</li>
+              <li>Centering Prayer</li>
+              <li>Sacred Rituals</li>
               <li>And more reflective activities!</li>
             </ul>
           </DialogDescription>

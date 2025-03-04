@@ -1,9 +1,8 @@
-
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ScrollText, Check } from "lucide-react";
+import { ScrollText, Check, Heart } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
@@ -54,7 +53,8 @@ export const ReflectiveActivities = () => {
     const isPremiumActivity = 
       activityType.toLowerCase().includes('meditation') || 
       activityType.toLowerCase().includes('journaling') ||
-      activityType.toLowerCase() === 'sacred rituals';
+      activityType.toLowerCase() === 'sacred rituals' ||
+      activityType.toLowerCase() === 'centering prayer';
 
     if (isPremiumActivity && !isSubscribed) {
       setShowPaywall(true);
@@ -64,6 +64,8 @@ export const ReflectiveActivities = () => {
     // Navigate to the correct page based on activity type
     if (activityType.toLowerCase() === 'sacred rituals') {
       navigate(`/sacred-rituals`);
+    } else if (activityType.toLowerCase() === 'centering prayer') {
+      navigate(`/centering-prayer`);
     } else {
       navigate(`/journal/${activityType.toLowerCase()}`);
     }
@@ -80,16 +82,23 @@ export const ReflectiveActivities = () => {
 
   const isPremiumActivity = (title: string) => 
     title.toLowerCase().includes('meditation') || 
-    title.toLowerCase().includes('journaling');
+    title.toLowerCase().includes('journaling') ||
+    title.toLowerCase() === 'centering prayer';
 
   // Categorize the activities
   const meditationActivities = activities?.filter(activity => 
     activity.title.toLowerCase().includes('meditation')
   ) || [];
 
-  // Other activities (excluding meditation)
+  // Centering Prayer activities
+  const centeringPrayerActivities = activities?.filter(activity => 
+    activity.title.toLowerCase() === 'centering prayer'
+  ) || [];
+
+  // Other activities (excluding meditation and centering prayer)
   const otherActivities = activities?.filter(activity => 
-    !activity.title.toLowerCase().includes('meditation')
+    !activity.title.toLowerCase().includes('meditation') &&
+    activity.title.toLowerCase() !== 'centering prayer'
   ) || [];
 
   return (
@@ -137,6 +146,45 @@ export const ReflectiveActivities = () => {
                         className="bg-purple-100 hover:bg-purple-200 text-purple-700"
                       >
                         <Check className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {/* Display Centering Prayer category */}
+          {centeringPrayerActivities.length > 0 && (
+            <div className="mb-6">
+              <h4 className="font-medium text-lg mb-3 text-rose-700">Centering Prayer</h4>
+              <div className="grid gap-4">
+                {centeringPrayerActivities.map((activity) => (
+                  <div
+                    key={activity.id}
+                    className="p-4 rounded-lg border transition-colors border-rose-200 bg-rose-50 hover:border-rose-300"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h4 className="font-medium text-rose-900">
+                          {activity.title}
+                          <span className="ml-2 inline-block px-2 py-1 text-xs font-medium bg-rose-100 text-rose-700 rounded-full">
+                            Premium
+                          </span>
+                        </h4>
+                        <p className="text-sm mt-1 text-rose-700">
+                          {activity.description}
+                        </p>
+                        <span className="inline-block text-sm mt-2 text-rose-600">
+                          {activity.duration_minutes} minutes
+                        </span>
+                      </div>
+                      <Button
+                        onClick={() => handleActivityClick(activity.title)}
+                        variant="secondary"
+                        className="bg-rose-100 hover:bg-rose-200 text-rose-700"
+                      >
+                        <Heart className="w-4 h-4" />
                       </Button>
                     </div>
                   </div>
