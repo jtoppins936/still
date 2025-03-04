@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
@@ -28,7 +29,6 @@ export const ReflectiveActivities = () => {
 
       if (error) throw error;
       
-      // We'll sort the activities but not filter them - we'll categorize them in the render
       return data.sort((a, b) => {
         if (a.title.toLowerCase().includes('meditation')) return -1;
         if (b.title.toLowerCase().includes('meditation')) return 1;
@@ -60,7 +60,7 @@ export const ReflectiveActivities = () => {
 
     // Navigate to the correct page based on activity type
     if (activityType.toLowerCase() === 'sacred rituals') {
-      navigate(`/journal/sacred_rituals`);
+      navigate(`/sacred-rituals`);
     } else {
       navigate(`/journal/${activityType.toLowerCase()}`);
     }

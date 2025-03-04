@@ -13,10 +13,13 @@ const SacredRituals = () => {
   useEffect(() => {
     if (!session) {
       navigate('/auth');
+    } else if (!isSubscribed) {
+      // Redirect to home if not subscribed
+      navigate('/');
     }
-  }, [session, navigate]);
+  }, [session, isSubscribed, navigate]);
 
-  if (!session) return null;
+  if (!session || !isSubscribed) return null;
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
