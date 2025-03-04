@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { seedCenteringPrayer } from "@/data/seed-centering-prayer";
 
 interface AuthContextType {
   session: Session | null;
@@ -28,6 +29,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setLoading(false);
+      
+      // Seed centering prayer data when user is logged in
+      if (session) {
+        seedCenteringPrayer().catch(error => {
+          console.error("Error seeding centering prayer data:", error);
+        });
+      }
     });
 
     // Set up auth state listener
@@ -37,6 +45,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.log("Auth state changed:", _event);
       setSession(session);
       setLoading(false);
+      
+      // Seed centering prayer data on sign in
+      if (session && _event === 'SIGNED_IN') {
+        seedCenteringPrayer().catch(error => {
+          console.error("Error seeding centering prayer data:", error);
+        });
+      }
     });
 
     return () => subscription.unsubscribe();
