@@ -3,10 +3,10 @@ import { Progress } from "@/components/ui/progress";
 
 interface ProgressTrackerProps {
   currentDay: number;
+  totalDays?: number;
 }
 
-export const ProgressTracker = ({ currentDay }: ProgressTrackerProps) => {
-  const totalDays = 30;
+export const ProgressTracker = ({ currentDay, totalDays = 30 }: ProgressTrackerProps) => {
   const progressPercentage = Math.min((currentDay - 1) / totalDays * 100, 100);
   
   return (
