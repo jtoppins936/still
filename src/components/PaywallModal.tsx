@@ -32,8 +32,8 @@ export function PaywallModal({ isOpen, onClose }: PaywallModalProps) {
             This feature is available to premium subscribers. For just $5, you'll get access to:
             <ul className="list-disc list-inside mt-4 space-y-2">
               <li>Blocking Statistics</li>
-              <li>Mindful Journaling</li>
               <li>Meditation Sessions</li>
+              <li>Mindful Journaling</li>
               <li>Centering Prayer</li>
               <li>Sacred Rituals</li>
               <li>And more reflective activities!</li>
