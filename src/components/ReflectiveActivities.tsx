@@ -25,7 +25,10 @@ export const ReflectiveActivities = () => {
       const { data, error } = await supabase
         .from("reflective_activities")
         .select("*")
-        .not("category", "eq", "sacred_rituals");
+        .not("category", "eq", "sacred_rituals")
+        .not("title", "ilike", "%art & expression%")
+        .not("title", "ilike", "%tea ceremony%")
+        .not("title", "ilike", "%sacred music%");
 
       if (error) throw error;
       
