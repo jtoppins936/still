@@ -15,7 +15,10 @@ export const ProgressTracker = ({ currentDay, totalDays }: ProgressTrackerProps)
         <span>Day {currentDay} of {totalDays}</span>
         <span>{progressPercentage}% complete</span>
       </div>
-      <Progress value={progressPercentage} className="h-2 bg-rose-100" indicatorClassName="bg-rose-600" />
+      <Progress 
+        value={progressPercentage} 
+        className="h-2 bg-rose-100"
+      />
     </div>
   );
 };

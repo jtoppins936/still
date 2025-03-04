@@ -27,9 +27,9 @@ export const CenteringPrayerPrompt = ({ prompt, dayId }: CenteringPrayerPromptPr
     setIsSaving(true);
     
     try {
-      // Check if a reflection already exists
+      // Use mindfulness_reflections as a temporary solution
       const { data: existingReflection } = await supabase
-        .from("centering_prayer_reflections")
+        .from("mindfulness_reflections")
         .select("*")
         .eq("program_day_id", dayId)
         .eq("user_id", userId)
@@ -38,13 +38,13 @@ export const CenteringPrayerPrompt = ({ prompt, dayId }: CenteringPrayerPromptPr
       if (existingReflection) {
         // Update existing reflection
         await supabase
-          .from("centering_prayer_reflections")
+          .from("mindfulness_reflections")
           .update({ reflection_content: reflection })
           .eq("id", existingReflection.id);
       } else {
         // Create new reflection
         await supabase
-          .from("centering_prayer_reflections")
+          .from("mindfulness_reflections")
           .insert({
             program_day_id: dayId,
             user_id: userId,

@@ -8,37 +8,67 @@ import { CenteringPrayerPrompt } from "./CenteringPrayerPrompt";
 import { ProgressTracker } from "./ProgressTracker";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
+
+// Define types for our data
+interface CenteringPrayerDay {
+  id: string;
+  day_number: number;
+  theme: string;
+  scripture: string;
+  practice: string;
+  reflection_prompt: string;
+  duration_minutes: number;
+}
+
+interface UserProgress {
+  id: string;
+  user_id: string;
+  current_day: number;
+  last_completed_at: string | null;
+}
 
 export const CenteringPrayerProgram = () => {
   const { session } = useAuth();
   const [currentDay, setCurrentDay] = useState(1);
   const userId = session?.user?.id;
+  const { toast } = useToast();
 
+  // Use mindfulness_program table as a temporary solution
   const { data: progress, isLoading: isLoadingProgress } = useQuery({
     queryKey: ["centering-prayer-progress", userId],
     queryFn: async () => {
       if (!userId) return { current_day: 1 };
       
+      // Use user_mindfulness_progress as a temporary solution
       const { data, error } = await supabase
-        .from("user_centering_prayer_progress")
+        .from("user_mindfulness_progress")
         .select("*")
         .eq("user_id", userId)
+        .eq("selected_category", "centering-prayer")
         .maybeSingle();
       
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching progress:", error);
+        return { current_day: 1 };
+      }
       
       if (!data) {
         // Create a new progress record if one doesn't exist
         const { data: newProgress, error: insertError } = await supabase
-          .from("user_centering_prayer_progress")
+          .from("user_mindfulness_progress")
           .insert([{
             user_id: userId,
             current_day: 1,
+            selected_category: "centering-prayer"
           }])
           .select()
           .single();
         
-        if (insertError) throw insertError;
+        if (insertError) {
+          console.error("Error creating progress:", insertError);
+          return { current_day: 1 };
+        }
         return newProgress;
       }
       
@@ -47,15 +77,20 @@ export const CenteringPrayerProgram = () => {
     enabled: !!userId,
   });
 
+  // Use mindfulness_program table as a temporary solution
   const { data: program, isLoading: isLoadingProgram } = useQuery({
     queryKey: ["centering-prayer-program"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("centering_prayer_program")
+        .from("mindfulness_program")
         .select("*")
+        .eq("category", "centering-prayer")
         .order("day_number", { ascending: true });
       
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching program:", error);
+        return [];
+      }
       return data || [];
     },
   });
@@ -65,15 +100,30 @@ export const CenteringPrayerProgram = () => {
     
     const nextDay = currentDay + 1;
     
-    await supabase
-      .from("user_centering_prayer_progress")
-      .update({ 
-        current_day: nextDay,
-        last_completed_at: new Date().toISOString()
-      })
-      .eq("user_id", userId);
-    
-    setCurrentDay(nextDay);
+    try {
+      await supabase
+        .from("user_mindfulness_progress")
+        .update({ 
+          current_day: nextDay,
+          last_completed_at: new Date().toISOString()
+        })
+        .eq("user_id", userId)
+        .eq("selected_category", "centering-prayer");
+      
+      setCurrentDay(nextDay);
+      
+      toast({
+        title: "Progress updated",
+        description: "You've moved to the next day in your centering prayer journey.",
+      });
+    } catch (error) {
+      console.error("Error updating progress:", error);
+      toast({
+        title: "Error updating progress",
+        description: "There was a problem updating your progress. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   if (isLoadingProgress || isLoadingProgram) {
@@ -90,7 +140,7 @@ export const CenteringPrayerProgram = () => {
   }
 
   // Set currentDay based on user progress
-  if (progress && currentDay !== progress.current_day) {
+  if (progress && progress.current_day && currentDay !== progress.current_day) {
     setCurrentDay(progress.current_day);
   }
 
