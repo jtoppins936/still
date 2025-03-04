@@ -27,22 +27,8 @@ export const ReflectiveActivities = () => {
 
       if (error) throw error;
       
-      // Process the activities to combine related ones into Sacred Rituals
-      const processedData = data.map(activity => {
-        // Check if the activity is one of the sacred ritual ones
-        if (
-          activity.title.toLowerCase().includes('art & expression') ||
-          activity.title.toLowerCase().includes('tea ceremony') ||
-          activity.title.toLowerCase().includes('sacred music')
-        ) {
-          // Mark it for grouping
-          return { ...activity, category: 'sacred_rituals' };
-        }
-        return activity;
-      });
-      
       // Sort activities to put meditation first
-      return processedData.sort((a, b) => {
+      return data.sort((a, b) => {
         if (a.title.toLowerCase().includes('meditation')) return -1;
         if (b.title.toLowerCase().includes('meditation')) return 1;
         return 0;
@@ -70,7 +56,12 @@ export const ReflectiveActivities = () => {
       return;
     }
 
-    navigate(`/journal/${activityType.toLowerCase()}`);
+    // Navigate to the correct page based on activity type
+    if (activityType.toLowerCase().includes('sacred rituals')) {
+      navigate(`/journal/sacred_rituals`);
+    } else {
+      navigate(`/journal/${activityType.toLowerCase()}`);
+    }
   };
 
   if (isLoading) {

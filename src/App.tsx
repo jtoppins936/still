@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile";
 import Mindfulness from "./pages/Mindfulness";
 import Journaling from "./pages/Journaling";
+import SacredRituals from "./pages/SacredRituals";
 
 import { AuthProvider } from "./components/AuthProvider";
 import { PaywallProvider } from "./components/PaywallProvider";
@@ -35,6 +36,7 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/mindfulness" element={<Mindfulness />} />
               <Route path="/journaling" element={<Journaling />} />
+              <Route path="/journal/sacred_rituals" element={<SacredRituals />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <Toaster />
