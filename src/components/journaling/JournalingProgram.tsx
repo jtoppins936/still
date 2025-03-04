@@ -7,7 +7,7 @@ import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 import { JournalingPrompt } from "./JournalingPrompt";
-import { ProgressTracker } from "./ProgressTracker";
+import { ProgressTracker } from "../centering-prayer/ProgressTracker";
 import { Book, ScrollText, Footprints, Trees } from "lucide-react";
 import { 
   Select, 
@@ -17,6 +17,7 @@ import {
   SelectValue 
 } from "@/components/ui/select";
 import type { UserJournalingProgress } from "@/types/journaling";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const JournalingProgram = () => {
   const { session } = useAuth();
@@ -70,59 +71,65 @@ export const JournalingProgram = () => {
 
   return (
     <div className="space-y-8">
-      <Card>
-        <CardHeader>
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-            <div className="flex items-center space-x-2">
-              {journalType === "regular" ? (
+      <Tabs 
+        defaultValue={journalType} 
+        onValueChange={(value) => setJournalType(value as "regular" | "nature_walk")}
+        className="w-full"
+      >
+        <div className="mb-6">
+          <TabsList className="w-full grid grid-cols-2">
+            <TabsTrigger value="regular" className="flex items-center gap-2">
+              <Book className="w-4 h-4" />
+              <span>Mindful Journal</span>
+            </TabsTrigger>
+            <TabsTrigger value="nature_walk" className="flex items-center gap-2">
+              <Footprints className="w-4 h-4" />
+              <span>Nature Walk Journal</span>
+            </TabsTrigger>
+          </TabsList>
+        </div>
+
+        <TabsContent value="regular">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center space-x-2">
                 <Book className="w-5 h-5 text-purple-600" />
-              ) : (
+                <h2 className="text-2xl font-medium">30-Day Journaling Journey</h2>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600 mb-6">
+                This 30-day journaling program guides you through a journey of self-discovery, 
+                mindfulness, and reflection. Each day offers a unique prompt to inspire your writing.
+              </p>
+              <ProgressTracker currentDay={currentDay} totalDays={30} />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="nature_walk">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center space-x-2">
                 <Trees className="w-5 h-5 text-green-600" />
-              )}
-              <h2 className="text-2xl font-medium">
-                {journalType === "regular" 
-                  ? "30-Day Journaling Journey" 
-                  : "30-Day Nature Walk Journal"}
-              </h2>
-            </div>
-            <Select
-              value={journalType}
-              onValueChange={(value: "regular" | "nature_walk") => {
-                setJournalType(value);
-                setCurrentDay(1); // Reset to day 1 when changing journal type
-              }}
-            >
-              <SelectTrigger className="w-full sm:w-[200px]">
-                <SelectValue placeholder="Journal Type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="regular">
-                  <div className="flex items-center space-x-2">
-                    <Book className="w-4 h-4" />
-                    <span>Regular Journal</span>
-                  </div>
-                </SelectItem>
-                <SelectItem value="nature_walk">
-                  <div className="flex items-center space-x-2">
-                    <Footprints className="w-4 h-4" />
-                    <span>Nature Walk</span>
-                  </div>
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <p className="text-gray-600 mb-6">
-            {journalType === "regular" ? (
-              "This 30-day journaling program guides you through a journey of self-discovery, mindfulness, and reflection. Each day offers a unique prompt to inspire your writing."
-            ) : (
-              "This 30-day nature walk journal guides your attention during walks in natural settings. Each prompt helps you notice different aspects of nature and your connection to the environment."
-            )}
-          </p>
-          <ProgressTracker currentDay={currentDay} />
-        </CardContent>
-      </Card>
+                <h2 className="text-2xl font-medium">30-Day Nature Walk Journal</h2>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600 mb-6">
+                Connect with the natural world through this 30-day guided nature walk journal. 
+                Each prompt will help you notice different aspects of nature and deepen your 
+                connection to the environment around you.
+              </p>
+              <ProgressTracker 
+                currentDay={currentDay} 
+                totalDays={30} 
+                variant="nature" 
+              />
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
 
       <JournalingPrompt 
         day={currentDay} 
