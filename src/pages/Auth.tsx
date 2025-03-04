@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Leaf } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/components/AuthProvider";
 
 const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -15,34 +16,62 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { session } = useAuth();
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (session) {
+      navigate("/");
+    }
+  }, [session, navigate]);
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const { error } = isSignUp
-        ? await supabase.auth.signUp({ email, password })
-        : await supabase.auth.signInWithPassword({ email, password });
-
-      if (error) throw error;
-
       if (isSignUp) {
-        toast({
-          title: "Welcome to Still!",
-          description: "Please check your email to verify your account.",
+        // Sign up
+        const { data, error } = await supabase.auth.signUp({ 
+          email, 
+          password,
+          options: {
+            data: {
+              // Add any custom user metadata here if needed
+            }
+          }
         });
+
+        if (error) throw error;
+
+        if (data?.user) {
+          toast({
+            title: "Welcome to Still!",
+            description: "Your account has been created successfully.",
+          });
+          // Navigate to home page after sign up
+          navigate("/");
+        }
       } else {
+        // Sign in
+        const { error } = await supabase.auth.signInWithPassword({ 
+          email, 
+          password 
+        });
+
+        if (error) throw error;
+
         toast({
           title: "Welcome back!",
           description: "Successfully signed in.",
         });
         navigate("/");
       }
-    } catch (error) {
+    } catch (error: any) {
+      console.error("Auth error:", error);
       toast({
         title: "Error",
-        description: error.message,
+        description: error.message || "Authentication failed",
         variant: "destructive",
       });
     } finally {

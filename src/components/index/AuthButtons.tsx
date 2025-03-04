@@ -3,28 +3,23 @@ import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 
 export const AuthButtons = ({ onProfileClick }: { onProfileClick: () => void }) => {
-  const { session } = useAuth();
+  const { session, signOut } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
   const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
+    try {
+      await signOut();
+      navigate("/auth");
+    } catch (error) {
       toast({
         title: "Error",
-        description: error.message,
+        description: "Failed to sign out",
         variant: "destructive",
       });
-    } else {
-      toast({
-        title: "Goodbye",
-        description: "You have been signed out.",
-      });
-      navigate("/auth");
     }
   };
 
