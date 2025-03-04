@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
@@ -27,10 +28,12 @@ export const ReflectiveActivities = () => {
 
       if (error) throw error;
       
-      // Sort activities to put meditation first
+      // Sort activities to put meditation first, then sacred rituals
       return data.sort((a, b) => {
         if (a.title.toLowerCase().includes('meditation')) return -1;
         if (b.title.toLowerCase().includes('meditation')) return 1;
+        if (a.title === 'Sacred Rituals') return -1;
+        if (b.title === 'Sacred Rituals') return 1;
         return 0;
       });
     },
@@ -77,7 +80,7 @@ export const ReflectiveActivities = () => {
     title.toLowerCase().includes('meditation') || 
     title.toLowerCase().includes('journaling');
 
-  // Get the Sacred Rituals activity (there should be only one combined activity now)
+  // Get the Sacred Rituals activity 
   const sacredRitualsActivity = activities?.find(activity => 
     activity.category === 'sacred_rituals' && 
     activity.title === 'Sacred Rituals'
@@ -85,10 +88,7 @@ export const ReflectiveActivities = () => {
 
   // Other activities
   const otherActivities = activities?.filter(activity => 
-    activity.title !== 'Sacred Rituals' &&
-    !activity.title.toLowerCase().includes('art & expression') &&
-    !activity.title.toLowerCase().includes('tea ceremony') &&
-    !activity.title.toLowerCase().includes('sacred music')
+    activity.title !== 'Sacred Rituals'
   ) || [];
 
   return (
