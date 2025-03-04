@@ -57,7 +57,7 @@ export const ReflectiveActivities = () => {
     }
 
     // Navigate to the correct page based on activity type
-    if (activityType.toLowerCase().includes('sacred rituals')) {
+    if (activityType.toLowerCase() === 'sacred rituals') {
       navigate(`/journal/sacred_rituals`);
     } else {
       navigate(`/journal/${activityType.toLowerCase()}`);
@@ -77,14 +77,18 @@ export const ReflectiveActivities = () => {
     title.toLowerCase().includes('meditation') || 
     title.toLowerCase().includes('journaling');
 
-  // Group the Sacred Rituals activities
-  const sacredRituals = activities?.filter(activity => 
-    activity.category === 'sacred_rituals'
-  ) || [];
+  // Get the Sacred Rituals activity (there should be only one combined activity now)
+  const sacredRitualsActivity = activities?.find(activity => 
+    activity.category === 'sacred_rituals' && 
+    activity.title === 'Sacred Rituals'
+  );
 
   // Other activities
   const otherActivities = activities?.filter(activity => 
-    activity.category !== 'sacred_rituals'
+    activity.title !== 'Sacred Rituals' &&
+    !activity.title.toLowerCase().includes('art & expression') &&
+    !activity.title.toLowerCase().includes('tea ceremony') &&
+    !activity.title.toLowerCase().includes('sacred music')
   ) || [];
 
   return (
@@ -101,57 +105,35 @@ export const ReflectiveActivities = () => {
             Choose from these mindful activities to enrich your Sabbath experience.
           </p>
           
-          {/* Display Sacred Rituals category if there are any */}
-          {sacredRituals.length > 0 && (
+          {/* Display Sacred Rituals category if it exists */}
+          {sacredRitualsActivity && (
             <div className="mb-6">
               <h4 className="font-medium text-lg mb-3 text-sage-700">Sacred Rituals</h4>
               <div className="grid gap-4">
-                {sacredRituals.map((activity) => {
-                  const isPremium = isPremiumActivity(activity.title);
-                  return (
-                    <div
-                      key={activity.id}
-                      className={`p-4 rounded-lg border transition-colors ${
-                        isPremium 
-                          ? 'border-purple-200 bg-purple-50 hover:border-purple-300' 
-                          : 'border-sage-100 bg-sage-50 hover:border-sage-200'
-                      }`}
-                    >
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <h4 className={`font-medium ${
-                            isPremium ? 'text-purple-900' : 'text-gray-900'
-                          }`}>
-                            {activity.title}
-                            {isPremium && (
-                              <span className="ml-2 inline-block px-2 py-1 text-xs font-medium bg-purple-100 text-purple-700 rounded-full">
-                                Premium
-                              </span>
-                            )}
-                          </h4>
-                          <p className={`text-sm mt-1 ${
-                            isPremium ? 'text-purple-700' : 'text-gray-600'
-                          }`}>
-                            {activity.description}
-                          </p>
-                          <span className={`inline-block text-sm mt-2 ${
-                            isPremium ? 'text-purple-600' : 'text-sage-600'
-                          }`}>
-                            {activity.duration_minutes} minutes
-                          </span>
-                        </div>
-                        <Button
-                          onClick={() => handleActivityClick(activity.title)}
-                          variant={isPremium ? "secondary" : "outline"}
-                          className={isPremium ? "bg-purple-100 hover:bg-purple-200 text-purple-700" : 
-                            "bg-sage-100 hover:bg-sage-200 text-sage-700 ml-4"}
-                        >
-                          <Check className="w-4 h-4" />
-                        </Button>
-                      </div>
+                <div
+                  className="p-4 rounded-lg border transition-colors border-sage-100 bg-sage-50 hover:border-sage-200"
+                >
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h4 className="font-medium text-gray-900">
+                        {sacredRitualsActivity.title}
+                      </h4>
+                      <p className="text-sm mt-1 text-gray-600">
+                        {sacredRitualsActivity.description}
+                      </p>
+                      <span className="inline-block text-sm mt-2 text-sage-600">
+                        {sacredRitualsActivity.duration_minutes} minutes
+                      </span>
                     </div>
-                  );
-                })}
+                    <Button
+                      onClick={() => handleActivityClick(sacredRitualsActivity.title)}
+                      variant="outline"
+                      className="bg-sage-100 hover:bg-sage-200 text-sage-700 ml-4"
+                    >
+                      <Check className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
               </div>
             </div>
           )}

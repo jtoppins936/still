@@ -20,8 +20,8 @@ const SacredRituals = () => {
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <h1 className="text-2xl font-bold text-sage-800 mb-6">Sacred Rituals</h1>
       <p className="text-gray-600 mb-8">
-        This 30-day program guides you through sacred rituals that combine art, music, and tea ceremonies
-        to create moments of profound connection and spiritual renewal.
+        This 30-day program guides you through sacred rituals that combine art & expression, 
+        music, and tea ceremonies to create moments of profound connection and spiritual renewal.
       </p>
       
       <SacredRitualsProgram />
