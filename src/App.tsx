@@ -1,49 +1,57 @@
+import React from 'react';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import Index from "@/pages/Index";
+import Auth from "@/pages/Auth";
+import Profile from "@/pages/Profile";
+import Journaling from "@/pages/Journaling";
+import Mindfulness from "@/pages/Mindfulness";
+import SacredRituals from "@/pages/SacredRituals";
+import NotFound from "@/pages/NotFound";
+import CenteringPrayer from "@/pages/CenteringPrayer";
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-import Index from "./pages/Index";
-import Auth from "./pages/Auth";
-import NotFound from "./pages/NotFound";
-import Profile from "./pages/Profile";
-import Mindfulness from "./pages/Mindfulness";
-import Journaling from "./pages/Journaling";
-import SacredRituals from "./pages/SacredRituals";
-
-import { AuthProvider } from "./components/AuthProvider";
-import { PaywallProvider } from "./components/PaywallProvider";
-import { Toaster } from "./components/ui/toaster";
-
-// Create a client
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 0,
-      refetchOnWindowFocus: false,
-    },
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Index />,
   },
-});
+  {
+    path: "/auth",
+    element: <Auth />,
+  },
+  {
+    path: "/profile",
+    element: <Profile />,
+  },
+  {
+    path: "/journal/:type",
+    element: <Journaling />,
+  },
+  {
+    path: "/mindfulness",
+    element: <Mindfulness />,
+  },
+  {
+    path: "/sacred-rituals",
+    element: <SacredRituals />,
+  },
+  {
+    path: "/centering-prayer",
+    element: <CenteringPrayer />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
+  },
+]);
 
 function App() {
   return (
-    <Router>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <PaywallProvider>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/mindfulness" element={<Mindfulness />} />
-              <Route path="/journaling" element={<Journaling />} />
-              <Route path="/journal/sacred_rituals" element={<SacredRituals />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            <Toaster />
-          </PaywallProvider>
-        </AuthProvider>
-      </QueryClientProvider>
-    </Router>
+    <React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>
   );
 }
 
