@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -11,13 +11,32 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { usePaywall } from "@/components/PaywallProvider";
+import { PaywallModal } from "@/components/PaywallModal";
+import { useNavigate } from "react-router-dom";
 
 export const SacredRitualsProgram = () => {
   const { session } = useAuth();
+  const { isSubscribed } = usePaywall();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [currentDay, setCurrentDay] = useState(1);
   const [reflection, setReflection] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
+
+  useEffect(() => {
+    // Redirect to auth if not logged in
+    if (!session) {
+      navigate('/auth');
+      return;
+    }
+    
+    // Show paywall if not subscribed
+    if (!isSubscribed) {
+      setShowPaywall(true);
+    }
+  }, [session, isSubscribed, navigate]);
 
   // Fetch sacred rituals program data
   const { data: programData, isLoading: programLoading } = useQuery({
@@ -27,7 +46,7 @@ export const SacredRitualsProgram = () => {
         .from("reflective_activities")
         .select("*")
         .eq("category", "sacred_rituals")
-        .order("id");
+        .order("title");
 
       if (error) throw error;
       return data;
@@ -40,11 +59,20 @@ export const SacredRitualsProgram = () => {
     queryFn: async () => {
       if (!session?.user?.id) return null;
 
+      const { data: activities } = await supabase
+        .from("reflective_activities")
+        .select("id")
+        .eq("category", "sacred_rituals")
+        .order("title")
+        .limit(1);
+        
+      if (!activities || activities.length === 0) return null;
+
       const { data: existingProgress, error } = await supabase
         .from("user_activities")
         .select("*")
         .eq("user_id", session.user.id)
-        .eq("activity_id", programData?.[0]?.id)
+        .eq("activity_id", activities[0].id)
         .single();
 
       if (error && error.code !== "PGRST116") throw error;
@@ -56,7 +84,7 @@ export const SacredRitualsProgram = () => {
 
       return null;
     },
-    enabled: !!programData && !!session?.user?.id,
+    enabled: !!session?.user?.id,
   });
 
   const handleSubmitReflection = async () => {
@@ -121,6 +149,11 @@ export const SacredRitualsProgram = () => {
     }
   };
 
+  // Hide content when user is not subscribed
+  if (!isSubscribed) {
+    return <PaywallModal isOpen={showPaywall} onClose={() => navigate('/')} />;
+  }
+
   const isLoading = programLoading || progressLoading;
 
   if (isLoading) {
@@ -133,6 +166,7 @@ export const SacredRitualsProgram = () => {
     );
   }
 
+  // If we have the program data, find the current day's prompt
   const currentPrompt = programData?.[currentDay - 1];
 
   return (

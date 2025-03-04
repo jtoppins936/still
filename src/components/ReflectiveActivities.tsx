@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
@@ -24,7 +23,8 @@ export const ReflectiveActivities = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("reflective_activities")
-        .select("*");
+        .select("*")
+        .not("category", "eq", "sacred_rituals");
 
       if (error) throw error;
       
@@ -47,10 +47,11 @@ export const ReflectiveActivities = () => {
       return;
     }
 
-    // Check if the activity is premium (meditation or journaling)
+    // Check if the activity is premium (meditation, sacred rituals, or journaling)
     const isPremiumActivity = 
       activityType.toLowerCase().includes('meditation') || 
-      activityType.toLowerCase().includes('journaling');
+      activityType.toLowerCase().includes('journaling') ||
+      activityType.toLowerCase() === 'sacred rituals';
 
     if (isPremiumActivity && !isSubscribed) {
       setShowPaywall(true);
@@ -83,19 +84,9 @@ export const ReflectiveActivities = () => {
     activity.title.toLowerCase().includes('meditation')
   ) || [];
 
-  // Sacred Rituals related activities (Art & Expression, Tea Ceremony, Sacred Music)
-  const sacredRitualsActivities = activities?.filter(activity => 
-    activity.title.toLowerCase().includes('art & expression') ||
-    activity.title.toLowerCase().includes('tea ceremony') ||
-    activity.title.toLowerCase().includes('sacred music')
-  ) || [];
-
-  // Other activities (excluding meditation and sacred rituals)
+  // Other activities (excluding meditation)
   const otherActivities = activities?.filter(activity => 
-    !activity.title.toLowerCase().includes('meditation') &&
-    !activity.title.toLowerCase().includes('art & expression') &&
-    !activity.title.toLowerCase().includes('tea ceremony') &&
-    !activity.title.toLowerCase().includes('sacred music')
+    !activity.title.toLowerCase().includes('meditation')
   ) || [];
 
   return (
@@ -152,37 +143,39 @@ export const ReflectiveActivities = () => {
           )}
           
           {/* Display Sacred Rituals category */}
-          {sacredRitualsActivities.length > 0 && (
-            <div className="mb-6">
-              <h4 className="font-medium text-lg mb-3 text-sage-700">Sacred Rituals</h4>
-              <div className="grid gap-4">
-                <div
-                  className="p-4 rounded-lg border transition-colors border-sage-100 bg-sage-50 hover:border-sage-200"
-                >
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h4 className="font-medium text-gray-900">
-                        Sacred Rituals
-                      </h4>
-                      <p className="text-sm mt-1 text-gray-600">
-                        A 30-day program that combines art & expression, music, and tea ceremonies to create moments of profound connection and spiritual renewal.
-                      </p>
-                      <span className="inline-block text-sm mt-2 text-sage-600">
-                        30+ minutes
+          <div className="mb-6">
+            <h4 className="font-medium text-lg mb-3 text-sage-700">Sacred Rituals</h4>
+            <div className="grid gap-4">
+              <div
+                className="p-4 rounded-lg border transition-colors border-sage-100 bg-sage-50 hover:border-sage-200"
+              >
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h4 className="font-medium text-gray-900">
+                      Sacred Rituals
+                      <span className="ml-2 inline-block px-2 py-1 text-xs font-medium bg-sage-100 text-sage-700 rounded-full">
+                        Premium
                       </span>
-                    </div>
-                    <Button
-                      onClick={() => handleActivityClick("Sacred Rituals")}
-                      variant="outline"
-                      className="bg-sage-100 hover:bg-sage-200 text-sage-700 ml-4"
-                    >
-                      <Check className="w-4 h-4" />
-                    </Button>
+                    </h4>
+                    <p className="text-sm mt-1 text-gray-600">
+                      A 30-day program that combines art & expression, music, and tea ceremonies 
+                      to create moments of profound connection and spiritual renewal.
+                    </p>
+                    <span className="inline-block text-sm mt-2 text-sage-600">
+                      30+ minutes
+                    </span>
                   </div>
+                  <Button
+                    onClick={() => handleActivityClick("Sacred Rituals")}
+                    variant="outline"
+                    className="bg-sage-100 hover:bg-sage-200 text-sage-700 ml-4"
+                  >
+                    <Check className="w-4 h-4" />
+                  </Button>
                 </div>
               </div>
             </div>
-          )}
+          </div>
           
           {/* Display other activities */}
           {otherActivities.length > 0 && (

@@ -3,9 +3,11 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { SacredRitualsProgram } from "@/components/sacred-rituals/SacredRitualsProgram";
 import { useAuth } from "@/components/AuthProvider";
+import { usePaywall } from "@/components/PaywallProvider";
 
 const SacredRituals = () => {
   const { session } = useAuth();
+  const { isSubscribed } = usePaywall();
   const navigate = useNavigate();
 
   useEffect(() => {
