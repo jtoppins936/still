@@ -49,7 +49,7 @@ export const SacredRitualsProgram = () => {
   }, [session, isSubscribed, navigate]);
 
   // Fetch sacred rituals program data
-  const { data: programData, isLoading: programLoading } = useQuery<SacredRitualActivity[]>({
+  const { data: programData, isLoading: programLoading } = useQuery({
     queryKey: ["sacred-rituals-program"],
     queryFn: async () => {
       const { data, error } = await supabase

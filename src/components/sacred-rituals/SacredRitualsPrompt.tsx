@@ -47,10 +47,21 @@ export const SacredRitualsPrompt = ({
           <p className="text-gray-700">{prompt.description}</p>
         </div>
 
+        <div className="mt-4 bg-sage-50 p-4 rounded-md border border-sage-100">
+          <h4 className="font-medium text-sage-800 mb-2">How to Practice Today's Ritual:</h4>
+          <ol className="list-decimal pl-5 space-y-2 text-gray-700">
+            <li>Find a quiet space where you won't be disturbed for {prompt.duration_minutes} minutes.</li>
+            <li>Take a few deep breaths to center yourself before beginning.</li>
+            <li>Follow the guidance in the description above.</li>
+            <li>When you've completed the ritual, take a moment to reflect on your experience.</li>
+            <li>Write your thoughts in the reflection area below.</li>
+          </ol>
+        </div>
+
         <div className="mt-8">
           <h3 className="text-lg font-medium text-sage-800 mb-2">Your Reflection</h3>
           <Textarea
-            placeholder="Write your reflections here..."
+            placeholder="Write your reflections here... Consider: How did this ritual make you feel? What insights arose? How might you incorporate elements of this practice into your daily life?"
             className="min-h-[200px] border-sage-200 focus:border-sage-300"
             value={reflection}
             onChange={(e) => onReflectionChange(e.target.value)}
