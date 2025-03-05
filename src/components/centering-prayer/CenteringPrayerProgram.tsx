@@ -19,6 +19,7 @@ interface CenteringPrayerDay {
   practice: string;
   reflection_prompt: string;
   duration_minutes: number;
+  focus_phrase: string;
 }
 
 interface UserProgress {
@@ -169,6 +170,13 @@ export const CenteringPrayerProgram = () => {
                 <h3 className="text-lg font-medium text-rose-800 mb-2">Scripture Focus</h3>
                 <p className="italic text-gray-700">{currentPrayer.scripture}</p>
               </div>
+              
+              {currentPrayer.focus_phrase && (
+                <div className="bg-rose-100 p-4 rounded-md border border-rose-200 text-center">
+                  <h3 className="text-lg font-medium text-rose-800 mb-2">Today's Sacred Phrase</h3>
+                  <p className="text-xl font-semibold text-rose-700">"{currentPrayer.focus_phrase}"</p>
+                </div>
+              )}
               
               <div>
                 <h3 className="text-lg font-medium text-rose-800 mb-2">Prayer Practice</h3>
