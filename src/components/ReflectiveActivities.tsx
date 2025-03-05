@@ -54,7 +54,6 @@ export const ReflectiveActivities = () => {
       activityType.toLowerCase().includes('journaling') ||
       activityType.toLowerCase() === 'sacred rituals' ||
       activityType.toLowerCase() === 'centering prayer' ||
-      activityType.toLowerCase() === 'reading reflection' ||
       activityType.toLowerCase() === 'gratitude practice';
 
     if (isPremiumActivity && !isSubscribed) {
@@ -88,7 +87,6 @@ export const ReflectiveActivities = () => {
     title.toLowerCase().includes('meditation') || 
     title.toLowerCase().includes('journaling') ||
     title.toLowerCase() === 'centering prayer' ||
-    title.toLowerCase() === 'reading reflection' ||
     title.toLowerCase() === 'gratitude practice';
 
   const meditationActivities = activities?.filter(activity => 
@@ -208,9 +206,6 @@ export const ReflectiveActivities = () => {
                   <div>
                     <h4 className="font-medium text-amber-900">
                       Reading Reflection
-                      <span className="ml-2 inline-block px-2 py-1 text-xs font-medium bg-amber-100 text-amber-700 rounded-full">
-                        Premium
-                      </span>
                     </h4>
                     <p className="text-sm mt-1 text-amber-700">
                       A 30-day program to deepen your connection with texts through guided 
@@ -242,9 +237,6 @@ export const ReflectiveActivities = () => {
                   <div>
                     <h4 className="font-medium text-blue-900">
                       Gratitude Practice
-                      <span className="ml-2 inline-block px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">
-                        Premium
-                      </span>
                     </h4>
                     <p className="text-sm mt-1 text-blue-700">
                       A 30-day program to cultivate an attitude of gratitude through 
@@ -276,9 +268,6 @@ export const ReflectiveActivities = () => {
                   <div>
                     <h4 className="font-medium text-gray-900">
                       Sacred Rituals
-                      <span className="ml-2 inline-block px-2 py-1 text-xs font-medium bg-sage-100 text-sage-700 rounded-full">
-                        Premium
-                      </span>
                     </h4>
                     <p className="text-sm mt-1 text-gray-600">
                       A 30-day program that combines art & expression, music, and tea ceremonies 
