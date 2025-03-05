@@ -214,37 +214,6 @@ export const ReflectiveActivities = () => {
             </div>
           </div>
           
-          <div className="mb-6">
-            <h4 className="font-medium text-lg mb-3 text-green-700">Nature Walk Journal</h4>
-            <div className="grid gap-4">
-              <div
-                className="p-4 rounded-lg border transition-colors border-green-200 bg-green-50 hover:border-green-300"
-              >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h4 className="font-medium text-green-900">
-                      Nature Walk Journal
-                    </h4>
-                    <p className="text-sm mt-1 text-green-700">
-                      A 30-day program that guides you to connect with nature through mindful walks
-                      and reflective journaling about your observations and experiences.
-                    </p>
-                    <span className="inline-block text-sm mt-2 text-green-600">
-                      20-30 minutes
-                    </span>
-                  </div>
-                  <Button
-                    onClick={() => handleActivityClick("nature_walk")}
-                    variant="secondary"
-                    className="bg-green-100 hover:bg-green-200 text-green-700"
-                  >
-                    <Trees className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-          
           {otherActivities.length > 0 && (
             <div className="grid gap-4">
               {otherActivities.map((activity) => {
