@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ScrollText, Check, Heart, BookOpen } from "lucide-react";
+import { ScrollText, Check, Heart, BookOpen, Footprints, Trees } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
@@ -58,6 +58,8 @@ export const ReflectiveActivities = () => {
       navigate(`/gratitude-practice`);
     } else if (activityType.toLowerCase() === 'mindfulness') {
       navigate(`/mindfulness`);
+    } else if (activityType.toLowerCase() === 'nature walk journal') {
+      navigate(`/journal/nature_walk`);
     } else {
       navigate(`/journal/${activityType.toLowerCase()}`);
     }
@@ -90,7 +92,8 @@ export const ReflectiveActivities = () => {
     !activity.title.toLowerCase().includes('meditation') &&
     activity.title.toLowerCase() !== 'centering prayer' &&
     activity.title.toLowerCase() !== 'gratitude practice' &&
-    activity.title.toLowerCase() !== 'reading reflection'
+    activity.title.toLowerCase() !== 'reading reflection' &&
+    activity.title.toLowerCase() !== 'nature walk journal'
   ) || [];
 
   return (
@@ -208,6 +211,38 @@ export const ReflectiveActivities = () => {
                     className="bg-blue-100 hover:bg-blue-200 text-blue-700"
                   >
                     <Heart className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="mb-6">
+            <h4 className="font-medium text-lg mb-3 text-green-700">Nature Walk Journal</h4>
+            <div className="grid gap-4">
+              <div
+                className="p-4 rounded-lg border transition-colors border-green-200 bg-green-50 hover:border-green-300"
+              >
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h4 className="font-medium text-green-900">
+                      Nature Walk Journal
+                    </h4>
+                    <p className="text-sm mt-1 text-green-700">
+                      Connect with the natural world through this 30-day guided nature walk journal. 
+                      Each prompt will help you notice different aspects of nature and deepen your 
+                      connection to the environment around you.
+                    </p>
+                    <span className="inline-block text-sm mt-2 text-green-600">
+                      20-30 minutes
+                    </span>
+                  </div>
+                  <Button
+                    onClick={() => handleActivityClick("Nature Walk Journal")}
+                    variant="secondary"
+                    className="bg-green-100 hover:bg-green-200 text-green-700"
+                  >
+                    <Footprints className="w-4 h-4" />
                   </Button>
                 </div>
               </div>
