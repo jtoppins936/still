@@ -1,4 +1,3 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
@@ -44,9 +43,10 @@ export const useSacredRitualsData = () => {
     },
   });
 
-  // Fetch user progress with explicit return type and intermediate type
+  // Using explicit generic type parameters to prevent deep type instantiation
   const progressQuery = useQuery<ProgressQueryResult, Error>({
     queryKey: ["sacred-rituals-progress", session?.user?.id],
+    // Remove the explicit Promise return type from the function but keep it in the generic parameters
     queryFn: async () => {
       if (!session?.user?.id) return null;
 
