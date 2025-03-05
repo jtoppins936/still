@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ScrollText, Check, Heart } from "lucide-react";
+import { ScrollText, Check, Heart, BookOpen } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
@@ -49,23 +49,24 @@ export const ReflectiveActivities = () => {
       return;
     }
 
-    // Check if the activity is premium (meditation, sacred rituals, or journaling)
     const isPremiumActivity = 
       activityType.toLowerCase().includes('meditation') || 
       activityType.toLowerCase().includes('journaling') ||
       activityType.toLowerCase() === 'sacred rituals' ||
-      activityType.toLowerCase() === 'centering prayer';
+      activityType.toLowerCase() === 'centering prayer' ||
+      activityType.toLowerCase() === 'reading reflection';
 
     if (isPremiumActivity && !isSubscribed) {
       setShowPaywall(true);
       return;
     }
 
-    // Navigate to the correct page based on activity type
     if (activityType.toLowerCase() === 'sacred rituals') {
       navigate(`/sacred-rituals`);
     } else if (activityType.toLowerCase() === 'centering prayer') {
       navigate(`/centering-prayer`);
+    } else if (activityType.toLowerCase() === 'reading reflection') {
+      navigate(`/reading-reflection`);
     } else {
       navigate(`/journal/${activityType.toLowerCase()}`);
     }
@@ -83,19 +84,21 @@ export const ReflectiveActivities = () => {
   const isPremiumActivity = (title: string) => 
     title.toLowerCase().includes('meditation') || 
     title.toLowerCase().includes('journaling') ||
-    title.toLowerCase() === 'centering prayer';
+    title.toLowerCase() === 'centering prayer' ||
+    title.toLowerCase() === 'reading reflection';
 
-  // Categorize the activities
   const meditationActivities = activities?.filter(activity => 
     activity.title.toLowerCase().includes('meditation')
   ) || [];
 
-  // Centering Prayer activities
   const centeringPrayerActivities = activities?.filter(activity => 
     activity.title.toLowerCase() === 'centering prayer'
   ) || [];
 
-  // Other activities (excluding meditation and centering prayer)
+  const readingReflectionActivities = activities?.filter(activity => 
+    activity.title.toLowerCase() === 'reading reflection'
+  ) || [];
+
   const otherActivities = activities?.filter(activity => 
     !activity.title.toLowerCase().includes('meditation') &&
     activity.title.toLowerCase() !== 'centering prayer'
@@ -115,7 +118,6 @@ export const ReflectiveActivities = () => {
             Choose from these mindful activities to enrich your Sabbath experience.
           </p>
           
-          {/* Display Meditation activities first */}
           {meditationActivities.length > 0 && (
             <div className="mb-6">
               <h4 className="font-medium text-lg mb-3 text-purple-700">Meditation</h4>
@@ -154,7 +156,6 @@ export const ReflectiveActivities = () => {
             </div>
           )}
           
-          {/* Display Centering Prayer category */}
           {centeringPrayerActivities.length > 0 && (
             <div className="mb-6">
               <h4 className="font-medium text-lg mb-3 text-rose-700">Centering Prayer</h4>
@@ -193,7 +194,40 @@ export const ReflectiveActivities = () => {
             </div>
           )}
           
-          {/* Display Sacred Rituals category */}
+          <div className="mb-6">
+            <h4 className="font-medium text-lg mb-3 text-amber-700">Reading Reflection</h4>
+            <div className="grid gap-4">
+              <div
+                className="p-4 rounded-lg border transition-colors border-amber-200 bg-amber-50 hover:border-amber-300"
+              >
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h4 className="font-medium text-amber-900">
+                      Reading Reflection
+                      <span className="ml-2 inline-block px-2 py-1 text-xs font-medium bg-amber-100 text-amber-700 rounded-full">
+                        Premium
+                      </span>
+                    </h4>
+                    <p className="text-sm mt-1 text-amber-700">
+                      A 30-day program to deepen your connection with texts through guided 
+                      reflection prompts that help extract meaning and personal insights.
+                    </p>
+                    <span className="inline-block text-sm mt-2 text-amber-600">
+                      15-20 minutes
+                    </span>
+                  </div>
+                  <Button
+                    onClick={() => handleActivityClick("Reading Reflection")}
+                    variant="secondary"
+                    className="bg-amber-100 hover:bg-amber-200 text-amber-700"
+                  >
+                    <BookOpen className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
           <div className="mb-6">
             <h4 className="font-medium text-lg mb-3 text-sage-700">Sacred Rituals</h4>
             <div className="grid gap-4">
@@ -228,7 +262,6 @@ export const ReflectiveActivities = () => {
             </div>
           </div>
           
-          {/* Display other activities */}
           {otherActivities.length > 0 && (
             <div className="grid gap-4">
               {otherActivities.map((activity) => {

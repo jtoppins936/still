@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {
   createBrowserRouter,
@@ -11,6 +12,7 @@ import Mindfulness from "@/pages/Mindfulness";
 import SacredRituals from "@/pages/SacredRituals";
 import NotFound from "@/pages/NotFound";
 import CenteringPrayer from "@/pages/CenteringPrayer";
+import ReadingReflection from "@/pages/ReadingReflection";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +42,10 @@ const router = createBrowserRouter([
   {
     path: "/centering-prayer",
     element: <CenteringPrayer />,
+  },
+  {
+    path: "/reading-reflection",
+    element: <ReadingReflection />,
   },
   {
     path: "*",
