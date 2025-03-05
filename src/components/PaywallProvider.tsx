@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
@@ -12,8 +11,8 @@ interface PaywallContextType {
 }
 
 const PaywallContext = createContext<PaywallContextType>({
-  isSubscribed: false,
-  isLoading: true,
+  isSubscribed: true, // Always true for testing
+  isLoading: false, 
   handleSubscribe: async () => {},
 });
 
@@ -97,7 +96,7 @@ export function PaywallProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <PaywallContext.Provider value={{ isSubscribed, isLoading, handleSubscribe }}>
+    <PaywallContext.Provider value={{ isSubscribed: true, isLoading, handleSubscribe }}>
       {children}
     </PaywallContext.Provider>
   );

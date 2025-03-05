@@ -21,11 +21,9 @@ const Journaling = () => {
           <p className="text-gray-600">
             Deepen your mindfulness practice through guided daily journaling
           </p>
-          {isSubscribed && (
-            <span className="mt-2 inline-block px-3 py-1 text-xs font-medium bg-purple-100 text-purple-700 rounded-full">
-              Premium Feature
-            </span>
-          )}
+          <span className="mt-2 inline-block px-3 py-1 text-xs font-medium bg-purple-100 text-purple-700 rounded-full">
+            Testing Mode - Premium Feature Available
+          </span>
         </header>
 
         {!session ? (
@@ -33,21 +31,6 @@ const Journaling = () => {
             <h2 className="text-xl font-medium mb-4">Sign in to begin your journaling practice</h2>
             <Button onClick={() => navigate("/auth")} className="bg-sage-600 hover:bg-sage-700">
               Sign In
-            </Button>
-          </div>
-        ) : !isSubscribed ? (
-          <div className="text-center py-12 bg-purple-50 rounded-lg border border-purple-100">
-            <h2 className="text-xl font-medium mb-4 text-purple-900">
-              Upgrade to Premium
-            </h2>
-            <p className="text-purple-700 mb-6 max-w-md mx-auto">
-              The 30-Day Mindful Journaling program is a premium feature designed to help you develop a consistent journaling practice.
-            </p>
-            <Button 
-              onClick={() => setShowPaywall(true)} 
-              className="bg-purple-600 hover:bg-purple-700 text-white"
-            >
-              Unlock Premium Features
             </Button>
           </div>
         ) : (

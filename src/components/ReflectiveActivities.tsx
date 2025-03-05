@@ -49,18 +49,6 @@ export const ReflectiveActivities = () => {
       return;
     }
 
-    const isPremiumActivity = 
-      activityType.toLowerCase().includes('meditation') || 
-      activityType.toLowerCase().includes('journaling') ||
-      activityType.toLowerCase() === 'sacred rituals' ||
-      activityType.toLowerCase() === 'centering prayer' ||
-      activityType.toLowerCase() === 'gratitude practice';
-
-    if (isPremiumActivity && !isSubscribed) {
-      setShowPaywall(true);
-      return;
-    }
-
     if (activityType.toLowerCase() === 'sacred rituals') {
       navigate(`/sacred-rituals`);
     } else if (activityType.toLowerCase() === 'centering prayer') {
@@ -69,6 +57,8 @@ export const ReflectiveActivities = () => {
       navigate(`/reading-reflection`);
     } else if (activityType.toLowerCase() === 'gratitude practice') {
       navigate(`/gratitude-practice`);
+    } else if (activityType.toLowerCase() === 'mindfulness') {
+      navigate(`/mindfulness`);
     } else {
       navigate(`/journal/${activityType.toLowerCase()}`);
     }
