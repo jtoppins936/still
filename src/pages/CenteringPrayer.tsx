@@ -1,9 +1,9 @@
 
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
 import { CenteringPrayerProgram } from "@/components/centering-prayer/CenteringPrayerProgram";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
 import { seedCenteringPrayer } from "@/data/seed-centering-prayer";
 import { SimpleFallbackProgram } from "@/components/centering-prayer/SimpleFallbackProgram";
 import { ErrorFallback } from "@/components/centering-prayer/ErrorFallback";
@@ -64,7 +64,7 @@ class ErrorBoundaryWrapper extends React.Component<
   { children: React.ReactNode; onError: (error: Error) => void },
   { hasError: boolean }
 > {
-  constructor(props) {
+  constructor(props: { children: React.ReactNode; onError: (error: Error) => void }) {
     super(props);
     this.state = { hasError: false };
   }
@@ -73,7 +73,7 @@ class ErrorBoundaryWrapper extends React.Component<
     return { hasError: true };
   }
 
-  componentDidCatch(error) {
+  componentDidCatch(error: Error) {
     this.props.onError(error);
   }
 
