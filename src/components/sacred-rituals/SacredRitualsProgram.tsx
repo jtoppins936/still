@@ -59,8 +59,8 @@ export const SacredRitualsProgram = () => {
     }
   }, [session, isSubscribed, navigate]);
 
-  // Fetch sacred rituals program data with explicit typing
-  const { data: programData, isLoading: programLoading } = useQuery<SacredRitualActivity[]>({
+  // Fetch sacred rituals program data
+  const programQuery = useQuery({
     queryKey: ["sacred-rituals-program"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -74,8 +74,8 @@ export const SacredRitualsProgram = () => {
     },
   });
 
-  // Fetch user's progress without explicit generic type (let TypeScript infer it)
-  const { data: userProgress, isLoading: progressLoading } = useQuery({
+  // Fetch user's progress
+  const progressQuery = useQuery({
     queryKey: ["sacred-rituals-progress", session?.user?.id],
     queryFn: async () => {
       if (!session?.user?.id) return null;
@@ -108,6 +108,10 @@ export const SacredRitualsProgram = () => {
     },
     enabled: !!session?.user?.id,
   });
+
+  const programData = programQuery.data;
+  const userProgress = progressQuery.data;
+  const isLoading = programQuery.isLoading || progressQuery.isLoading;
 
   const handleSubmitReflection = async () => {
     if (!session?.user?.id || !programData || reflection.trim() === "") return;
@@ -184,8 +188,6 @@ export const SacredRitualsProgram = () => {
   if (!isSubscribed) {
     return <PaywallModal isOpen={showPaywall} onClose={() => navigate('/')} />;
   }
-
-  const isLoading = programLoading || progressLoading;
 
   if (isLoading) {
     return (
