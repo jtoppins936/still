@@ -25,6 +25,17 @@ interface SacredRitualActivity {
   day: number;
 }
 
+// Define a type for user progress
+interface UserProgress {
+  id: string;
+  user_id: string;
+  activity_id: string;
+  scheduled_for: string | null;
+  completed: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export const SacredRitualsProgram = () => {
   const { session } = useAuth();
   const { isSubscribed } = usePaywall();
@@ -64,7 +75,7 @@ export const SacredRitualsProgram = () => {
   });
 
   // Fetch user's progress
-  const { data: userProgress, isLoading: progressLoading } = useQuery({
+  const { data: userProgress, isLoading: progressLoading } = useQuery<UserProgress | null, Error>({
     queryKey: ["sacred-rituals-progress", session?.user?.id],
     queryFn: async () => {
       if (!session?.user?.id) return null;
@@ -90,7 +101,7 @@ export const SacredRitualsProgram = () => {
       if (existingProgress) {
         // Start from day 1 for new users, otherwise use the stored progress (up to day 30)
         setCurrentDay(existingProgress.completed ? 30 : Math.min(30, existingProgress.scheduled_for ? new Date(existingProgress.scheduled_for).getDate() : 1));
-        return existingProgress;
+        return existingProgress as UserProgress;
       }
 
       return null;
