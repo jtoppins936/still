@@ -46,7 +46,7 @@ export const SacredRitualsProgram = () => {
         .from("reflective_activities")
         .select("*")
         .eq("category", "sacred_rituals")
-        .order("title");
+        .order("day");  // Order by day instead of title to ensure correct sequence
 
       if (error) throw error;
       return data;
@@ -63,7 +63,7 @@ export const SacredRitualsProgram = () => {
         .from("reflective_activities")
         .select("id")
         .eq("category", "sacred_rituals")
-        .order("title")
+        .eq("day", 1)  // Get the Day 1 activity specifically
         .limit(1);
         
       if (!activities || activities.length === 0) return null;
@@ -167,8 +167,8 @@ export const SacredRitualsProgram = () => {
     );
   }
 
-  // If we have the program data, find the current day's prompt
-  const currentPrompt = programData?.[currentDay - 1];
+  // If we have the program data, find the current day's prompt by looking for the matching day number
+  const currentPrompt = programData?.find(prompt => prompt.day === currentDay);
 
   return (
     <div className="space-y-6">
