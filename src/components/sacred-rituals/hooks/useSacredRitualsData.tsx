@@ -29,7 +29,7 @@ export const useSacredRitualsData = () => {
   // Fetch program data
   const programQuery = useQuery({
     queryKey: ["sacred-rituals-program"],
-    queryFn: async () => {
+    queryFn: async (): Promise<SacredRitualActivity[]> => {
       const { data, error } = await supabase
         .from("reflective_activities")
         .select("*")
@@ -44,7 +44,7 @@ export const useSacredRitualsData = () => {
   // Fetch user progress with proper typing
   const progressQuery = useQuery({
     queryKey: ["sacred-rituals-progress", session?.user?.id],
-    queryFn: async () => {
+    queryFn: async (): Promise<UserProgress | null> => {
       if (!session?.user?.id) return null;
 
       const { data: activities } = await supabase
