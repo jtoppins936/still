@@ -91,7 +91,8 @@ export const ReflectiveActivities = () => {
 
   const otherActivities = activities?.filter(activity => 
     !activity.title.toLowerCase().includes('meditation') &&
-    activity.title.toLowerCase() !== 'centering prayer'
+    activity.title.toLowerCase() !== 'centering prayer' &&
+    activity.title.toLowerCase() !== 'gratitude practice'
   ) || [];
 
   return (
