@@ -258,6 +258,7 @@ export type Database = {
           created_at: string | null
           day_number: number
           duration_minutes: number
+          focus_phrase: string | null
           id: string
           practice: string
           reflection_prompt: string
@@ -270,6 +271,7 @@ export type Database = {
           created_at?: string | null
           day_number: number
           duration_minutes: number
+          focus_phrase?: string | null
           id?: string
           practice: string
           reflection_prompt: string
@@ -282,6 +284,7 @@ export type Database = {
           created_at?: string | null
           day_number?: number
           duration_minutes?: number
+          focus_phrase?: string | null
           id?: string
           practice?: string
           reflection_prompt?: string
