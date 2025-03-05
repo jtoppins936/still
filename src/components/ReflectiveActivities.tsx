@@ -54,7 +54,8 @@ export const ReflectiveActivities = () => {
       activityType.toLowerCase().includes('journaling') ||
       activityType.toLowerCase() === 'sacred rituals' ||
       activityType.toLowerCase() === 'centering prayer' ||
-      activityType.toLowerCase() === 'reading reflection';
+      activityType.toLowerCase() === 'reading reflection' ||
+      activityType.toLowerCase() === 'gratitude practice';
 
     if (isPremiumActivity && !isSubscribed) {
       setShowPaywall(true);
@@ -67,6 +68,8 @@ export const ReflectiveActivities = () => {
       navigate(`/centering-prayer`);
     } else if (activityType.toLowerCase() === 'reading reflection') {
       navigate(`/reading-reflection`);
+    } else if (activityType.toLowerCase() === 'gratitude practice') {
+      navigate(`/gratitude-practice`);
     } else {
       navigate(`/journal/${activityType.toLowerCase()}`);
     }
@@ -85,7 +88,8 @@ export const ReflectiveActivities = () => {
     title.toLowerCase().includes('meditation') || 
     title.toLowerCase().includes('journaling') ||
     title.toLowerCase() === 'centering prayer' ||
-    title.toLowerCase() === 'reading reflection';
+    title.toLowerCase() === 'reading reflection' ||
+    title.toLowerCase() === 'gratitude practice';
 
   const meditationActivities = activities?.filter(activity => 
     activity.title.toLowerCase().includes('meditation')
@@ -222,6 +226,40 @@ export const ReflectiveActivities = () => {
                     className="bg-amber-100 hover:bg-amber-200 text-amber-700"
                   >
                     <BookOpen className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="mb-6">
+            <h4 className="font-medium text-lg mb-3 text-blue-700">Gratitude Practice</h4>
+            <div className="grid gap-4">
+              <div
+                className="p-4 rounded-lg border transition-colors border-blue-200 bg-blue-50 hover:border-blue-300"
+              >
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h4 className="font-medium text-blue-900">
+                      Gratitude Practice
+                      <span className="ml-2 inline-block px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">
+                        Premium
+                      </span>
+                    </h4>
+                    <p className="text-sm mt-1 text-blue-700">
+                      A 30-day program to cultivate an attitude of gratitude through 
+                      daily reflection prompts that help you recognize life's gifts.
+                    </p>
+                    <span className="inline-block text-sm mt-2 text-blue-600">
+                      10-15 minutes
+                    </span>
+                  </div>
+                  <Button
+                    onClick={() => handleActivityClick("Gratitude Practice")}
+                    variant="secondary"
+                    className="bg-blue-100 hover:bg-blue-200 text-blue-700"
+                  >
+                    <Heart className="w-4 h-4" />
                   </Button>
                 </div>
               </div>

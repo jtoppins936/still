@@ -13,6 +13,7 @@ import SacredRituals from "@/pages/SacredRituals";
 import NotFound from "@/pages/NotFound";
 import CenteringPrayer from "@/pages/CenteringPrayer";
 import ReadingReflection from "@/pages/ReadingReflection";
+import GratitudePractice from "@/pages/GratitudePractice";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
   {
     path: "/reading-reflection",
     element: <ReadingReflection />,
+  },
+  {
+    path: "/gratitude-practice",
+    element: <GratitudePractice />,
   },
   {
     path: "*",
