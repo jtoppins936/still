@@ -38,6 +38,7 @@ const Auth = () => {
           email, 
           password,
           options: {
+            emailRedirectTo: window.location.origin,
             data: {
               // Add any custom user metadata here if needed
             }
@@ -46,14 +47,27 @@ const Auth = () => {
 
         if (error) throw error;
 
+        console.log("Sign up response:", data);
+
         if (data?.user) {
           console.log("Sign up successful:", data.user.id);
           toast({
             title: "Welcome to Still!",
             description: "Your account has been created successfully.",
           });
-          // Navigate to home page after sign up
-          navigate("/");
+          
+          // Force a session check after sign up
+          const { data: sessionData } = await supabase.auth.getSession();
+          if (sessionData?.session) {
+            console.log("Session obtained after signup, redirecting");
+            navigate("/");
+          } else {
+            console.log("No session after signup, showing confirmation message");
+            toast({
+              title: "Verification email sent",
+              description: "Please check your email to verify your account before logging in.",
+            });
+          }
         }
       } else {
         // Sign in

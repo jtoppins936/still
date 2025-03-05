@@ -26,18 +26,34 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log("Initial auth session:", session?.user?.id || "No session");
-      setSession(session);
-      setLoading(false);
-      
-      // Seed centering prayer data when user is logged in
-      if (session) {
-        seedCenteringPrayer().catch(error => {
-          console.error("Error seeding centering prayer data:", error);
-        });
+    const initializeAuth = async () => {
+      try {
+        console.log("Initializing auth session...");
+        const { data, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error("Error getting session:", error.message);
+          setLoading(false);
+          return;
+        }
+        
+        console.log("Initial auth session:", data.session?.user?.id || "No session");
+        setSession(data.session);
+        
+        // Seed centering prayer data when user is logged in
+        if (data.session) {
+          seedCenteringPrayer().catch(error => {
+            console.error("Error seeding centering prayer data:", error);
+          });
+        }
+      } catch (err) {
+        console.error("Unexpected error in auth initialization:", err);
+      } finally {
+        setLoading(false);
       }
-    });
+    };
+    
+    initializeAuth();
 
     // Set up auth state listener
     const {
@@ -45,7 +61,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       console.log("Auth state changed:", _event, session?.user?.id || "No session");
       setSession(session);
-      setLoading(false);
       
       // Seed centering prayer data on sign in
       if (session && _event === 'SIGNED_IN') {

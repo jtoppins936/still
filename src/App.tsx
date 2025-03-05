@@ -14,6 +14,9 @@ import NotFound from "@/pages/NotFound";
 import CenteringPrayer from "@/pages/CenteringPrayer";
 import ReadingReflection from "@/pages/ReadingReflection";
 import GratitudePractice from "@/pages/GratitudePractice";
+import { AuthProvider } from "@/components/AuthProvider";
+import { PaywallProvider } from "@/components/PaywallProvider";
+import { Toaster } from "@/components/ui/toaster";
 
 const router = createBrowserRouter([
   {
@@ -61,7 +64,12 @@ const router = createBrowserRouter([
 function App() {
   return (
     <React.StrictMode>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <PaywallProvider>
+          <RouterProvider router={router} />
+          <Toaster />
+        </PaywallProvider>
+      </AuthProvider>
     </React.StrictMode>
   );
 }
