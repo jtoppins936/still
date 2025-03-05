@@ -13,6 +13,7 @@ import { GratitudePractice } from "./reflective-activities/GratitudePractice";
 import { OtherActivities } from "./reflective-activities/OtherActivities";
 import { ActivityLoader } from "./reflective-activities/ActivityLoader";
 import { isPremiumActivity } from "./reflective-activities/helpers";
+import { SacredRituals } from "./reflective-activities/SacredRituals";
 
 export const ReflectiveActivities = () => {
   const { session } = useAuth();
@@ -25,7 +26,6 @@ export const ReflectiveActivities = () => {
       const { data, error } = await supabase
         .from("reflective_activities")
         .select("*")
-        .not("category", "eq", "sacred_rituals")
         .not("title", "ilike", "%art & expression%")
         .not("title", "ilike", "%tea ceremony%")
         .not("title", "ilike", "%sacred music%")
@@ -42,7 +42,20 @@ export const ReflectiveActivities = () => {
     },
   });
 
-  if (isLoading) {
+  const { data: sacredRituals, isLoading: isSacredRitualsLoading } = useQuery({
+    queryKey: ["sacred-rituals"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("reflective_activities")
+        .select("*")
+        .eq("category", "sacred_rituals");
+
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  if (isLoading || isSacredRitualsLoading) {
     return <ActivityLoader />;
   }
 
@@ -83,6 +96,9 @@ export const ReflectiveActivities = () => {
             activities={otherActivities} 
             isPremiumActivity={isPremiumActivity} 
           />
+          {sacredRituals && sacredRituals.length > 0 && (
+            <SacredRituals activities={sacredRituals} />
+          )}
         </CardContent>
       </Card>
 
