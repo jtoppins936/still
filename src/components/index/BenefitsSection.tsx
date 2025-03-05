@@ -31,7 +31,7 @@ export const BenefitsSection = () => {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <span className="inline-block px-3 py-1 text-sm bg-sage-100 text-sage-700 rounded-full mb-6">
-            Why Still
+            Why Still?
           </span>
           <h2 className="text-3xl md:text-4xl font-light text-gray-900">
             Cultivate a Life of Intention
