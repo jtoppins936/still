@@ -13,7 +13,7 @@ import type { MindfulnessProgram } from "@/types/mindfulness";
 
 interface DailyMeditationProps {
   day: number;
-  category: 'faith_based' | 'spiritual' | 'neutral';
+  category: 'faith_based' | 'spiritual' | 'neutral' | 'centering-prayer';
 }
 
 export const DailyMeditation = ({ day, category }: DailyMeditationProps) => {
@@ -115,6 +115,18 @@ export const DailyMeditation = ({ day, category }: DailyMeditationProps) => {
             {meditation.scripture}
           </p>
         </div>
+
+        {meditation.focus_phrase && (
+          <div className="space-y-2">
+            <div className="flex items-center space-x-2">
+              <PenLine className="w-4 h-4 text-purple-600" />
+              <h4 className="font-medium">Sacred Word</h4>
+            </div>
+            <p className="text-gray-600 pl-6 font-medium">
+              {meditation.focus_phrase}
+            </p>
+          </div>
+        )}
 
         <div className="space-y-2">
           <div className="flex items-center space-x-2">
