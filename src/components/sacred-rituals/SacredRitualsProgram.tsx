@@ -74,7 +74,7 @@ export const SacredRitualsProgram = () => {
     },
   });
 
-  // Fetch user's progress
+  // Fetch user's progress - Add explicit typing here
   const { data: userProgress, isLoading: progressLoading } = useQuery<UserProgress | null, Error>({
     queryKey: ["sacred-rituals-progress", session?.user?.id],
     queryFn: async () => {
