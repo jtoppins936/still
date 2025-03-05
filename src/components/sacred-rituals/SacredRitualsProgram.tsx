@@ -54,7 +54,14 @@ export const SacredRitualsProgram = () => {
         .order("id");
 
       if (error) throw error;
-      return data;
+      
+      // Sort activities by day number extracted from the title
+      return data.sort((a, b) => {
+        // Extract day number from title (e.g., "Sacred Rituals: Day 1 - Morning Ritual")
+        const dayA = parseInt(a.title.match(/Day\s+(\d+)/i)?.[1] || "0");
+        const dayB = parseInt(b.title.match(/Day\s+(\d+)/i)?.[1] || "0");
+        return dayA - dayB;
+      });
     },
   });
 
