@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
@@ -28,7 +27,8 @@ export const ReflectiveActivities = () => {
         .not("category", "eq", "sacred_rituals")
         .not("title", "ilike", "%art & expression%")
         .not("title", "ilike", "%tea ceremony%")
-        .not("title", "ilike", "%sacred music%");
+        .not("title", "ilike", "%sacred music%")
+        .not("title", "ilike", "%nature walk journal%");
 
       if (error) throw error;
       
