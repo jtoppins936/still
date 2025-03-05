@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ScrollText, Check, Heart, BookOpen, Footprints, Trees } from "lucide-react";
+import { ScrollText, Check, Heart, BookOpen } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
@@ -58,6 +58,8 @@ export const ReflectiveActivities = () => {
       navigate(`/gratitude-practice`);
     } else if (activityType.toLowerCase() === 'mindfulness') {
       navigate(`/mindfulness`);
+    } else if (activityType.toLowerCase() === 'nature walk journal') {
+      navigate(`/journal/nature_walk`);
     } else {
       navigate(`/journal/${activityType.toLowerCase()}`);
     }
