@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -17,6 +17,21 @@ import GratitudePractice from "@/pages/GratitudePractice";
 import { AuthProvider } from "@/components/AuthProvider";
 import { PaywallProvider } from "@/components/PaywallProvider";
 import { Toaster } from "@/components/ui/toaster";
+
+// Add a fallback component for error states
+const ErrorFallback = () => (
+  <div className="flex flex-col items-center justify-center min-h-screen p-4">
+    <h1 className="text-2xl font-bold text-rose-700 mb-4">Something went wrong</h1>
+    <p className="text-gray-600 mb-4">We're experiencing technical difficulties. Please try again later.</p>
+  </div>
+);
+
+// Add a loading component for suspense
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="w-8 h-8 border-4 border-rose-200 border-t-rose-600 rounded-full animate-spin"></div>
+  </div>
+);
 
 const router = createBrowserRouter([
   {
@@ -64,14 +79,41 @@ const router = createBrowserRouter([
 function App() {
   return (
     <React.StrictMode>
-      <AuthProvider>
-        <PaywallProvider>
-          <RouterProvider router={router} />
-          <Toaster />
-        </PaywallProvider>
-      </AuthProvider>
+      <ErrorBoundary>
+        <Suspense fallback={<LoadingFallback />}>
+          <AuthProvider>
+            <PaywallProvider>
+              <RouterProvider router={router} />
+              <Toaster />
+            </PaywallProvider>
+          </AuthProvider>
+        </Suspense>
+      </ErrorBoundary>
     </React.StrictMode>
   );
+}
+
+// Simple error boundary component
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error("Error in app:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <ErrorFallback />;
+    }
+    return this.props.children;
+  }
 }
 
 export default App;

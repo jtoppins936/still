@@ -3,23 +3,30 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
 import { CenteringPrayerProgram } from "@/components/centering-prayer/CenteringPrayerProgram";
 import { Button } from "@/components/ui/button";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { seedCenteringPrayer } from "@/data/seed-centering-prayer";
+import { SimpleFallbackProgram } from "@/components/centering-prayer/SimpleFallbackProgram";
+import { ErrorFallback } from "@/components/centering-prayer/ErrorFallback";
 
 const CenteringPrayer = () => {
   const { session } = useAuth();
   const navigate = useNavigate();
+  const [error, setError] = useState<Error | null>(null);
 
   // Seed data on component mount if needed, but don't let it break rendering
   useEffect(() => {
     try {
       seedCenteringPrayer().catch(error => {
         console.error("Error seeding centering prayer data in page:", error);
+        // Don't throw the error, just log it
       });
     } catch (error) {
       console.error("Error calling seedCenteringPrayer in page:", error);
     }
   }, []);
+
+  // Reset error state
+  const resetError = () => setError(null);
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -41,11 +48,41 @@ const CenteringPrayer = () => {
             Sign In
           </Button>
         </div>
+      ) : error ? (
+        <ErrorFallback error={error} resetErrorBoundary={resetError} />
       ) : (
-        <CenteringPrayerProgram />
+        <ErrorBoundaryWrapper onError={(e) => setError(e)}>
+          <CenteringPrayerProgram />
+        </ErrorBoundaryWrapper>
       )}
     </div>
   );
 };
+
+// Simple error boundary component specifically for the CenteringPrayerProgram
+class ErrorBoundaryWrapper extends React.Component<
+  { children: React.ReactNode; onError: (error: Error) => void },
+  { hasError: boolean }
+> {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error) {
+    this.props.onError(error);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <SimpleFallbackProgram />;
+    }
+    return this.props.children;
+  }
+}
 
 export default CenteringPrayer;
