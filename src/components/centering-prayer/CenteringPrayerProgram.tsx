@@ -9,25 +9,7 @@ import { ProgressTracker } from "./ProgressTracker";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
-
-// Define types for our data
-interface CenteringPrayerDay {
-  id: string;
-  day_number: number;
-  theme: string;
-  scripture: string;
-  practice: string;
-  reflection_prompt: string;
-  duration_minutes: number;
-  focus_phrase: string;
-}
-
-interface UserProgress {
-  id: string;
-  user_id: string;
-  current_day: number;
-  last_completed_at: string | null;
-}
+import { MindfulnessProgram } from "@/types/mindfulness";
 
 export const CenteringPrayerProgram = () => {
   const { session } = useAuth();
@@ -93,7 +75,6 @@ export const CenteringPrayerProgram = () => {
         return [];
       }
       
-      // Log the data to see the structure and ensure focus_phrase is included
       console.log("Fetched program data:", data);
       return data || [];
     },
@@ -130,6 +111,30 @@ export const CenteringPrayerProgram = () => {
     }
   };
 
+  // Set currentDay based on user progress
+  if (progress && progress.current_day && currentDay !== progress.current_day) {
+    setCurrentDay(progress.current_day);
+  }
+
+  // Define default prayer content for fallback
+  const defaultPrayer: MindfulnessProgram = {
+    id: "default",
+    day_number: 1,
+    theme: "Introduction to Silence",
+    scripture: "Be still, and know that I am God. (Psalm 46:10)",
+    practice: "Find a quiet place and sit comfortably with your back straight. Close your eyes and take several deep breaths. Use today's sacred word as a symbol of your intention to consent to God's presence. Introduce this word gently at the beginning, and whenever thoughts arise, gently return to the sacred word. Sit in silence for 10 minutes.",
+    reflection_prompt: "What was your experience of silence like today? How did the sacred word help you return to presence?",
+    duration_minutes: 10,
+    category: "centering-prayer",
+    focus_phrase: "Be still"
+  };
+
+  const currentPrayer = program?.find(day => day.day_number === currentDay) || defaultPrayer;
+  console.log("Current prayer:", currentPrayer);
+  
+  const totalDays = program?.length || 30;
+  const isLastDay = currentDay >= totalDays;
+
   if (isLoadingProgress || isLoadingProgram) {
     return (
       <div className="space-y-4">
@@ -143,18 +148,6 @@ export const CenteringPrayerProgram = () => {
     );
   }
 
-  // Set currentDay based on user progress
-  if (progress && progress.current_day && currentDay !== progress.current_day) {
-    setCurrentDay(progress.current_day);
-  }
-
-  const currentPrayer = program?.find(day => day.day_number === currentDay);
-  // Log the current prayer to debug
-  console.log("Current prayer:", currentPrayer);
-  
-  const totalDays = program?.length || 30;
-  const isLastDay = currentDay >= totalDays;
-
   return (
     <div className="space-y-8">
       <ProgressTracker currentDay={currentDay} totalDays={totalDays} />
@@ -166,50 +159,47 @@ export const CenteringPrayerProgram = () => {
         </TabsList>
         
         <TabsContent value="practice" className="p-4 border rounded-md mt-2">
-          {currentPrayer ? (
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold text-rose-700">
-                Day {currentPrayer.day_number}: {currentPrayer.theme}
-              </h2>
-              
-              <div className="bg-rose-50 p-4 rounded-md border border-rose-100">
-                <h3 className="text-lg font-medium text-rose-800 mb-2">Scripture Focus</h3>
-                <p className="italic text-gray-700">{currentPrayer.scripture}</p>
-              </div>
-              
-              {/* Ensure sacred phrase is displayed prominently */}
-              <div className="bg-rose-100 p-4 rounded-md border border-rose-200 text-center">
-                <h3 className="text-lg font-medium text-rose-800 mb-2">Today's Sacred Word</h3>
-                <p className="text-xl font-semibold text-rose-700">
-                  "{currentPrayer.focus_phrase || "Be present"}"
-                </p>
-              </div>
-              
-              <div>
-                <h3 className="text-lg font-medium text-rose-800 mb-2">Prayer Practice</h3>
-                <div className="prose text-gray-700">
-                  <p>{currentPrayer.practice}</p>
-                </div>
-              </div>
-              
-              <div className="pt-4 border-t border-gray-200">
-                <p className="text-gray-500 text-sm">
-                  {currentPrayer.duration_minutes} minutes
-                </p>
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold text-rose-700">
+              Day {currentPrayer.day_number}: {currentPrayer.theme}
+            </h2>
+            
+            <div className="bg-rose-50 p-4 rounded-md border border-rose-100">
+              <h3 className="text-lg font-medium text-rose-800 mb-2">Scripture Focus</h3>
+              <p className="italic text-gray-700">{currentPrayer.scripture}</p>
+            </div>
+            
+            {/* Sacred Word or Phrase Section */}
+            <div className="bg-rose-100 p-4 rounded-md border border-rose-200 text-center">
+              <h3 className="text-lg font-medium text-rose-800 mb-2">Today's Sacred Word</h3>
+              <p className="text-xl font-semibold text-rose-700">
+                "{currentPrayer.focus_phrase || "Be present"}"
+              </p>
+              <p className="mt-2 text-rose-600 text-sm">
+                Repeat this sacred word gently whenever your thoughts wander during prayer
+              </p>
+            </div>
+            
+            <div>
+              <h3 className="text-lg font-medium text-rose-800 mb-2">Prayer Practice</h3>
+              <div className="prose text-gray-700">
+                <p>{currentPrayer.practice}</p>
               </div>
             </div>
-          ) : (
-            <p>No prayer practice available for today.</p>
-          )}
+            
+            <div className="pt-4 border-t border-gray-200">
+              <p className="text-gray-500 text-sm">
+                {currentPrayer.duration_minutes} minutes
+              </p>
+            </div>
+          </div>
         </TabsContent>
         
         <TabsContent value="reflection" className="p-4 border rounded-md mt-2">
-          {currentPrayer && (
-            <CenteringPrayerPrompt 
-              prompt={currentPrayer.reflection_prompt}
-              dayId={currentPrayer.id}
-            />
-          )}
+          <CenteringPrayerPrompt 
+            prompt={currentPrayer.reflection_prompt}
+            dayId={currentPrayer.id}
+          />
         </TabsContent>
       </Tabs>
       
