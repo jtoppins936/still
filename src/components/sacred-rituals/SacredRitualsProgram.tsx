@@ -1,48 +1,29 @@
 
 import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
-import { ProgressTracker } from "@/components/journaling/ProgressTracker";
-import { SacredRitualsPrompt } from "./SacredRitualsPrompt";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/components/AuthProvider";
+import { useNavigate } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useAuth } from "@/components/AuthProvider";
 import { usePaywall } from "@/components/PaywallProvider";
 import { PaywallModal } from "@/components/PaywallModal";
-import { useNavigate } from "react-router-dom";
-
-interface SacredRitualActivity {
-  id: string;
-  category: string;
-  title: string;
-  description: string;
-  duration_minutes: number;
-  created_at: string | null;
-  day: number;
-}
-
-interface UserProgress {
-  id: string;
-  user_id: string;
-  activity_id: string;
-  scheduled_for: string | null;
-  completed: boolean;
-  created_at: string;
-  updated_at: string;
-}
+import { SacredRitualsPrompt } from "./SacredRitualsPrompt";
+import { SacredRitualsHeader } from "./SacredRitualsHeader";
+import { useSacredRitualsData } from "./hooks/useSacredRitualsData";
+import { useSaveReflection } from "./SacredRitualsSaveReflection";
 
 export const SacredRitualsProgram = () => {
   const { session } = useAuth();
   const { isSubscribed } = usePaywall();
-  const { toast } = useToast();
   const navigate = useNavigate();
   const [currentDay, setCurrentDay] = useState(1);
   const [reflection, setReflection] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
+
+  // Custom hook for data fetching
+  const { programData, userProgress, isLoading, refetchProgress } = useSacredRitualsData();
+  
+  // Custom hook for saving reflections
+  const { saveReflection } = useSaveReflection();
 
   useEffect(() => {
     if (!session) {
@@ -55,114 +36,26 @@ export const SacredRitualsProgram = () => {
     }
   }, [session, isSubscribed, navigate]);
 
-  // First query to fetch program data
-  const programQuery = useQuery({
-    queryKey: ["sacred-rituals-program"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("reflective_activities")
-        .select("*")
-        .eq("category", "sacred_rituals")
-        .order("day");
-
-      if (error) throw error;
-      return data as SacredRitualActivity[];
-    },
-  });
-
-  // Separate function declaration for fetching user progress
-  const fetchUserProgress = async () => {
-    if (!session?.user?.id) return null;
-
-    const { data: activities } = await supabase
-      .from("reflective_activities")
-      .select("id")
-      .eq("category", "sacred_rituals")
-      .eq("day", 1)
-      .limit(1);
-      
-    if (!activities || activities.length === 0) return null;
-
-    const { data: existingProgress, error } = await supabase
-      .from("user_activities")
-      .select("*")
-      .eq("user_id", session.user.id)
-      .eq("activity_id", activities[0].id)
-      .maybeSingle();
-
-    if (error && error.code !== "PGRST116") throw error;
-
-    if (existingProgress) {
-      setCurrentDay(existingProgress.completed ? 30 : Math.min(30, existingProgress.scheduled_for ? new Date(existingProgress.scheduled_for).getDate() : 1));
-      return existingProgress;
+  useEffect(() => {
+    if (userProgress) {
+      setCurrentDay(userProgress.completed ? 30 : Math.min(30, userProgress.scheduled_for ? new Date(userProgress.scheduled_for).getDate() : 1));
     }
-
-    return null;
-  };
-
-  // Second query to fetch user progress - explicitly typing the return type
-  const progressQuery = useQuery({
-    queryKey: ["sacred-rituals-progress", session?.user?.id],
-    queryFn: fetchUserProgress,
-    enabled: !!session?.user?.id,
-  });
-
-  // Extract data and loading states
-  const programData = programQuery.data;
-  const userProgress = progressQuery.data;
-  const isLoading = programQuery.isLoading || progressQuery.isLoading;
+  }, [userProgress]);
 
   const handleSubmitReflection = async () => {
-    if (!session?.user?.id || !programData || reflection.trim() === "") return;
-
-    try {
-      const activityId = programData.find(activity => activity.day === currentDay)?.id;
-      
-      if (!activityId) {
-        toast({
-          title: "Error",
-          description: "Could not find the activity for the current day.",
-          variant: "destructive",
-        });
-        return;
+    if (!session?.user?.id) return;
+    
+    await saveReflection({
+      userId: session.user.id,
+      programData,
+      userProgress,
+      reflection,
+      currentDay,
+      onSuccess: () => {
+        setSubmitted(true);
+        refetchProgress();
       }
-      
-      await supabase.from("journal_entries").insert({
-        user_id: session.user.id,
-        content: reflection,
-        entry_type: "sacred_rituals"
-      });
-
-      if (userProgress) {
-        await supabase
-          .from("user_activities")
-          .update({
-            scheduled_for: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString(),
-            completed: currentDay >= 30
-          })
-          .eq("id", userProgress.id);
-      } else {
-        await supabase.from("user_activities").insert({
-          user_id: session.user.id,
-          activity_id: activityId,
-          scheduled_for: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString(),
-          completed: currentDay >= 30
-        });
-      }
-
-      setSubmitted(true);
-      toast({
-        title: "Reflection submitted",
-        description: "Your sacred ritual reflection has been saved.",
-      });
-    } catch (error) {
-      console.error("Error saving reflection:", error);
-      toast({
-        title: "Error",
-        description: "Failed to save your reflection. Please try again.",
-        variant: "destructive",
-      });
-    }
+    });
   };
 
   const handleNextDay = () => {
@@ -199,42 +92,12 @@ export const SacredRitualsProgram = () => {
 
   return (
     <div className="space-y-6">
-      <Card className="border-sage-100">
-        <CardContent className="pt-6">
-          <div className="mb-6">
-            <h3 className="text-lg font-medium text-sage-800 mb-2">Sacred Rituals Program</h3>
-            <p className="text-sm text-gray-600 mb-4">
-              This 30-day program guides you through simple sacred rituals to integrate mindfulness into your daily life.
-              Each day presents a new ritual practice along with a reflection prompt. Complete each day's ritual, then
-              journal about your experience before moving to the next day.
-            </p>
-          </div>
-          
-          <ProgressTracker totalDays={30} currentDay={currentDay} />
-          
-          <div className="flex justify-between items-center mt-4 mb-6">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={handlePreviousDay} 
-              disabled={currentDay <= 1}
-              className="text-sage-700"
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" /> Previous
-            </Button>
-            <span className="text-lg font-medium text-sage-800">Day {currentDay}</span>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={handleNextDay} 
-              disabled={currentDay >= 30 || !submitted}
-              className="text-sage-700"
-            >
-              Next <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      <SacredRitualsHeader 
+        currentDay={currentDay}
+        onPreviousDay={handlePreviousDay}
+        onNextDay={handleNextDay}
+        submitted={submitted}
+      />
 
       {currentPrompt && (
         <SacredRitualsPrompt
