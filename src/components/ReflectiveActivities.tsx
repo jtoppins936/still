@@ -85,14 +85,11 @@ export const ReflectiveActivities = () => {
     activity.title.toLowerCase() === 'centering prayer'
   ) || [];
 
-  const readingReflectionActivities = activities?.filter(activity => 
-    activity.title.toLowerCase() === 'reading reflection'
-  ) || [];
-
   const otherActivities = activities?.filter(activity => 
     !activity.title.toLowerCase().includes('meditation') &&
     activity.title.toLowerCase() !== 'centering prayer' &&
-    activity.title.toLowerCase() !== 'gratitude practice'
+    activity.title.toLowerCase() !== 'gratitude practice' &&
+    activity.title.toLowerCase() !== 'reading reflection'
   ) || [];
 
   return (
@@ -184,37 +181,6 @@ export const ReflectiveActivities = () => {
               </div>
             </div>
           )}
-          
-          <div className="mb-6">
-            <h4 className="font-medium text-lg mb-3 text-amber-700">Reading Reflection</h4>
-            <div className="grid gap-4">
-              <div
-                className="p-4 rounded-lg border transition-colors border-amber-200 bg-amber-50 hover:border-amber-300"
-              >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h4 className="font-medium text-amber-900">
-                      Reading Reflection
-                    </h4>
-                    <p className="text-sm mt-1 text-amber-700">
-                      A 30-day program to deepen your connection with texts through guided 
-                      reflection prompts that help extract meaning and personal insights.
-                    </p>
-                    <span className="inline-block text-sm mt-2 text-amber-600">
-                      15-20 minutes
-                    </span>
-                  </div>
-                  <Button
-                    onClick={() => handleActivityClick("Reading Reflection")}
-                    variant="secondary"
-                    className="bg-amber-100 hover:bg-amber-200 text-amber-700"
-                  >
-                    <BookOpen className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
           
           <div className="mb-6">
             <h4 className="font-medium text-lg mb-3 text-blue-700">Gratitude Practice</h4>
