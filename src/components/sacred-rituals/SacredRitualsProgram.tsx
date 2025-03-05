@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
@@ -54,6 +55,7 @@ export const SacredRitualsProgram = () => {
     }
   }, [session, isSubscribed, navigate]);
 
+  // First query to fetch program data
   const programQuery = useQuery({
     queryKey: ["sacred-rituals-program"],
     queryFn: async () => {
@@ -68,6 +70,7 @@ export const SacredRitualsProgram = () => {
     },
   });
 
+  // Separate function declaration for fetching user progress
   const fetchUserProgress = async () => {
     if (!session?.user?.id) return null;
 
@@ -97,12 +100,14 @@ export const SacredRitualsProgram = () => {
     return null;
   };
 
+  // Second query to fetch user progress - explicitly typing the return type
   const progressQuery = useQuery({
     queryKey: ["sacred-rituals-progress", session?.user?.id],
     queryFn: fetchUserProgress,
     enabled: !!session?.user?.id,
   });
 
+  // Extract data and loading states
   const programData = programQuery.data;
   const userProgress = progressQuery.data;
   const isLoading = programQuery.isLoading || progressQuery.isLoading;
