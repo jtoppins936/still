@@ -3,10 +3,19 @@ import { useNavigate } from "react-router-dom";
 import { SacredRitualsProgram } from "@/components/sacred-rituals/SacredRitualsProgram";
 import { useAuth } from "@/components/AuthProvider";
 import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
+// If you have a seed function for sacred rituals, import it here
+// import { seedSacredRituals } from "@/data/seed-sacred-rituals";
 
 const SacredRituals = () => {
   const { session } = useAuth();
   const navigate = useNavigate();
+
+  // Seed data on component mount if needed
+  useEffect(() => {
+    // If you have a seed function for sacred rituals, call it here
+    // seedSacredRituals();
+  }, []);
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">

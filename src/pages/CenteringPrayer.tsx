@@ -3,10 +3,17 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
 import { CenteringPrayerProgram } from "@/components/centering-prayer/CenteringPrayerProgram";
 import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
+import { seedCenteringPrayer } from "@/data/seed-centering-prayer";
 
 const CenteringPrayer = () => {
   const { session } = useAuth();
   const navigate = useNavigate();
+
+  // Seed data on component mount if needed
+  useEffect(() => {
+    seedCenteringPrayer();
+  }, []);
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">

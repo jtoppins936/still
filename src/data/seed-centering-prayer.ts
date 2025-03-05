@@ -63,10 +63,235 @@ export const seedCenteringPrayer = async () => {
           practice: "Begin with your sacred word. Today, hold a gentle awareness that God is already present within you. There is no distance to travel, no gap to cross. Simply rest in this presence for 15 minutes, returning to your sacred word when needed.",
           reflection_prompt: "How does it feel to consider that God's presence is already within you? Does this change your approach to prayer?",
           duration_minutes: 15
+        },
+        {
+          category: "centering-prayer",
+          day_number: 6,
+          theme: "Consent to God's Presence",
+          scripture: "Here I am, Lord. (1 Samuel 3:4)",
+          practice: "Begin with your sacred word. Today, focus on your practice as an act of consent to God's presence and action within you. Each time you return to your sacred word, it is a 'yes' to God. Sit for 15 minutes in this posture of openness.",
+          reflection_prompt: "What does it mean to you to give consent to God's presence and action in your life? How did today's practice reflect this consent?",
+          duration_minutes: 15
+        },
+        {
+          category: "centering-prayer",
+          day_number: 7,
+          theme: "Rest in Silence",
+          scripture: "My soul finds rest in God alone. (Psalm 62:1)",
+          practice: "Begin with your sacred word. Today, allow yourself to simply rest in the silence. There is nothing to accomplish, nothing to achieve. Just be. When thoughts arise, gently return to your sacred word. Sit for 15 minutes.",
+          reflection_prompt: "What is your relationship with silence? Is it comfortable or uncomfortable for you to simply rest without doing anything?",
+          duration_minutes: 15
+        },
+        {
+          category: "centering-prayer",
+          day_number: 8,
+          theme: "Beyond Words",
+          scripture: "We do not know what we ought to pray for, but the Spirit himself intercedes for us through wordless groans. (Romans 8:26)",
+          practice: "Begin with your sacred word. Today, notice how centering prayer moves beyond words and concepts. Allow the prayer to simply be an experience of presence. When thoughts arise, gently return to your sacred word. Practice for 15 minutes.",
+          reflection_prompt: "How does prayer without words differ from your other experiences of prayer? What insights arise from this wordless communion?",
+          duration_minutes: 15
+        },
+        {
+          category: "centering-prayer",
+          day_number: 9,
+          theme: "Resting in Love",
+          scripture: "As the Father has loved me, so have I loved you. Now remain in my love. (John 15:9)",
+          practice: "Begin with your sacred word. Today, allow yourself to rest in the awareness of being loved. You don't need to generate feelings or try to love God back. Simply be receptive to the love that is already present. Sit for 15 minutes.",
+          reflection_prompt: "What is it like to simply receive love without trying to earn it or return it? How might this experience shape your daily life?",
+          duration_minutes: 15
+        },
+        {
+          category: "centering-prayer",
+          day_number: 10,
+          theme: "Welcoming Distractions",
+          scripture: "Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. (Philippians 4:6)",
+          practice: "Begin with your sacred word. Today, practice welcoming distractions rather than fighting them. Each distraction is an opportunity to return to your sacred word with gentleness. Don't judge yourself for being distracted. Sit for 20 minutes.",
+          reflection_prompt: "What kinds of distractions arose during your prayer today? How did it feel to welcome them rather than resist them?",
+          duration_minutes: 20
+        },
+        {
+          category: "centering-prayer",
+          day_number: 11,
+          theme: "The Breath of God",
+          scripture: "The Lord God formed the man from the dust of the ground and breathed into his nostrils the breath of life. (Genesis 2:7)",
+          practice: "Begin with your sacred word. Today, bring gentle awareness to your breath as a symbol of God's life-giving presence. Your breath happens without your control, much like God's presence. Don't manipulate your breath, just notice it. Sit for 20 minutes.",
+          reflection_prompt: "How did awareness of your breath influence your prayer experience today? What connections do you see between breath and spirit?",
+          duration_minutes: 20
+        },
+        {
+          category: "centering-prayer",
+          day_number: 12,
+          theme: "Spiritual Senses",
+          scripture: "Taste and see that the Lord is good. (Psalm 34:8)",
+          practice: "Begin with your sacred word. Today, be open to how God might be experienced through your spiritual senses. Perhaps there is a feeling, an image, a sense of presence. Don't seek experiences, but be open to what arises. Sit for 20 minutes.",
+          reflection_prompt: "Did you notice any sensory dimensions to your prayer experience today? How might you describe the 'taste' or 'feel' of God's presence?",
+          duration_minutes: 20
+        },
+        {
+          category: "centering-prayer",
+          day_number: 13,
+          theme: "Expanding Awareness",
+          scripture: "In him we live and move and have our being. (Acts 17:28)",
+          practice: "Begin with your sacred word. Today, gradually expand your awareness to include your body, the room, and beyond—all while maintaining your center in the presence of God. When thoughts arise, gently return to your sacred word. Sit for 20 minutes.",
+          reflection_prompt: "What was it like to expand your awareness while maintaining your center? How might this practice apply to your daily life?",
+          duration_minutes: 20
+        },
+        {
+          category: "centering-prayer",
+          day_number: 14,
+          theme: "Midpoint Reflection",
+          scripture: "Search me, God, and know my heart; test me and know my anxious thoughts. (Psalm 139:23)",
+          practice: "Begin with your sacred word. Today, as you reach the midpoint of this program, sit in silence for 20 minutes. Allow this to be a time of simple presence with God.",
+          reflection_prompt: "Looking back on your first two weeks of centering prayer, what changes have you noticed in yourself? What challenges persist? What insights have emerged?",
+          duration_minutes: 20
+        },
+        {
+          category: "centering-prayer",
+          day_number: 15,
+          theme: "Darkness and Light",
+          scripture: "Even the darkness will not be dark to you; the night will shine like the day, for darkness is as light to you. (Psalm 139:12)",
+          practice: "Begin with your sacred word. Today, notice if there are places of darkness or light in your prayer—feelings of absence or presence. Welcome both as part of the journey. When thoughts arise, return to your sacred word. Sit for 20 minutes.",
+          reflection_prompt: "What was your experience of darkness or light in today's prayer? How do you relate to periods of spiritual consolation or desolation?",
+          duration_minutes: 20
+        },
+        {
+          category: "centering-prayer",
+          day_number: 16,
+          theme: "The Cloud of Unknowing",
+          scripture: "Now we see only a reflection as in a mirror; then we shall see face to face. (1 Corinthians 13:12)",
+          practice: "Begin with your sacred word. Today, reflect briefly on how centering prayer invites us into the 'cloud of unknowing'—beyond concepts and images of God. Consent to God's presence in this unknowing. Sit for 20 minutes.",
+          reflection_prompt: "What is your relationship with 'not knowing' God intellectually but experiencing God directly? How comfortable are you with mystery in your spiritual life?",
+          duration_minutes: 20
+        },
+        {
+          category: "centering-prayer",
+          day_number: 17,
+          theme: "The Paschal Mystery",
+          scripture: "Very truly I tell you, unless a kernel of wheat falls to the ground and dies, it remains only a single seed. But if it dies, it produces many seeds. (John 12:24)",
+          practice: "Begin with your sacred word. Today, consider how centering prayer participates in the paschal mystery—letting go (death) leads to new life. Each return to your sacred word is a small 'dying to self.' Sit for 20 minutes.",
+          reflection_prompt: "What are you being invited to let go of in your spiritual journey? How might this letting go lead to new life?",
+          duration_minutes: 20
+        },
+        {
+          category: "centering-prayer",
+          day_number: 18,
+          theme: "Resting in Community",
+          scripture: "For where two or three gather in my name, there am I with them. (Matthew 18:20)",
+          practice: "Begin with your sacred word. Today, even though you may be practicing alone, hold an awareness of being connected to others who practice centering prayer around the world. We rest in God together. Sit for 20 minutes.",
+          reflection_prompt: "How does the knowledge that you are not alone in this practice affect your experience? What value do you see in communal contemplative practice?",
+          duration_minutes: 20
+        },
+        {
+          category: "centering-prayer",
+          day_number: 19,
+          theme: "Subtle Attachment",
+          scripture: "Set your minds on things above, not on earthly things. (Colossians 3:2)",
+          practice: "Begin with your sacred word. Today, notice any subtle attachments that arise during prayer—perhaps attachment to having a 'good' prayer time or special experiences. When these arise, gently return to your sacred word. Sit for 20 minutes.",
+          reflection_prompt: "What attachments did you notice in your prayer today? How might centering prayer be teaching you about non-attachment and freedom?",
+          duration_minutes: 20
+        },
+        {
+          category: "centering-prayer",
+          day_number: 20,
+          theme: "Transformed Consciousness",
+          scripture: "Do not conform to the pattern of this world, but be transformed by the renewing of your mind. (Romans 12:2)",
+          practice: "Begin with your sacred word. Today, reflect briefly on how regular centering prayer gradually transforms your consciousness—not through effort but through consistent consent to God's presence. Sit for 20 minutes.",
+          reflection_prompt: "What subtle shifts in consciousness or awareness have you noticed since beginning this practice? How might these shifts be affecting your daily life?",
+          duration_minutes: 20
+        },
+        {
+          category: "centering-prayer",
+          day_number: 21,
+          theme: "Fruits of the Spirit",
+          scripture: "But the fruit of the Spirit is love, joy, peace, forbearance, kindness, goodness, faithfulness, gentleness and self-control. (Galatians 5:22-23)",
+          practice: "Begin with your sacred word. Today, as you enter the third week of practice, reflect briefly on how centering prayer is not about achieving experiences during prayer but bearing fruit in daily life. Sit for 20 minutes.",
+          reflection_prompt: "Have you noticed any of the fruits of the Spirit emerging more prominently in your life since beginning this practice? Which ones?",
+          duration_minutes: 20
+        },
+        {
+          category: "centering-prayer",
+          day_number: 22,
+          theme: "Purification",
+          scripture: "Create in me a pure heart, O God, and renew a steadfast spirit within me. (Psalm 51:10)",
+          practice: "Begin with your sacred word. Today, understand that one effect of centering prayer is purification—bringing unconscious material to awareness for healing. If difficult emotions arise, simply return to your sacred word. Sit for 20 minutes.",
+          reflection_prompt: "Have you experienced any emotional purification since beginning this practice? How has centering prayer affected your emotional life?",
+          duration_minutes: 20
+        },
+        {
+          category: "centering-prayer",
+          day_number: 23,
+          theme: "Union with God",
+          scripture: "Whoever is united with the Lord is one with him in spirit. (1 Corinthians 6:17)",
+          practice: "Begin with your sacred word. Today, reflect briefly on how centering prayer fosters union with God—not as an achievement but as a revelation of what already is. Sit for 25 minutes in this awareness.",
+          reflection_prompt: "What does union with God mean to you? How do you understand or experience this reality in your prayer and life?",
+          duration_minutes: 25
+        },
+        {
+          category: "centering-prayer",
+          day_number: 24,
+          theme: "Service Flowing from Silence",
+          scripture: "Whoever wants to become great among you must be your servant. (Matthew 20:26)",
+          practice: "Begin with your sacred word. Today, reflect briefly on how centering prayer leads naturally to service—being filled with God's love naturally overflows into loving action. Sit for 25 minutes.",
+          reflection_prompt: "How has your centering prayer practice affected how you relate to and serve others? Do you notice any connections between contemplation and action?",
+          duration_minutes: 25
+        },
+        {
+          category: "centering-prayer",
+          day_number: 25,
+          theme: "Continuous Prayer",
+          scripture: "Pray continually. (1 Thessalonians 5:17)",
+          practice: "Begin with your sacred word. Today, as you sit for 25 minutes, consider how centering prayer can extend beyond formal sitting times into a continuous awareness of God's presence throughout your day.",
+          reflection_prompt: "Have you noticed God's presence at unexpected moments in your day? How might your formal prayer practice extend into continuous prayer?",
+          duration_minutes: 25
+        },
+        {
+          category: "centering-prayer",
+          day_number: 26,
+          theme: "The Divine Therapy",
+          scripture: "He heals the brokenhearted and binds up their wounds. (Psalm 147:3)",
+          practice: "Begin with your sacred word. Today, understand centering prayer as a 'divine therapy'—allowing God's healing presence to touch wounded places within. Sit for 25 minutes in this healing presence.",
+          reflection_prompt: "What healing have you experienced through this practice? Are there places within you still inviting God's healing touch?",
+          duration_minutes: 25
+        },
+        {
+          category: "centering-prayer",
+          day_number: 27,
+          theme: "Surrendered Will",
+          scripture: "Not my will, but yours be done. (Luke 22:42)",
+          practice: "Begin with your sacred word. Today, reflect briefly on how centering prayer is an exercise in surrender—letting go of your agenda and opening to God's. Sit for 25 minutes in this posture of surrender.",
+          reflection_prompt: "What is your experience of surrender in prayer? How does this surrender extend into your daily decisions and actions?",
+          duration_minutes: 25
+        },
+        {
+          category: "centering-prayer",
+          day_number: 28,
+          theme: "Love as the Measure",
+          scripture: "And over all these virtues put on love, which binds them all together in perfect unity. (Colossians 3:14)",
+          practice: "Begin with your sacred word. Today, reflect briefly on how love is the ultimate measure of spiritual growth—not experiences, insights, or abilities. Sit for 25 minutes in this love.",
+          reflection_prompt: "How has your capacity to give and receive love been affected by your centering prayer practice? Where do you see growth or challenges?",
+          duration_minutes: 25
+        },
+        {
+          category: "centering-prayer",
+          day_number: 29,
+          theme: "A Lifelong Journey",
+          scripture: "Being confident of this, that he who began a good work in you will carry it on to completion until the day of Christ Jesus. (Philippians 1:6)",
+          practice: "Begin with your sacred word. Today, as you near the end of this 30-day program, reflect briefly on centering prayer as a lifelong journey rather than a destination. Sit for 25 minutes.",
+          reflection_prompt: "How do you envision centering prayer as part of your spiritual journey going forward? What supports do you need to continue the practice?",
+          duration_minutes: 25
+        },
+        {
+          category: "centering-prayer",
+          day_number: 30,
+          theme: "Integration and Continuation",
+          scripture: "May the God of hope fill you with all joy and peace as you trust in him, so that you may overflow with hope by the power of the Holy Spirit. (Romans 15:13)",
+          practice: "Begin with your sacred word. Today, as you complete this 30-day program, sit for 30 minutes in centering prayer, allowing everything you've learned to integrate naturally.",
+          reflection_prompt: "As you complete this program, what gifts have you received? What challenges remain? How will you continue to nurture your contemplative practice going forward?",
+          duration_minutes: 30
         }
       ]
     );
-
+  
   if (error) {
     console.error("Error seeding centering prayer data:", error);
     return;
