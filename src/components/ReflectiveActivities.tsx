@@ -30,7 +30,8 @@ export const ReflectiveActivities = () => {
         .not("title", "ilike", "%tea ceremony%")
         .not("title", "ilike", "%sacred music%")
         .not("title", "ilike", "%nature walk%")
-        .not("title", "ilike", "%nature walk journal%");
+        .not("title", "ilike", "%nature walk journal%")
+        .not("category", "eq", "sacred_rituals"); // Exclude sacred rituals from regular activities
 
       if (error) throw error;
       
@@ -48,7 +49,8 @@ export const ReflectiveActivities = () => {
       const { data, error } = await supabase
         .from("reflective_activities")
         .select("*")
-        .eq("category", "sacred_rituals");
+        .eq("category", "sacred_rituals")
+        .limit(1); // Just get one representative ritual to display
 
       if (error) throw error;
       return data;
@@ -72,7 +74,8 @@ export const ReflectiveActivities = () => {
     activity.title.toLowerCase() !== 'centering prayer' &&
     activity.title.toLowerCase() !== 'gratitude practice' &&
     activity.title.toLowerCase() !== 'reading reflection' &&
-    !activity.title.toLowerCase().includes('nature walk')
+    !activity.title.toLowerCase().includes('nature walk') &&
+    !activity.title.toLowerCase().includes('sacred rituals')
   ) || [];
 
   return (
