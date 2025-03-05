@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,7 +13,6 @@ import { usePaywall } from "@/components/PaywallProvider";
 import { PaywallModal } from "@/components/PaywallModal";
 import { useNavigate } from "react-router-dom";
 
-// Define a type for the sacred rituals data
 interface SacredRitualActivity {
   id: string;
   category: string;
@@ -25,7 +23,6 @@ interface SacredRitualActivity {
   day: number;
 }
 
-// Define a type for user progress
 interface UserProgress {
   id: string;
   user_id: string;
@@ -41,25 +38,22 @@ export const SacredRitualsProgram = () => {
   const { isSubscribed } = usePaywall();
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [currentDay, setCurrentDay] = useState(1); // Set to Day 1 by default
+  const [currentDay, setCurrentDay] = useState(1);
   const [reflection, setReflection] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
 
   useEffect(() => {
-    // Redirect to auth if not logged in
     if (!session) {
       navigate('/auth');
       return;
     }
     
-    // Show paywall if not subscribed
     if (!isSubscribed) {
       setShowPaywall(true);
     }
   }, [session, isSubscribed, navigate]);
 
-  // Fetch sacred rituals program data
   const programQuery = useQuery({
     queryKey: ["sacred-rituals-program"],
     queryFn: async () => {
@@ -67,45 +61,45 @@ export const SacredRitualsProgram = () => {
         .from("reflective_activities")
         .select("*")
         .eq("category", "sacred_rituals")
-        .order("day");  // Order by day to ensure correct sequence
+        .order("day");
 
       if (error) throw error;
       return data as SacredRitualActivity[];
     },
   });
 
-  // Fetch user's progress
+  const fetchUserProgress = async () => {
+    if (!session?.user?.id) return null;
+
+    const { data: activities } = await supabase
+      .from("reflective_activities")
+      .select("id")
+      .eq("category", "sacred_rituals")
+      .eq("day", 1)
+      .limit(1);
+      
+    if (!activities || activities.length === 0) return null;
+
+    const { data: existingProgress, error } = await supabase
+      .from("user_activities")
+      .select("*")
+      .eq("user_id", session.user.id)
+      .eq("activity_id", activities[0].id)
+      .maybeSingle();
+
+    if (error && error.code !== "PGRST116") throw error;
+
+    if (existingProgress) {
+      setCurrentDay(existingProgress.completed ? 30 : Math.min(30, existingProgress.scheduled_for ? new Date(existingProgress.scheduled_for).getDate() : 1));
+      return existingProgress;
+    }
+
+    return null;
+  };
+
   const progressQuery = useQuery({
     queryKey: ["sacred-rituals-progress", session?.user?.id],
-    queryFn: async () => {
-      if (!session?.user?.id) return null;
-
-      const { data: activities } = await supabase
-        .from("reflective_activities")
-        .select("id")
-        .eq("category", "sacred_rituals")
-        .eq("day", 1)  // Get the Day 1 activity specifically
-        .limit(1);
-        
-      if (!activities || activities.length === 0) return null;
-
-      const { data: existingProgress, error } = await supabase
-        .from("user_activities")
-        .select("*")
-        .eq("user_id", session.user.id)
-        .eq("activity_id", activities[0].id)
-        .maybeSingle();
-
-      if (error && error.code !== "PGRST116") throw error;
-
-      if (existingProgress) {
-        // Start from day 1 for new users, otherwise use the stored progress (up to day 30)
-        setCurrentDay(existingProgress.completed ? 30 : Math.min(30, existingProgress.scheduled_for ? new Date(existingProgress.scheduled_for).getDate() : 1));
-        return existingProgress;
-      }
-
-      return null;
-    },
+    queryFn: fetchUserProgress,
     enabled: !!session?.user?.id,
   });
 
@@ -128,14 +122,12 @@ export const SacredRitualsProgram = () => {
         return;
       }
       
-      // Save journal entry
       await supabase.from("journal_entries").insert({
         user_id: session.user.id,
         content: reflection,
         entry_type: "sacred_rituals"
       });
 
-      // Update user progress
       if (userProgress) {
         await supabase
           .from("user_activities")
@@ -184,7 +176,6 @@ export const SacredRitualsProgram = () => {
     }
   };
 
-  // Hide content when user is not subscribed
   if (!isSubscribed) {
     return <PaywallModal isOpen={showPaywall} onClose={() => navigate('/')} />;
   }
@@ -199,7 +190,6 @@ export const SacredRitualsProgram = () => {
     );
   }
 
-  // If we have the program data, find the current day's prompt by looking for the matching day number
   const currentPrompt = programData?.find(prompt => prompt.day === currentDay);
 
   return (
