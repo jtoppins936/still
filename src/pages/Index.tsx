@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
@@ -29,23 +28,13 @@ const Index = () => {
       return;
     }
     
-    if (!isSubscribed) {
-      setShowPaywall(true);
-      return;
-    }
-
     navigate("/profile");
   };
 
   const handleProfileClick = () => {
-    if (!isSubscribed) {
-      setShowPaywall(true);
-      return;
-    }
     navigate("/profile");
   };
 
-  // These functions are still needed for the navigation elsewhere in the app
   const handleMindfulnessClick = () => {
     navigate("/mindfulness");
   };
@@ -66,7 +55,6 @@ const Index = () => {
       <AuthButtons onProfileClick={handleProfileClick} />
       <HeroSection mounted={mounted} onBeginJourney={handleBeginJourney} />
 
-      {/* Daily Challenge Section */}
       <section className="py-24 px-4 bg-white">
         <div className="max-w-3xl mx-auto text-center">
           <span className="inline-block px-3 py-1 text-sm bg-sage-100 text-sage-700 rounded-full mb-6">
@@ -82,7 +70,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Declutter Section - Now marked as a free feature */}
       <section className="py-24 px-4 bg-white">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-16">
@@ -100,7 +87,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Sabbath Planner Section */}
       <section className="py-24 px-4 bg-sage-50">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-16">

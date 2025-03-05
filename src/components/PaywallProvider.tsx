@@ -21,8 +21,9 @@ export const usePaywall = () => useContext(PaywallContext);
 const stripePromise = loadStripe("your-publishable-key"); // Replace with your Stripe publishable key
 
 export function PaywallProvider({ children }: { children: React.ReactNode }) {
-  const [isSubscribed, setIsSubscribed] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  // For testing purposes, set isSubscribed to true by default
+  const [isSubscribed, setIsSubscribed] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const { session } = useAuth();
 
   useEffect(() => {
@@ -44,7 +45,7 @@ export function PaywallProvider({ children }: { children: React.ReactNode }) {
         .maybeSingle();
 
       if (error) throw error;
-      setIsSubscribed(!!data);
+      // For testing, we don't change isSubscribed here
     } catch (error) {
       console.error("Error checking subscription:", error);
     } finally {

@@ -27,9 +27,9 @@ export function PaywallModal({ isOpen, onClose }: PaywallModalProps) {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Premium Feature</DialogTitle>
+          <DialogTitle>Premium Feature (Testing Mode)</DialogTitle>
           <DialogDescription>
-            This feature is available to premium subscribers. For just $5, you'll get access to:
+            All premium features are currently accessible for testing. In production, these features would require a subscription:
             <ul className="list-disc list-inside mt-4 space-y-2">
               <li>Blocking Statistics</li>
               <li>Meditation Sessions</li>
@@ -41,8 +41,8 @@ export function PaywallModal({ isOpen, onClose }: PaywallModalProps) {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="mt-6">
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={onSubscribe}>Subscribe for $5</Button>
+          <Button variant="outline" onClick={onClose}>Close</Button>
+          <Button onClick={onClose}>Continue Testing</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
