@@ -59,7 +59,7 @@ export const SacredRitualsProgram = () => {
     }
   }, [session, isSubscribed, navigate]);
 
-  // Fetch sacred rituals program data
+  // Fetch sacred rituals program data - Add explicit typing here
   const { data: programData, isLoading: programLoading } = useQuery<SacredRitualActivity[], Error>({
     queryKey: ["sacred-rituals-program"],
     queryFn: async () => {
