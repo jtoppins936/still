@@ -59,7 +59,7 @@ export const SacredRitualsProgram = () => {
     }
   }, [session, isSubscribed, navigate]);
 
-  // Fetch sacred rituals program data - Add explicit typing here
+  // Fetch sacred rituals program data with explicit typing
   const { data: programData, isLoading: programLoading } = useQuery<SacredRitualActivity[], Error>({
     queryKey: ["sacred-rituals-program"],
     queryFn: async () => {
@@ -67,14 +67,14 @@ export const SacredRitualsProgram = () => {
         .from("reflective_activities")
         .select("*")
         .eq("category", "sacred_rituals")
-        .order("day");  // Order by day instead of title to ensure correct sequence
+        .order("day");  // Order by day to ensure correct sequence
 
       if (error) throw error;
       return data as SacredRitualActivity[];
     },
   });
 
-  // Fetch user's progress - Add explicit typing here
+  // Fetch user's progress with explicit typing
   const { data: userProgress, isLoading: progressLoading } = useQuery<UserProgress | null, Error>({
     queryKey: ["sacred-rituals-progress", session?.user?.id],
     queryFn: async () => {
@@ -113,7 +113,16 @@ export const SacredRitualsProgram = () => {
     if (!session?.user?.id || !programData || reflection.trim() === "") return;
 
     try {
-      const activityId = programData[0].id;
+      const activityId = programData.find(activity => activity.day === currentDay)?.id;
+      
+      if (!activityId) {
+        toast({
+          title: "Error",
+          description: "Could not find the activity for the current day.",
+          variant: "destructive",
+        });
+        return;
+      }
       
       // Save journal entry
       await supabase.from("journal_entries").insert({
@@ -195,6 +204,15 @@ export const SacredRitualsProgram = () => {
     <div className="space-y-6">
       <Card className="border-sage-100">
         <CardContent className="pt-6">
+          <div className="mb-6">
+            <h3 className="text-lg font-medium text-sage-800 mb-2">Sacred Rituals Program</h3>
+            <p className="text-sm text-gray-600 mb-4">
+              This 30-day program guides you through simple sacred rituals to integrate mindfulness into your daily life.
+              Each day presents a new ritual practice along with a reflection prompt. Complete each day's ritual, then
+              journal about your experience before moving to the next day.
+            </p>
+          </div>
+          
           <ProgressTracker totalDays={30} currentDay={currentDay} />
           
           <div className="flex justify-between items-center mt-4 mb-6">
