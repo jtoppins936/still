@@ -21,6 +21,7 @@ const Auth = () => {
   // Redirect if already authenticated
   useEffect(() => {
     if (session) {
+      console.log("User already authenticated, redirecting to home");
       navigate("/");
     }
   }, [session, navigate]);
@@ -32,6 +33,7 @@ const Auth = () => {
     try {
       if (isSignUp) {
         // Sign up
+        console.log("Attempting to sign up with:", email);
         const { data, error } = await supabase.auth.signUp({ 
           email, 
           password,
@@ -45,6 +47,7 @@ const Auth = () => {
         if (error) throw error;
 
         if (data?.user) {
+          console.log("Sign up successful:", data.user.id);
           toast({
             title: "Welcome to Still!",
             description: "Your account has been created successfully.",
@@ -54,13 +57,15 @@ const Auth = () => {
         }
       } else {
         // Sign in
-        const { error } = await supabase.auth.signInWithPassword({ 
+        console.log("Attempting to sign in with:", email);
+        const { data, error } = await supabase.auth.signInWithPassword({ 
           email, 
           password 
         });
 
         if (error) throw error;
 
+        console.log("Sign in successful:", data?.user?.id);
         toast({
           title: "Welcome back!",
           description: "Successfully signed in.",

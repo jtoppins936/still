@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { loadStripe } from "@stripe/stripe-js";
+import { useToast } from "@/components/ui/use-toast";
 
 interface PaywallContextType {
   isSubscribed: boolean;
@@ -25,11 +26,14 @@ export function PaywallProvider({ children }: { children: React.ReactNode }) {
   const [isSubscribed, setIsSubscribed] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const { session } = useAuth();
+  const { toast } = useToast();
 
   useEffect(() => {
     if (session?.user) {
+      console.log("User is authenticated:", session.user.id);
       checkSubscription();
     } else {
+      console.log("No authenticated user");
       setIsLoading(false);
       setIsSubscribed(false);
     }
@@ -46,6 +50,7 @@ export function PaywallProvider({ children }: { children: React.ReactNode }) {
 
       if (error) throw error;
       // For testing, we don't change isSubscribed here
+      console.log("Subscription check:", data);
     } catch (error) {
       console.error("Error checking subscription:", error);
     } finally {
@@ -54,7 +59,14 @@ export function PaywallProvider({ children }: { children: React.ReactNode }) {
   };
 
   const handleSubscribe = async () => {
-    if (!session?.user?.id) return;
+    if (!session?.user?.id) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to subscribe",
+        variant: "destructive",
+      });
+      return;
+    }
     
     try {
       const { error } = await supabase
@@ -68,9 +80,19 @@ export function PaywallProvider({ children }: { children: React.ReactNode }) {
 
       if (error) throw error;
       
+      toast({
+        title: "Subscription successful",
+        description: "You now have access to premium features",
+      });
+      
       setIsSubscribed(true);
     } catch (error) {
       console.error("Error creating subscription:", error);
+      toast({
+        title: "Subscription failed",
+        description: "There was an error processing your subscription",
+        variant: "destructive",
+      });
     }
   };
 
