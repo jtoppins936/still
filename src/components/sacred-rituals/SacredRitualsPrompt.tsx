@@ -4,8 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Check, Clock } from "lucide-react";
 
+interface SacredRitualActivity {
+  id: string;
+  category: string;
+  title: string;
+  description: string;
+  duration_minutes: number;
+  created_at: string | null;
+  day: number;
+}
+
 interface SacredRitualsPromptProps {
-  prompt: any;
+  prompt: SacredRitualActivity;
   day: number;
   reflection: string;
   onReflectionChange: (value: string) => void;

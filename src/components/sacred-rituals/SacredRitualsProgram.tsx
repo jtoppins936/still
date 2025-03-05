@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { ProgressTracker } from "@/components/journaling/ProgressTracker";
 import { SacredRitualsPrompt } from "./SacredRitualsPrompt";
@@ -14,6 +13,17 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { usePaywall } from "@/components/PaywallProvider";
 import { PaywallModal } from "@/components/PaywallModal";
 import { useNavigate } from "react-router-dom";
+
+// Define a type for the sacred rituals data
+interface SacredRitualActivity {
+  id: string;
+  category: string;
+  title: string;
+  description: string;
+  duration_minutes: number;
+  created_at: string | null;
+  day: number;
+}
 
 export const SacredRitualsProgram = () => {
   const { session } = useAuth();
@@ -39,7 +49,7 @@ export const SacredRitualsProgram = () => {
   }, [session, isSubscribed, navigate]);
 
   // Fetch sacred rituals program data
-  const { data: programData, isLoading: programLoading } = useQuery({
+  const { data: programData, isLoading: programLoading } = useQuery<SacredRitualActivity[]>({
     queryKey: ["sacred-rituals-program"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -49,7 +59,7 @@ export const SacredRitualsProgram = () => {
         .order("day");  // Order by day instead of title to ensure correct sequence
 
       if (error) throw error;
-      return data;
+      return data as SacredRitualActivity[];
     },
   });
 
