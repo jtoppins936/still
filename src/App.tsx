@@ -12,6 +12,7 @@ import NotFound from "@/pages/NotFound";
 import CenteringPrayer from "@/pages/CenteringPrayer";
 import ReadingReflection from "@/pages/ReadingReflection";
 import GratitudePractice from "@/pages/GratitudePractice";
+import SacredRituals from "./pages/SacredRituals";
 import { AuthProvider } from "@/components/AuthProvider";
 import { PaywallProvider } from "@/components/PaywallProvider";
 import { Toaster } from "@/components/ui/toaster";
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
   {
     path: "/gratitude-practice",
     element: <GratitudePractice />,
+  },
+  {
+    path: "/sacred-rituals",
+    element: <SacredRituals />,
   },
   {
     path: "*",
