@@ -60,7 +60,7 @@ export const SacredRitualsProgram = () => {
   }, [session, isSubscribed, navigate]);
 
   // Fetch sacred rituals program data with explicit typing
-  const { data: programData, isLoading: programLoading } = useQuery<SacredRitualActivity[], Error>({
+  const { data: programData, isLoading: programLoading } = useQuery<SacredRitualActivity[]>({
     queryKey: ["sacred-rituals-program"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -74,7 +74,7 @@ export const SacredRitualsProgram = () => {
     },
   });
 
-  // Fetch user's progress with explicit typing
+  // Fetch user's progress without explicit generic type (let TypeScript infer it)
   const { data: userProgress, isLoading: progressLoading } = useQuery({
     queryKey: ["sacred-rituals-progress", session?.user?.id],
     queryFn: async () => {
@@ -94,14 +94,14 @@ export const SacredRitualsProgram = () => {
         .select("*")
         .eq("user_id", session.user.id)
         .eq("activity_id", activities[0].id)
-        .single();
+        .maybeSingle();
 
       if (error && error.code !== "PGRST116") throw error;
 
       if (existingProgress) {
         // Start from day 1 for new users, otherwise use the stored progress (up to day 30)
         setCurrentDay(existingProgress.completed ? 30 : Math.min(30, existingProgress.scheduled_for ? new Date(existingProgress.scheduled_for).getDate() : 1));
-        return existingProgress as UserProgress;
+        return existingProgress;
       }
 
       return null;
