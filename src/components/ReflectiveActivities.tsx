@@ -29,6 +29,7 @@ export const ReflectiveActivities = () => {
         .not("title", "ilike", "%art & expression%")
         .not("title", "ilike", "%tea ceremony%")
         .not("title", "ilike", "%sacred music%")
+        .not("title", "ilike", "%nature walk%")
         .not("title", "ilike", "%nature walk journal%");
 
       if (error) throw error;
@@ -58,7 +59,7 @@ export const ReflectiveActivities = () => {
     activity.title.toLowerCase() !== 'centering prayer' &&
     activity.title.toLowerCase() !== 'gratitude practice' &&
     activity.title.toLowerCase() !== 'reading reflection' &&
-    activity.title.toLowerCase() !== 'nature walk journal'
+    !activity.title.toLowerCase().includes('nature walk')
   ) || [];
 
   return (
