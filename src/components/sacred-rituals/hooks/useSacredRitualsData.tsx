@@ -23,10 +23,13 @@ export interface UserProgress {
   updated_at: string;
 }
 
+// Type for the return data of the progressQuery
+type ProgressQueryResult = UserProgress | null;
+
 export const useSacredRitualsData = () => {
   const { session } = useAuth();
 
-  // Fetch program data
+  // Fetch program data with explicit return type
   const programQuery = useQuery({
     queryKey: ["sacred-rituals-program"],
     queryFn: async (): Promise<SacredRitualActivity[]> => {
@@ -41,10 +44,10 @@ export const useSacredRitualsData = () => {
     },
   });
 
-  // Fetch user progress with proper typing
-  const progressQuery = useQuery({
+  // Fetch user progress with explicit return type and intermediate type
+  const progressQuery = useQuery<ProgressQueryResult, Error>({
     queryKey: ["sacred-rituals-progress", session?.user?.id],
-    queryFn: async (): Promise<UserProgress | null> => {
+    queryFn: async () => {
       if (!session?.user?.id) return null;
 
       const { data: activities } = await supabase
