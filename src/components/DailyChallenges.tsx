@@ -2,6 +2,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { ChallengeCard } from "./ChallengeCard";
 import { Skeleton } from "@/components/ui/skeleton";
+import { supabase } from "@/integrations/supabase/client";
 
 // Define our 30 daily slowness activities
 const SLOWNESS_ACTIVITIES = [
@@ -224,7 +225,7 @@ export const DailyChallenges = () => {
       // Calculate which activity to show based on the current date
       const today = new Date();
       // Use the day of the year to determine which activity to show (0-364)
-      const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
+      const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24));
       
       // Get the activity for today (cycle through the 30 activities)
       const todayIndex = dayOfYear % SLOWNESS_ACTIVITIES.length;
