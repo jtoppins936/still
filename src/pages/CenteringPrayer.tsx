@@ -10,9 +10,15 @@ const CenteringPrayer = () => {
   const { session } = useAuth();
   const navigate = useNavigate();
 
-  // Seed data on component mount if needed
+  // Seed data on component mount if needed, but don't let it break rendering
   useEffect(() => {
-    seedCenteringPrayer();
+    try {
+      seedCenteringPrayer().catch(error => {
+        console.error("Error seeding centering prayer data in page:", error);
+      });
+    } catch (error) {
+      console.error("Error calling seedCenteringPrayer in page:", error);
+    }
   }, []);
 
   return (

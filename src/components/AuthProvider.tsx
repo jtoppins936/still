@@ -40,11 +40,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         console.log("Initial auth session:", data.session?.user?.id || "No session");
         setSession(data.session);
         
-        // Seed centering prayer data when user is logged in
+        // Seed centering prayer data when user is logged in - catch error but don't fail
         if (data.session) {
-          seedCenteringPrayer().catch(error => {
+          try {
+            await seedCenteringPrayer();
+          } catch (error) {
             console.error("Error seeding centering prayer data:", error);
-          });
+            // Don't throw the error further, just log it
+          }
         }
       } catch (err) {
         console.error("Unexpected error in auth initialization:", err);
@@ -62,11 +65,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.log("Auth state changed:", _event, session?.user?.id || "No session");
       setSession(session);
       
-      // Seed centering prayer data on sign in
+      // Seed centering prayer data on sign in - catch error but don't fail
       if (session && _event === 'SIGNED_IN') {
-        seedCenteringPrayer().catch(error => {
+        try {
+          seedCenteringPrayer().catch(error => {
+            console.error("Error seeding centering prayer data:", error);
+            // Don't throw the error further, just log it
+          });
+        } catch (error) {
           console.error("Error seeding centering prayer data:", error);
-        });
+        }
       }
     });
 
