@@ -68,23 +68,6 @@ const router = createBrowserRouter([
   },
 ]);
 
-function App() {
-  return (
-    <React.StrictMode>
-      <ErrorBoundary>
-        <Suspense fallback={<LoadingFallback />}>
-          <AuthProvider>
-            <PaywallProvider>
-              <RouterProvider router={router} />
-              <Toaster />
-            </PaywallProvider>
-          </AuthProvider>
-        </Suspense>
-      </ErrorBoundary>
-    </React.StrictMode>
-  );
-}
-
 interface ErrorBoundaryState {
   hasError: boolean;
 }
@@ -113,6 +96,23 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
     }
     return this.props.children;
   }
+}
+
+function App() {
+  return (
+    <React.StrictMode>
+      <ErrorBoundary>
+        <Suspense fallback={<LoadingFallback />}>
+          <AuthProvider>
+            <PaywallProvider>
+              <RouterProvider router={router} />
+              <Toaster />
+            </PaywallProvider>
+          </AuthProvider>
+        </Suspense>
+      </ErrorBoundary>
+    </React.StrictMode>
+  );
 }
 
 export default App;
