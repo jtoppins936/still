@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Heart, Leaf, Brain } from "lucide-react";
 
-type MindfulnessCategory = 'faith_based' | 'spiritual' | 'neutral';
+type MindfulnessCategory = 'faith_based' | 'spiritual' | 'neutral' | 'centering-prayer';
 
 interface CategorySelectorProps {
   onSelectCategory: (category: MindfulnessCategory) => void;

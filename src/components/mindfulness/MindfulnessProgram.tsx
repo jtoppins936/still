@@ -12,7 +12,7 @@ import { ProgressTracker } from "./ProgressTracker";
 import { ScrollText } from "lucide-react";
 import type { UserMindfulnessProgress } from "@/types/mindfulness";
 
-type MindfulnessCategory = 'faith_based' | 'spiritual' | 'neutral';
+type MindfulnessCategory = 'faith_based' | 'spiritual' | 'neutral' | 'centering-prayer';
 
 export const MindfulnessProgram = () => {
   const { session } = useAuth();

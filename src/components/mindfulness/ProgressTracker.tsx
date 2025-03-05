@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 
 interface ProgressTrackerProps {
   currentDay: number;
-  category: 'faith_based' | 'spiritual' | 'neutral';
+  category: 'faith_based' | 'spiritual' | 'neutral' | 'centering-prayer';
 }
 
 export const ProgressTracker = ({ currentDay, category }: ProgressTrackerProps) => {
