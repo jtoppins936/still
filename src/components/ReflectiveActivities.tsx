@@ -49,9 +49,7 @@ export const ReflectiveActivities = () => {
       return;
     }
 
-    if (activityType.toLowerCase() === 'sacred rituals') {
-      navigate(`/sacred-rituals`);
-    } else if (activityType.toLowerCase() === 'centering prayer') {
+    if (activityType.toLowerCase() === 'centering prayer') {
       navigate(`/centering-prayer`);
     } else if (activityType.toLowerCase() === 'reading reflection') {
       navigate(`/reading-reflection`);
@@ -242,37 +240,6 @@ export const ReflectiveActivities = () => {
                     className="bg-blue-100 hover:bg-blue-200 text-blue-700"
                   >
                     <Heart className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="mb-6">
-            <h4 className="font-medium text-lg mb-3 text-sage-700">Sacred Rituals</h4>
-            <div className="grid gap-4">
-              <div
-                className="p-4 rounded-lg border transition-colors border-sage-100 bg-sage-50 hover:border-sage-200"
-              >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h4 className="font-medium text-gray-900">
-                      Sacred Rituals
-                    </h4>
-                    <p className="text-sm mt-1 text-gray-600">
-                      A 30-day program that combines art & expression, music, and tea ceremonies 
-                      to create moments of profound connection and spiritual renewal.
-                    </p>
-                    <span className="inline-block text-sm mt-2 text-sage-600">
-                      30+ minutes
-                    </span>
-                  </div>
-                  <Button
-                    onClick={() => handleActivityClick("Sacred Rituals")}
-                    variant="outline"
-                    className="bg-sage-100 hover:bg-sage-200 text-sage-700 ml-4"
-                  >
-                    <Check className="w-4 h-4" />
                   </Button>
                 </div>
               </div>

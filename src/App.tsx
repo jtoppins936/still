@@ -1,4 +1,3 @@
-
 import React, { Suspense } from 'react';
 import {
   createBrowserRouter,
@@ -9,7 +8,6 @@ import Auth from "@/pages/Auth";
 import Profile from "@/pages/Profile";
 import Journaling from "@/pages/Journaling";
 import Mindfulness from "@/pages/Mindfulness";
-import SacredRituals from "@/pages/SacredRituals";
 import NotFound from "@/pages/NotFound";
 import CenteringPrayer from "@/pages/CenteringPrayer";
 import ReadingReflection from "@/pages/ReadingReflection";
@@ -18,7 +16,6 @@ import { AuthProvider } from "@/components/AuthProvider";
 import { PaywallProvider } from "@/components/PaywallProvider";
 import { Toaster } from "@/components/ui/toaster";
 
-// Add a fallback component for error states
 const ErrorFallback = () => (
   <div className="flex flex-col items-center justify-center min-h-screen p-4">
     <h1 className="text-2xl font-bold text-rose-700 mb-4">Something went wrong</h1>
@@ -26,7 +23,6 @@ const ErrorFallback = () => (
   </div>
 );
 
-// Add a loading component for suspense
 const LoadingFallback = () => (
   <div className="flex items-center justify-center min-h-screen">
     <div className="w-8 h-8 border-4 border-rose-200 border-t-rose-600 rounded-full animate-spin"></div>
@@ -53,10 +49,6 @@ const router = createBrowserRouter([
   {
     path: "/mindfulness",
     element: <Mindfulness />,
-  },
-  {
-    path: "/sacred-rituals",
-    element: <SacredRituals />,
   },
   {
     path: "/centering-prayer",
@@ -93,7 +85,6 @@ function App() {
   );
 }
 
-// Fix the error boundary component with proper TypeScript typing
 interface ErrorBoundaryState {
   hasError: boolean;
 }
@@ -102,7 +93,6 @@ interface ErrorBoundaryProps {
   children: React.ReactNode;
 }
 
-// Simple error boundary component
 class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
