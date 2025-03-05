@@ -82,7 +82,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Declutter Section */}
+      {/* Declutter Section - Now marked as a free feature */}
       <section className="py-24 px-4 bg-white">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-16">
