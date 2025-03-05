@@ -66,17 +66,18 @@ const Index = () => {
       <AuthButtons onProfileClick={handleProfileClick} />
       <HeroSection mounted={mounted} onBeginJourney={handleBeginJourney} />
 
-      {/* Remove the Clean Navigation Section with the two program links */}
-
       {/* Daily Challenge Section */}
       <section className="py-24 px-4 bg-white">
         <div className="max-w-3xl mx-auto text-center">
-          <span className="inline-block px-3 py-1 text-sm bg-sand-100 text-sand-700 rounded-full mb-6">
+          <span className="inline-block px-3 py-1 text-sm bg-sage-100 text-sage-700 rounded-full mb-6">
             Daily Practice
           </span>
-          <h2 className="text-3xl md:text-4xl font-light mb-16 text-gray-900">
+          <h2 className="text-3xl md:text-4xl font-light mb-4 text-gray-900">
             Today's Invitation to Slowness
           </h2>
+          <p className="text-gray-600 mb-12">
+            A new mindful activity each day to help you cultivate presence and intentionality in your daily life.
+          </p>
           <DailyChallenges />
         </div>
       </section>
