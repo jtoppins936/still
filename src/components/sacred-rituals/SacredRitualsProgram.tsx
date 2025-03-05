@@ -20,7 +20,7 @@ export const SacredRitualsProgram = () => {
   const { isSubscribed } = usePaywall();
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [currentDay, setCurrentDay] = useState(1);
+  const [currentDay, setCurrentDay] = useState(1); // Set to Day 1 by default
   const [reflection, setReflection] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
@@ -78,6 +78,7 @@ export const SacredRitualsProgram = () => {
       if (error && error.code !== "PGRST116") throw error;
 
       if (existingProgress) {
+        // Start from day 1 for new users, otherwise use the stored progress (up to day 30)
         setCurrentDay(existingProgress.completed ? 30 : Math.min(30, existingProgress.scheduled_for ? new Date(existingProgress.scheduled_for).getDate() : 1));
         return existingProgress;
       }

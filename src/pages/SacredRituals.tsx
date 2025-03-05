@@ -4,17 +4,15 @@ import { SacredRitualsProgram } from "@/components/sacred-rituals/SacredRitualsP
 import { useAuth } from "@/components/AuthProvider";
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
-// If you have a seed function for sacred rituals, import it here
-// import { seedSacredRituals } from "@/data/seed-sacred-rituals";
+import { seedSacredRituals } from "@/data/seed-sacred-rituals";
 
 const SacredRituals = () => {
   const { session } = useAuth();
   const navigate = useNavigate();
 
-  // Seed data on component mount if needed
+  // Seed data on component mount
   useEffect(() => {
-    // If you have a seed function for sacred rituals, call it here
-    // seedSacredRituals();
+    seedSacredRituals();
   }, []);
 
   return (
