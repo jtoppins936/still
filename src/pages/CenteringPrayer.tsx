@@ -7,11 +7,15 @@ import { Button } from "@/components/ui/button";
 import { seedCenteringPrayer } from "@/data/seed-centering-prayer";
 import { SimpleFallbackProgram } from "@/components/centering-prayer/SimpleFallbackProgram";
 import { ErrorFallback } from "@/components/centering-prayer/ErrorFallback";
+import { usePaywall } from "@/components/PaywallProvider";
+import { PaywallModal } from "@/components/PaywallModal";
 
 const CenteringPrayer = () => {
   const { session } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState<Error | null>(null);
+  const { isSubscribed } = usePaywall();
+  const [showPaywall, setShowPaywall] = useState(false);
 
   // Seed data on component mount if needed, but don't let it break rendering
   useEffect(() => {
@@ -37,7 +41,7 @@ const CenteringPrayer = () => {
       </p>
       <div className="mb-8">
         <span className="inline-block px-3 py-1 text-xs font-medium bg-rose-100 text-rose-700 rounded-full">
-          Testing Mode - Premium Feature Available
+          Premium Feature
         </span>
       </div>
       
@@ -48,6 +52,16 @@ const CenteringPrayer = () => {
             Sign In
           </Button>
         </div>
+      ) : !isSubscribed ? (
+        <div className="text-center py-12 bg-rose-50 rounded-lg">
+          <h2 className="text-xl font-medium mb-4">Unlock Centering Prayer with a Premium Subscription</h2>
+          <p className="mb-6 text-gray-600">
+            Centering Prayer is a premium feature that guides you through contemplative prayer practices.
+          </p>
+          <Button onClick={() => setShowPaywall(true)} className="bg-rose-600 hover:bg-rose-700">
+            Unlock Premium
+          </Button>
+        </div>
       ) : error ? (
         <ErrorFallback error={error} resetErrorBoundary={resetError} />
       ) : (
@@ -55,6 +69,11 @@ const CenteringPrayer = () => {
           <CenteringPrayerProgram />
         </ErrorBoundaryWrapper>
       )}
+
+      <PaywallModal 
+        isOpen={showPaywall} 
+        onClose={() => setShowPaywall(false)} 
+      />
     </div>
   );
 };

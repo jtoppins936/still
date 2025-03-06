@@ -22,7 +22,7 @@ const GratitudePractice = () => {
             Cultivate an attitude of gratitude through 30 days of guided reflection
           </p>
           <span className="mt-2 inline-block px-3 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">
-            Testing Mode - Premium Feature Available
+            Premium Feature
           </span>
         </header>
 
@@ -31,6 +31,16 @@ const GratitudePractice = () => {
             <h2 className="text-xl font-medium mb-4">Sign in to begin your gratitude practice</h2>
             <Button onClick={() => navigate("/auth")} className="bg-blue-600 hover:bg-blue-700">
               Sign In
+            </Button>
+          </div>
+        ) : !isSubscribed ? (
+          <div className="text-center py-12 bg-blue-50 rounded-lg">
+            <h2 className="text-xl font-medium mb-4">Unlock Gratitude Practice with a Premium Subscription</h2>
+            <p className="mb-6 text-gray-600">
+              Gratitude Practice is a premium feature that helps you cultivate daily gratitude.
+            </p>
+            <Button onClick={() => setShowPaywall(true)} className="bg-blue-600 hover:bg-blue-700">
+              Unlock Premium
             </Button>
           </div>
         ) : (

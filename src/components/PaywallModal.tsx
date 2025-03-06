@@ -16,7 +16,7 @@ interface PaywallModalProps {
 }
 
 export function PaywallModal({ isOpen, onClose }: PaywallModalProps) {
-  const { handleSubscribe } = usePaywall();
+  const { handleSubscribe, price } = usePaywall();
 
   const onSubscribe = async () => {
     await handleSubscribe();
@@ -27,9 +27,9 @@ export function PaywallModal({ isOpen, onClose }: PaywallModalProps) {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Premium Feature (Testing Mode)</DialogTitle>
+          <DialogTitle>Premium Feature</DialogTitle>
           <DialogDescription>
-            All premium features are currently accessible for testing. In production, these features would require a subscription:
+            Unlock all premium features for just {price}:
             <ul className="list-disc list-inside mt-4 space-y-2">
               <li>Blocking Statistics</li>
               <li>Meditation Sessions</li>
@@ -41,8 +41,8 @@ export function PaywallModal({ isOpen, onClose }: PaywallModalProps) {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="mt-6">
-          <Button variant="outline" onClick={onClose}>Close</Button>
-          <Button onClick={onClose}>Continue Testing</Button>
+          <Button variant="outline" onClick={onClose}>Not Now</Button>
+          <Button onClick={onSubscribe}>Subscribe for {price}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

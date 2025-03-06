@@ -22,7 +22,7 @@ export default function SacredRitualsPage() {
             Daily practices to help you slow down and connect with the present moment
           </p>
           <span className="mt-2 inline-block px-3 py-1 text-xs font-medium bg-purple-100 text-purple-700 rounded-full">
-            Testing Mode - Premium Feature Available
+            Premium Feature
           </span>
         </header>
 
@@ -31,6 +31,16 @@ export default function SacredRitualsPage() {
             <h2 className="text-xl font-medium mb-4">Sign in to begin your sacred rituals journey</h2>
             <Button onClick={() => navigate("/auth")} className="bg-purple-600 hover:bg-purple-700">
               Sign In
+            </Button>
+          </div>
+        ) : !isSubscribed ? (
+          <div className="text-center py-12 bg-purple-50 rounded-lg">
+            <h2 className="text-xl font-medium mb-4">Unlock Sacred Rituals with a Premium Subscription</h2>
+            <p className="mb-6 text-gray-600">
+              Sacred Rituals is a premium feature that helps you develop mindful daily practices.
+            </p>
+            <Button onClick={() => setShowPaywall(true)} className="bg-purple-600 hover:bg-purple-700">
+              Unlock Premium
             </Button>
           </div>
         ) : (

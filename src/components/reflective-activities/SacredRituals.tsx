@@ -36,6 +36,11 @@ export const SacredRituals = ({ activities }: SacredRitualsProps) => {
       return;
     }
 
+    if (!isSubscribed) {
+      setShowPaywall(true);
+      return;
+    }
+
     navigate(`/sacred-rituals`);
   };
 

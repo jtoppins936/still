@@ -12,7 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const Profile = () => {
   const { session } = useAuth();
-  const { isSubscribed } = usePaywall();
+  const { isSubscribed, price } = usePaywall();
   const [showPaywall, setShowPaywall] = useState(false);
 
   const { data: journalEntries, isLoading: isLoadingJournal } = useQuery({
@@ -70,7 +70,7 @@ const Profile = () => {
             <CardContent>
               <div className="text-center py-6">
                 <p className="text-gray-600 mb-4">
-                  Upgrade to premium to access detailed statistics about your digital sabbath journey.
+                  Upgrade to premium ({price}) to access detailed statistics about your digital sabbath journey.
                 </p>
                 <button
                   onClick={() => setShowPaywall(true)}
