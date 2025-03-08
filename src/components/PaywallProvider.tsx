@@ -2,8 +2,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
-import { loadStripe } from "@stripe/stripe-js";
 import { useToast } from "@/components/ui/use-toast";
+import { StoreKitService } from "@/services/StoreKitService";
 
 interface PaywallContextType {
   isSubscribed: boolean;
@@ -13,15 +13,13 @@ interface PaywallContextType {
 }
 
 const PaywallContext = createContext<PaywallContextType>({
-  isSubscribed: false, // Default to false - not subscribed
+  isSubscribed: false,
   isLoading: false, 
   handleSubscribe: async () => {},
   price: "$2.99/month"
 });
 
 export const usePaywall = () => useContext(PaywallContext);
-
-const stripePromise = loadStripe("your-publishable-key"); // Replace with your Stripe publishable key
 
 export function PaywallProvider({ children }: { children: React.ReactNode }) {
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -34,6 +32,11 @@ export function PaywallProvider({ children }: { children: React.ReactNode }) {
     if (session?.user) {
       console.log("User is authenticated:", session.user.id);
       checkSubscription();
+      
+      // Initialize StoreKit if on iOS
+      if (window.Capacitor?.isNativePlatform()) {
+        StoreKitService.initialize().catch(console.error);
+      }
     } else {
       console.log("No authenticated user");
       setIsLoading(false);
@@ -44,6 +47,19 @@ export function PaywallProvider({ children }: { children: React.ReactNode }) {
   const checkSubscription = async () => {
     try {
       setIsLoading(true);
+      
+      // If on iOS, check subscription through StoreKit
+      if (window.Capacitor?.isNativePlatform()) {
+        const hasActiveSubscription = await StoreKitService.checkActiveSubscription();
+        setIsSubscribed(hasActiveSubscription);
+        
+        if (hasActiveSubscription) {
+          console.log("Active StoreKit subscription found");
+          return;
+        }
+      }
+      
+      // Fall back to database check
       const { data, error } = await supabase
         .from("subscriptions")
         .select("*")
@@ -53,7 +69,6 @@ export function PaywallProvider({ children }: { children: React.ReactNode }) {
 
       if (error) throw error;
       
-      // Set subscription status based on actual database result
       setIsSubscribed(!!data);
       console.log("Subscription check:", data ? "Active subscription found" : "No active subscription");
     } catch (error) {
@@ -75,8 +90,23 @@ export function PaywallProvider({ children }: { children: React.ReactNode }) {
     }
     
     try {
-      // In a real production app, this would redirect to Stripe for payment
-      // For now, we'll simulate subscription by creating a record
+      // For iOS, use StoreKit
+      if (window.Capacitor?.isNativePlatform()) {
+        const success = await StoreKitService.purchaseSubscription("premium_monthly");
+        
+        if (success) {
+          toast({
+            title: "Subscription successful",
+            description: "You now have access to premium features",
+          });
+          setIsSubscribed(true);
+          return;
+        } else {
+          throw new Error("Purchase was not completed");
+        }
+      }
+      
+      // Web fallback - simulate subscription by creating a database record
       const { error } = await supabase
         .from("subscriptions")
         .insert([{

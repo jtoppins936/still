@@ -11,7 +11,13 @@ const config: CapacitorConfig = {
   },
   ios: {
     path: 'ios',
-    scheme: 'Still'
+    scheme: 'Still',
+    // Add the following to improve App Store submissions
+    backgroundColor: "#ffffff",
+    contentInset: "always",
+    preferredContentMode: "mobile",
+    minVersion: "14.0", // Minimum iOS version supported
+    limitsNavigationsToAppBoundDomains: true // For App Store privacy requirements
   }
 };
 
