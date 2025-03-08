@@ -6,6 +6,7 @@ import { useAuth } from "@/components/AuthProvider";
 import { useToast } from "@/components/ui/use-toast";
 import { usePaywall } from "@/components/PaywallProvider";
 import { useState } from "react";
+import { PaywallModal } from "@/components/PaywallModal";
 
 type Activity = {
   id: string;
@@ -41,7 +42,7 @@ export const SacredRituals = ({ activities }: SacredRitualsProps) => {
       return;
     }
 
-    navigate(`/sacred-rituals`);
+    navigate("/sacred-rituals");
   };
 
   return (
@@ -49,7 +50,8 @@ export const SacredRituals = ({ activities }: SacredRitualsProps) => {
       <h4 className="font-medium text-lg mb-3 text-sage-700">Sacred Rituals</h4>
       <div className="grid gap-4">
         <div
-          className="p-4 rounded-lg border transition-colors border-purple-200 bg-purple-50 hover:border-purple-300"
+          className="p-4 rounded-lg border transition-colors border-purple-200 bg-purple-50 hover:border-purple-300 cursor-pointer"
+          onClick={handleActivityClick}
         >
           <div className="flex justify-between items-start">
             <div>
@@ -68,7 +70,10 @@ export const SacredRituals = ({ activities }: SacredRitualsProps) => {
               </span>
             </div>
             <Button
-              onClick={handleActivityClick}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleActivityClick();
+              }}
               variant="secondary"
               className="bg-purple-100 hover:bg-purple-200 text-purple-700"
             >
@@ -77,6 +82,11 @@ export const SacredRituals = ({ activities }: SacredRitualsProps) => {
           </div>
         </div>
       </div>
+      
+      <PaywallModal 
+        isOpen={showPaywall} 
+        onClose={() => setShowPaywall(false)} 
+      />
     </div>
   );
 };
