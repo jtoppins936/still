@@ -52,7 +52,7 @@ const Auth = () => {
         if (data?.user) {
           console.log("Sign up successful:", data.user.id);
           toast({
-            title: "Welcome to Still!",
+            title: "Welcome to Stillness.io!",
             description: "Your account has been created successfully.",
           });
           

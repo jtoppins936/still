@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
@@ -48,7 +49,7 @@ const Index = () => {
       <div className="pt-8 pb-4 flex justify-center">
         <img 
           src="/lovable-uploads/d96c4875-c3cb-496c-a2c6-efcd3450efcc.png" 
-          alt="STILL Logo" 
+          alt="Stillness.io Logo" 
           className="h-48 w-auto"
         />
       </div>

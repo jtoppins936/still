@@ -1,5 +1,5 @@
 
-# iOS App Store Submission Guide for Still App
+# iOS App Store Submission Guide for Stillness.io App
 
 ## Step-by-Step Guide to App Store Submission
 
@@ -43,10 +43,10 @@ Before submitting, create your app in [App Store Connect](https://appstoreconnec
 1. Go to "My Apps" > "+" > "New App"
 2. Fill in required information:
    - Platform: iOS
-   - Name: Still
+   - Name: Stillness.io
    - Primary language: English
    - Bundle ID: com.stillapp.ios
-   - SKU: still2023 (or similar unique identifier)
+   - SKU: stillness2023 (or similar unique identifier)
 
 ### 4. Implement StoreKit for In-App Purchases
 
