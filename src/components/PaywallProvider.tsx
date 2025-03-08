@@ -28,13 +28,19 @@ export function PaywallProvider({ children }: { children: React.ReactNode }) {
   const { toast } = useToast();
   const price = "$2.99/month";
 
+  const isCapacitorEnabled = (): boolean => {
+    return typeof window !== 'undefined' && 
+           typeof window.Capacitor !== 'undefined' && 
+           window.Capacitor.isNativePlatform();
+  };
+
   useEffect(() => {
     if (session?.user) {
       console.log("User is authenticated:", session.user.id);
       checkSubscription();
       
       // Initialize StoreKit if on iOS
-      if (window.Capacitor?.isNativePlatform()) {
+      if (isCapacitorEnabled()) {
         StoreKitService.initialize().catch(console.error);
       }
     } else {
@@ -49,7 +55,7 @@ export function PaywallProvider({ children }: { children: React.ReactNode }) {
       setIsLoading(true);
       
       // If on iOS, check subscription through StoreKit
-      if (window.Capacitor?.isNativePlatform()) {
+      if (isCapacitorEnabled()) {
         const hasActiveSubscription = await StoreKitService.checkActiveSubscription();
         setIsSubscribed(hasActiveSubscription);
         
@@ -91,7 +97,7 @@ export function PaywallProvider({ children }: { children: React.ReactNode }) {
     
     try {
       // For iOS, use StoreKit
-      if (window.Capacitor?.isNativePlatform()) {
+      if (isCapacitorEnabled()) {
         const success = await StoreKitService.purchaseSubscription("premium_monthly");
         
         if (success) {

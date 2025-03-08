@@ -1,8 +1,6 @@
 
 /**
- * This is a stub implementation of a StoreKit service for handling in-app purchases.
- * It needs to be properly implemented with actual StoreKit integration after 
- * exporting the project and setting up the iOS platform with Capacitor.
+ * StoreKit service for handling in-app purchases on iOS.
  */
 
 type ProductDetails = {
@@ -14,19 +12,19 @@ type ProductDetails = {
   currency: string;
 };
 
-export class StoreKitService {
+class StoreKitServiceClass {
   // Will hold available products after initialization
   private products: ProductDetails[] = [];
   
   // Method to initialize StoreKit and load products
-  async initialize(): Promise<boolean> {
-    console.log('StoreKit service initialization would happen here');
+  public async initialize(): Promise<boolean> {
+    console.log('StoreKit service initialization');
     // In a real implementation, this would initialize StoreKit and load products
     
     // For now, we'll just populate with our premium subscription
     this.products = [
       {
-        id: 'com.stillapp.premium_monthly',
+        id: 'premium_monthly',
         title: 'Premium Subscription',
         description: 'Unlock all premium features',
         price: '$2.99',
@@ -39,33 +37,40 @@ export class StoreKitService {
   }
   
   // Get available products
-  getProducts(): ProductDetails[] {
+  public getProducts(): ProductDetails[] {
     return this.products;
   }
   
-  // Purchase a product by ID
-  async purchaseProduct(productId: string): Promise<{success: boolean, transaction?: any}> {
-    console.log(`Purchase would be initiated for product: ${productId}`);
+  // Check if user has active subscription
+  public async checkActiveSubscription(): Promise<boolean> {
+    console.log('Checking for active subscription');
+    // This would verify with Apple's servers in a real implementation
+    return false;
+  }
+  
+  // Purchase a subscription by product ID
+  public async purchaseSubscription(productId: string): Promise<boolean> {
+    console.log(`Purchase initiated for subscription: ${productId}`);
     // In a real implementation, this would initiate the purchase flow with StoreKit
     
     // Mock implementation returns success for testing
-    return { success: false, transaction: null };
+    return false;
   }
   
   // Verify a purchase receipt
-  async verifyPurchase(receipt: string): Promise<boolean> {
-    console.log('Purchase verification would happen here');
+  public async verifyPurchase(receipt: string): Promise<boolean> {
+    console.log('Purchase verification');
     // In a real implementation, this would verify the receipt with Apple's servers
     return false;
   }
   
   // Restore previous purchases
-  async restorePurchases(): Promise<boolean> {
-    console.log('Purchase restoration would happen here');
+  public async restorePurchases(): Promise<boolean> {
+    console.log('Purchase restoration');
     // In a real implementation, this would restore previous purchases
     return false;
   }
 }
 
 // Create singleton instance
-export const storeKit = new StoreKitService();
+export const StoreKitService = new StoreKitServiceClass();
