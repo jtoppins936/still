@@ -5,6 +5,7 @@ import App from './App.tsx';
 import './index.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { seedCenteringPrayer } from './data/seed-centering-prayer.ts';
+import { Capacitor } from '@capacitor/core';
 
 // Initialize seedCenteringPrayer, but don't let it break the app
 try {
@@ -25,6 +26,11 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+// Log platform info to help with debugging
+if (Capacitor.isNativePlatform()) {
+  console.log('Running on native platform:', Capacitor.getPlatform());
+}
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
