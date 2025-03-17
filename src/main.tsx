@@ -7,6 +7,16 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { seedCenteringPrayer } from './data/seed-centering-prayer.ts';
 import { Capacitor } from '@capacitor/core';
 
+console.log('Main.tsx loading - Application startup');
+
+// Log detailed environment info
+console.log('Environment info:', {
+  isNative: Capacitor.isNativePlatform(),
+  platform: Capacitor.getPlatform(),
+  isPluginAvailable: Capacitor.isPluginAvailable('Device'),
+  webDir: 'dist'
+});
+
 // Initialize seedCenteringPrayer, but don't let it break the app
 try {
   seedCenteringPrayer().catch(error => {
@@ -27,15 +37,19 @@ const queryClient = new QueryClient({
   },
 });
 
-// Log platform info to help with debugging
-if (Capacitor.isNativePlatform()) {
-  console.log('Running on native platform:', Capacitor.getPlatform());
-}
+// React root needs to be executed to trigger the app rendering
+const rootElement = document.getElementById('root');
+console.log('Root element found:', rootElement ? 'Yes' : 'No');
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <App />
-    </QueryClientProvider>
-  </React.StrictMode>,
-);
+if (rootElement) {
+  ReactDOM.createRoot(rootElement).render(
+    <React.StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
+    </React.StrictMode>,
+  );
+  console.log('React app mounted successfully');
+} else {
+  console.error('Root element not found - app cannot mount!');
+}
