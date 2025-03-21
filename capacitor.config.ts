@@ -17,6 +17,16 @@ const config: CapacitorConfig = {
     minVersion: "14.0", 
     limitsNavigationsToAppBoundDomains: true
   },
+  plugins: {
+    SplashScreen: {
+      launchShowDuration: 2000,
+      backgroundColor: "#FFFFFF",
+      showSpinner: false,
+      spinnerColor: "#8C9F89",
+      splashFullScreen: true,
+      splashImmersive: true
+    }
+  },
   // Make sure this is true to use the bundled web content
   bundledWebRuntime: true,
   // Add this to help with debugging

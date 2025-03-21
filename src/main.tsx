@@ -6,8 +6,16 @@ import './index.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { seedCenteringPrayer } from './data/seed-centering-prayer.ts';
 import { Capacitor } from '@capacitor/core';
+import { SplashScreen } from '@capacitor/splash-screen';
 
 console.log('Main.tsx loading - Application startup');
+
+// Initialize Capacitor SplashScreen
+if (Capacitor.isNativePlatform()) {
+  SplashScreen.hide().catch(error => {
+    console.error("Error hiding splash screen:", error);
+  });
+}
 
 // Log detailed environment info
 console.log('Environment info:', {
