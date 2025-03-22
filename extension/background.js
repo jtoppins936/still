@@ -1,3 +1,4 @@
+
 let isBlockingEnabled = false;
 let blockEndTime = null;
 let defaultBlockedSites = [
@@ -14,6 +15,7 @@ let defaultBlockedSites = [
 ];
 
 let customBlockedSites = [];
+let user = null;
 
 // Check if blocking should be disabled
 function checkBlockingStatus() {
@@ -73,6 +75,17 @@ async function trackBlockedAttempt(domain) {
   }
 }
 
+// Show notification reminder about digital sabbath
+function showReminderNotification() {
+  chrome.notifications.create({
+    type: 'basic',
+    iconUrl: 'images/icon128.png',
+    title: 'Digital Sabbath Reminder',
+    message: 'You are currently on a digital sabbath. Remember to disconnect and be present.',
+    priority: 2
+  });
+}
+
 // Listen for navigation events
 chrome.webNavigation.onBeforeNavigate.addListener((details) => {
   checkBlockingStatus();
@@ -85,9 +98,59 @@ chrome.webNavigation.onBeforeNavigate.addListener((details) => {
       chrome.tabs.update(details.tabId, {
         url: chrome.runtime.getURL("blocked.html")
       });
+      
+      // Show a reminder notification when site is blocked
+      showReminderNotification();
     }
   }
 });
+
+// Check if the current time matches any scheduled blocking periods
+function checkScheduledBlocking() {
+  chrome.storage.local.get(['blockingSchedules'], (result) => {
+    const schedules = result.blockingSchedules || [];
+    
+    if (schedules.length === 0) return;
+    
+    const now = new Date();
+    const dayOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][now.getDay()];
+    const currentHour = now.getHours();
+    const currentMinute = now.getMinutes();
+    const currentTime = `${currentHour.toString().padStart(2, '0')}:${currentMinute.toString().padStart(2, '0')}`;
+    
+    // Check if current time falls within any of the scheduled blocks
+    for (const schedule of schedules) {
+      if (schedule.days_of_week.includes(dayOfWeek)) {
+        if (schedule.start_time <= currentTime && currentTime <= schedule.end_time) {
+          if (!isBlockingEnabled) {
+            // Enable blocking and set the end time to the end of the scheduled period
+            const [endHours, endMinutes] = schedule.end_time.split(':').map(Number);
+            const endTimeDate = new Date();
+            endTimeDate.setHours(endHours, endMinutes, 0, 0);
+            
+            isBlockingEnabled = true;
+            blockEndTime = endTimeDate.toISOString();
+            
+            chrome.storage.local.set({ 
+              isBlockingEnabled: true,
+              blockEndTime
+            });
+            
+            // Show a notification that scheduled blocking has begun
+            chrome.notifications.create({
+              type: 'basic',
+              iconUrl: 'images/icon128.png',
+              title: 'Digital Sabbath Activated',
+              message: 'Your scheduled digital sabbath period has begun. Take this time to disconnect.',
+              priority: 2
+            });
+          }
+          return;
+        }
+      }
+    }
+  });
+}
 
 // Listen for messages from popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -97,6 +160,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       if (isBlockingEnabled) {
         // Set 24 hour block period
         blockEndTime = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+        
+        // Show notification when user enables blocking manually
+        showReminderNotification();
       } else {
         blockEndTime = null;
       }
@@ -125,12 +191,17 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         customBlockedSites
       });
       break;
+      
+    case "updateBlockingSchedules":
+      chrome.storage.local.set({ blockingSchedules: request.schedules });
+      sendResponse({ success: true });
+      break;
   }
 });
 
 // Initialize state from storage
 chrome.storage.local.get(
-  ['isBlockingEnabled', 'blockEndTime', 'customBlockedSites'], 
+  ['isBlockingEnabled', 'blockEndTime', 'customBlockedSites', 'blockingSchedules'], 
   (result) => {
     isBlockingEnabled = result.isBlockingEnabled || false;
     blockEndTime = result.blockEndTime || null;
@@ -138,3 +209,6 @@ chrome.storage.local.get(
     checkBlockingStatus();
   }
 );
+
+// Check scheduled blocking every minute
+setInterval(checkScheduledBlocking, 60000);

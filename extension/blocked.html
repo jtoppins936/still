@@ -12,23 +12,69 @@
       justify-content: center;
       height: 100vh;
       margin: 0;
-      background-color: #F3F4F6;
+      background-color: #F8FAF5;
       color: #1F2937;
     }
     .container {
       text-align: center;
       max-width: 600px;
       padding: 32px;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
     h1 {
       margin-bottom: 16px;
+      color: #4D6A47;
+    }
+    .icon {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 20px;
+      color: #4D6A47;
+    }
+    .message {
+      margin-bottom: 24px;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+    .alternative {
+      background-color: #F1F5EE;
+      padding: 16px;
+      border-radius: 8px;
+      margin-top: 24px;
+    }
+    .alternative h3 {
+      margin-top: 0;
+      color: #4D6A47;
+    }
+    .alternative ul {
+      text-align: left;
+      padding-left: 20px;
+    }
+    .alternative li {
+      margin-bottom: 8px;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>This site is currently blocked</h1>
-    <p>You've enabled website blocking as part of your digital sabbath. Take this time to disconnect and focus on what matters.</p>
+    <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+    </svg>
+    <h1>Digital Sabbath Active</h1>
+    <p class="message">This site is currently blocked as part of your digital sabbath commitment. Take this opportunity to disconnect and be present.</p>
+    
+    <div class="alternative">
+      <h3>Instead of browsing, consider:</h3>
+      <ul>
+        <li>Taking a few deep breaths</li>
+        <li>Going for a short walk</li>
+        <li>Reading a physical book</li>
+        <li>Having a conversation with someone nearby</li>
+        <li>Practicing a few minutes of meditation</li>
+      </ul>
+    </div>
   </div>
 </body>
 </html>

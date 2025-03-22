@@ -1,13 +1,21 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useToast } from "@/components/ui/use-toast";
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
+import { Calendar, AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const DAYS_OF_WEEK = [
   "Monday",
@@ -44,10 +52,33 @@ export const BlockingSchedule = () => {
     enabled: !!session?.user.id,
   });
 
+  // Sync schedules with extension when they change
+  useEffect(() => {
+    if (!schedules || !window.chrome?.runtime) return;
+    
+    // Send updated schedules to extension
+    try {
+      window.chrome?.runtime.sendMessage({
+        action: "updateBlockingSchedules",
+        schedules: schedules
+      });
+    } catch (error) {
+      console.log("Extension communication not available");
+    }
+  }, [schedules]);
+
   const createSchedule = useMutation({
     mutationFn: async () => {
       if (!session?.user?.id) {
         throw new Error("You must be logged in to create a schedule");
+      }
+
+      if (selectedDays.length === 0) {
+        throw new Error("Please select at least one day");
+      }
+
+      if (startTime >= endTime) {
+        throw new Error("End time must be after start time");
       }
 
       const { error } = await supabase
@@ -81,6 +112,36 @@ export const BlockingSchedule = () => {
     },
   });
 
+  const deleteSchedule = useMutation({
+    mutationFn: async (scheduleId: number) => {
+      if (!session?.user?.id) {
+        throw new Error("You must be logged in to delete a schedule");
+      }
+
+      const { error } = await supabase
+        .from("blocking_schedules")
+        .delete()
+        .eq("id", scheduleId)
+        .eq("user_id", session.user.id);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["blocking-schedules", session?.user.id] });
+      toast({
+        title: "Schedule deleted",
+        description: "Your blocking schedule has been removed",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
   if (!session) {
     return (
       <Card>
@@ -97,14 +158,25 @@ export const BlockingSchedule = () => {
   return (
     <Card>
       <CardHeader>
-        <h3 className="text-lg font-medium">Blocking Schedule</h3>
+        <div className="flex items-center space-x-2">
+          <Calendar className="w-5 h-5 text-sage-600" />
+          <h3 className="text-lg font-medium">Blocking Schedule</h3>
+        </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
+          <Alert className="bg-sage-50 border-sage-200">
+            <AlertCircle className="h-4 w-4 text-sage-600" />
+            <AlertDescription>
+              Create scheduled times for your digital sabbath. During these times, distracting websites will be blocked and you'll receive reminders when using apps.
+            </AlertDescription>
+          </Alert>
+
           <div>
+            <label className="block text-sm font-medium mb-1">Days of Week</label>
             <Select 
               value={selectedDays.join(",")} 
-              onValueChange={(value) => setSelectedDays(value.split(","))}
+              onValueChange={(value) => setSelectedDays(value ? value.split(",") : [])}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select days" />
@@ -141,6 +213,7 @@ export const BlockingSchedule = () => {
           <Button 
             onClick={() => createSchedule.mutate()}
             disabled={createSchedule.isPending}
+            className="bg-sage-600 hover:bg-sage-700 text-white w-full"
           >
             Save Schedule
           </Button>
@@ -151,9 +224,20 @@ export const BlockingSchedule = () => {
               {schedules.map((schedule) => (
                 <div 
                   key={schedule.id}
-                  className="p-2 bg-gray-50 rounded mb-2"
+                  className="p-3 bg-gray-50 rounded mb-2 flex justify-between items-center"
                 >
-                  {schedule.days_of_week.join(", ")} - {schedule.start_time} to {schedule.end_time}
+                  <div>
+                    <span className="font-medium">{schedule.days_of_week.join(", ")}</span> • {schedule.start_time} to {schedule.end_time}
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => deleteSchedule.mutate(schedule.id)}
+                    disabled={deleteSchedule.isPending}
+                    className="text-gray-500 hover:text-red-500"
+                  >
+                    Remove
+                  </Button>
                 </div>
               ))}
             </div>

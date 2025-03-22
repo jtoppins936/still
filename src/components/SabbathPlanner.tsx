@@ -1,10 +1,10 @@
 
 import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Moon, ScrollText, Timer, Info } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { ReflectiveActivities } from "./ReflectiveActivities";
@@ -16,11 +16,13 @@ import {
   DialogTitle,
   DialogDescription
 } from "@/components/ui/dialog";
+import { Capacitor } from '@capacitor/core';
 
 export const SabbathPlanner = () => {
   const [isBlocking, setIsBlocking] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState<string | null>(null);
   const [showInfoDialog, setShowInfoDialog] = useState(false);
+  const [showReminderDialog, setShowReminderDialog] = useState(false);
   const { session } = useAuth();
   const { toast } = useToast();
 
@@ -78,6 +80,102 @@ export const SabbathPlanner = () => {
     };
   }, [preferences?.is_active]);
 
+  // Listen for mobile app focus to show reminder
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform() || !preferences?.is_active) return;
+
+    const handleAppFocus = () => {
+      // Show reminder when app becomes active during digital sabbath
+      if (preferences?.is_active) {
+        setShowReminderDialog(true);
+      }
+    };
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        handleAppFocus();
+      }
+    });
+
+    // Check and show initially if we're in a digital sabbath
+    if (preferences?.is_active) {
+      setTimeout(() => {
+        setShowReminderDialog(true);
+      }, 1000);
+    }
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleAppFocus);
+    };
+  }, [preferences?.is_active]);
+
+  // Check blocking schedules on app load and set timer for next check
+  useEffect(() => {
+    const checkScheduledBlocking = async () => {
+      if (!session?.user) return;
+
+      try {
+        const { data: schedules } = await supabase
+          .from("blocking_schedules")
+          .select("*")
+          .eq("user_id", session.user.id)
+          .eq("is_active", true);
+
+        if (!schedules || schedules.length === 0) return;
+
+        const now = new Date();
+        const dayOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][now.getDay()];
+        const currentTime = now.toTimeString().substring(0, 5); // Format: "HH:MM"
+
+        // Check if current time falls within any scheduled blocks
+        for (const schedule of schedules) {
+          if (schedule.days_of_week.includes(dayOfWeek)) {
+            if (schedule.start_time <= currentTime && currentTime <= schedule.end_time) {
+              if (!preferences?.is_active) {
+                // Enable sabbath mode via backend
+                await supabase
+                  .from("sabbath_preferences")
+                  .upsert({
+                    user_id: session.user.id,
+                    is_active: true,
+                  });
+
+                // Store end information in local storage
+                const endDateTime = new Date();
+                const [endHours, endMinutes] = schedule.end_time.split(':').map(Number);
+                endDateTime.setHours(endHours, endMinutes, 0, 0);
+                
+                localStorage.setItem('sabbath_schedule', JSON.stringify({
+                  end_time: schedule.end_time,
+                  end_date: endDateTime.toISOString().split('T')[0]
+                }));
+
+                // Show toast notification
+                toast({
+                  title: "Digital Sabbath Activated",
+                  description: "Your scheduled digital sabbath period has begun.",
+                });
+
+                // If on mobile, show reminder dialog
+                if (Capacitor.isNativePlatform()) {
+                  setShowReminderDialog(true);
+                }
+              }
+              break;
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error checking scheduled blocking:', error);
+      }
+    };
+
+    checkScheduledBlocking();
+    const intervalId = setInterval(checkScheduledBlocking, 5 * 60 * 1000); // Check every 5 minutes
+
+    return () => clearInterval(intervalId);
+  }, [session?.user]);
+
   const toggleAppBlocking = async () => {
     if (!session) {
       toast({
@@ -100,12 +198,25 @@ export const SabbathPlanner = () => {
       if (error) throw error;
 
       if (!preferences?.is_active) {
+        // Set 24 hour block period
+        const endTime = new Date(Date.now() + 24 * 60 * 60 * 1000);
+        localStorage.setItem('sabbath_schedule', JSON.stringify({
+          end_time: endTime.toTimeString().substring(0, 5),
+          end_date: endTime.toISOString().split('T')[0]
+        }));
+
         // Show guidance toast when enabling
         toast({
           title: "Digital Sabbath Enabled",
           description: "Browser extension will block distracting sites. For mobile apps, we'll remind you when you open them during your sabbath time.",
         });
+
+        // If on mobile, show the reminder immediately
+        if (Capacitor.isNativePlatform()) {
+          setShowReminderDialog(true);
+        }
       } else {
+        localStorage.removeItem('sabbath_schedule');
         toast({
           title: "Digital Sabbath Disabled",
           description: "Website and app blocking has been turned off.",
@@ -177,6 +288,7 @@ export const SabbathPlanner = () => {
       <BlockingSchedule />
       <ReflectiveActivities />
 
+      {/* Info Dialog */}
       <Dialog open={showInfoDialog} onOpenChange={setShowInfoDialog}>
         <DialogContent>
           <DialogHeader>
@@ -203,6 +315,34 @@ export const SabbathPlanner = () => {
               </p>
             </div>
           </DialogDescription>
+        </DialogContent>
+      </Dialog>
+
+      {/* Reminder Dialog for Mobile Apps */}
+      <Dialog open={showReminderDialog} onOpenChange={setShowReminderDialog}>
+        <DialogContent className="bg-sage-50 border-sage-200">
+          <DialogHeader>
+            <DialogTitle className="text-center text-sage-800">Digital Sabbath Reminder</DialogTitle>
+          </DialogHeader>
+          <div className="py-6 text-center">
+            <Moon className="w-16 h-16 text-sage-600 mx-auto mb-4" />
+            <DialogDescription className="text-center text-base text-gray-700 mb-4">
+              <p className="font-medium text-lg mb-3">You are currently on a Digital Sabbath</p>
+              <p className="mb-2">Remember your intention to disconnect from digital distractions.</p>
+              <p>Is this app essential right now, or can it wait until after your sabbath period?</p>
+            </DialogDescription>
+            <div className="text-xs text-gray-500 mt-4">
+              <p>Note: Phone calls and text messages are always available for essential communication.</p>
+            </div>
+          </div>
+          <div className="flex justify-center">
+            <Button 
+              onClick={() => setShowReminderDialog(false)}
+              className="bg-sage-600 hover:bg-sage-700 text-white"
+            >
+              I understand
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
