@@ -17,6 +17,20 @@ import { useAuth } from "@/components/AuthProvider";
 import { Calendar, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
+// Add Chrome extension types
+declare global {
+  interface Window {
+    chrome?: {
+      runtime?: {
+        sendMessage: (
+          message: any,
+          callback?: (response: any) => void
+        ) => void;
+      };
+    };
+  }
+}
+
 const DAYS_OF_WEEK = [
   "Monday",
   "Tuesday",
@@ -113,7 +127,7 @@ export const BlockingSchedule = () => {
   });
 
   const deleteSchedule = useMutation({
-    mutationFn: async (scheduleId: number) => {
+    mutationFn: async (scheduleId: string) => { // Change parameter type to string
       if (!session?.user?.id) {
         throw new Error("You must be logged in to delete a schedule");
       }
@@ -232,7 +246,7 @@ export const BlockingSchedule = () => {
                   <Button 
                     variant="ghost" 
                     size="sm" 
-                    onClick={() => deleteSchedule.mutate(schedule.id)}
+                    onClick={() => deleteSchedule.mutate(schedule.id.toString())} // Convert id to string
                     disabled={deleteSchedule.isPending}
                     className="text-gray-500 hover:text-red-500"
                   >
