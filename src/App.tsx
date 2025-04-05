@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import {
   createBrowserRouter,
   RouterProvider,
+  createHashRouter,
 } from "react-router-dom";
 import Index from "@/pages/Index";
 import Auth from "@/pages/Auth";
@@ -30,7 +31,8 @@ const LoadingFallback = () => (
   </div>
 );
 
-const router = createBrowserRouter([
+const isProduction = import.meta.env.MODE === 'production';
+const router = (isProduction ? createHashRouter : createBrowserRouter)([
   {
     path: "/",
     element: <Index />,

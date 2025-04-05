@@ -9,6 +9,8 @@ import { Capacitor } from '@capacitor/core';
 import { SplashScreen } from '@capacitor/splash-screen';
 
 console.log('Main.tsx loading - Application startup');
+console.log('Current environment:', import.meta.env.MODE);
+console.log('Base URL:', import.meta.env.BASE_URL);
 
 // Initialize Capacitor SplashScreen
 if (Capacitor.isNativePlatform()) {
@@ -45,19 +47,37 @@ const queryClient = new QueryClient({
   },
 });
 
+// Helper function to show error message in case of mounting failures
+const showErrorMessage = (message) => {
+  const rootElement = document.getElementById('root');
+  if (rootElement) {
+    rootElement.innerHTML = `<div style="padding: 20px; color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; border-radius: 5px; margin: 20px;">
+      <h2>Application Error</h2>
+      <p>${message}</p>
+      <p>Please try refreshing the page. If the problem persists, contact support.</p>
+    </div>`;
+  }
+};
+
 // React root needs to be executed to trigger the app rendering
 const rootElement = document.getElementById('root');
 console.log('Root element found:', rootElement ? 'Yes' : 'No');
 
-if (rootElement) {
-  ReactDOM.createRoot(rootElement).render(
-    <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <App />
-      </QueryClientProvider>
-    </React.StrictMode>,
-  );
-  console.log('React app mounted successfully');
-} else {
-  console.error('Root element not found - app cannot mount!');
+try {
+  if (rootElement) {
+    ReactDOM.createRoot(rootElement).render(
+      <React.StrictMode>
+        <QueryClientProvider client={queryClient}>
+          <App />
+        </QueryClientProvider>
+      </React.StrictMode>,
+    );
+    console.log('React app mounted successfully');
+  } else {
+    console.error('Root element not found - app cannot mount!');
+    showErrorMessage('Failed to find root element for mounting the application.');
+  }
+} catch (error) {
+  console.error('Critical error mounting app:', error);
+  showErrorMessage(`Failed to initialize application: ${error.message}`);
 }

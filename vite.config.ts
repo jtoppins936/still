@@ -20,6 +20,6 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  // Add base with dot prefix for Capacitor static assets
-  base: './',
+  // Use conditional base path for GitHub Pages
+  base: mode === 'production' ? '/stillness.io/' : './',
 }));
