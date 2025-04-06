@@ -12,20 +12,34 @@ console.log('Main.tsx loading - Application startup');
 console.log('Current environment:', import.meta.env.MODE);
 console.log('Base URL:', import.meta.env.BASE_URL);
 
-// Initialize Capacitor SplashScreen
-if (Capacitor.isNativePlatform()) {
-  SplashScreen.hide().catch(error => {
-    console.error("Error hiding splash screen:", error);
+// Initialize app on iOS/native platforms
+const initializeNativePlatform = async () => {
+  if (Capacitor.isNativePlatform()) {
+    try {
+      // Hide splash screen with a slight delay to ensure app is fully rendered
+      setTimeout(() => {
+        SplashScreen.hide().catch(error => {
+          console.error("Error hiding splash screen:", error);
+        });
+      }, 300);
+    } catch (error) {
+      console.error("Error in native platform initialization:", error);
+    }
+  }
+};
+
+// Initialize native platform features
+initializeNativePlatform();
+
+// Log detailed environment info only in development
+if (import.meta.env.MODE === 'development') {
+  console.log('Environment info:', {
+    isNative: Capacitor.isNativePlatform(),
+    platform: Capacitor.getPlatform(),
+    isPluginAvailable: Capacitor.isPluginAvailable('Device'),
+    webDir: 'dist'
   });
 }
-
-// Log detailed environment info
-console.log('Environment info:', {
-  isNative: Capacitor.isNativePlatform(),
-  platform: Capacitor.getPlatform(),
-  isPluginAvailable: Capacitor.isPluginAvailable('Device'),
-  webDir: 'dist'
-});
 
 // Initialize seedCenteringPrayer, but don't let it break the app
 try {
@@ -36,13 +50,14 @@ try {
   console.error("Error calling seedCenteringPrayer in main:", error);
 }
 
-// Create a client
+// Create a client with optimized settings for mobile
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: 1,
       retryDelay: 1000,
       staleTime: 5 * 60 * 1000, // 5 minutes
+      cacheTime: 10 * 60 * 1000, // 10 minutes for better mobile performance
     },
   },
 });
@@ -66,11 +81,18 @@ console.log('Root element found:', rootElement ? 'Yes' : 'No');
 try {
   if (rootElement) {
     ReactDOM.createRoot(rootElement).render(
-      <React.StrictMode>
+      // Remove StrictMode in production for better performance on iOS
+      import.meta.env.MODE === 'production' ? (
         <QueryClientProvider client={queryClient}>
           <App />
         </QueryClientProvider>
-      </React.StrictMode>,
+      ) : (
+        <React.StrictMode>
+          <QueryClientProvider client={queryClient}>
+            <App />
+          </QueryClientProvider>
+        </React.StrictMode>
+      ),
     );
     console.log('React app mounted successfully');
   } else {

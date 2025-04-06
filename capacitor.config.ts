@@ -2,11 +2,12 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.stillapp.ios',
+  appId: 'com.stillness.io',
   appName: 'Stillness.io',
   webDir: 'dist',
   server: {
-    androidScheme: 'https'
+    androidScheme: 'https',
+    iosScheme: 'https'
   },
   ios: {
     path: 'ios',
@@ -15,7 +16,11 @@ const config: CapacitorConfig = {
     contentInset: "always",
     preferredContentMode: "mobile",
     minVersion: "14.0", 
-    limitsNavigationsToAppBoundDomains: true
+    limitsNavigationsToAppBoundDomains: true,
+    build: {
+      automaticProvisioning: true,
+      developmentTeam: "YOUR_TEAM_ID" // Replace with your Apple Developer Team ID
+    }
   },
   plugins: {
     SplashScreen: {
@@ -27,10 +32,8 @@ const config: CapacitorConfig = {
       splashImmersive: true
     }
   },
-  // Make sure this is true to use the bundled web content
-  bundledWebRuntime: true,
-  // Add this to help with debugging
-  loggingBehavior: 'debug'
+  bundledWebRuntime: false, // Set to false for production
+  loggingBehavior: 'production' // Change to 'production' for release
 };
 
 export default config;

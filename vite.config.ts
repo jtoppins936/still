@@ -20,6 +20,31 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  // Use conditional base path for GitHub Pages
-  base: mode === 'production' ? '/stillness.io/' : './',
+  // Use base setting optimized for app vs web
+  base: mode === 'production' && !process.env.CAPACITOR ? '/stillness.io/' : './',
+  // Build optimizations for iOS
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    emptyOutDir: true,
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: mode === 'production',
+        drop_debugger: true
+      }
+    },
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          ui: [
+            'lucide-react', 
+            '@radix-ui/react-dialog', 
+            '@radix-ui/react-toast'
+          ]
+        }
+      }
+    }
+  }
 }));
