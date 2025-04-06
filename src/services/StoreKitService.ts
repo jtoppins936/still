@@ -13,6 +13,9 @@ type ProductDetails = {
   currency: string;
 };
 
+// Extend with possible purchase states
+export type PurchaseState = 'pending' | 'completed' | 'restored' | 'failed';
+
 class StoreKitServiceClass {
   // Will hold available products after initialization
   private products: ProductDetails[] = [];
@@ -35,14 +38,28 @@ class StoreKitServiceClass {
         // In a real implementation, this would initialize the StoreKit API
         // When you add the actual StoreKit Capacitor plugin, implement real initialization here
         
-        // Mock products for testing
+        // App Store product IDs - Update these with your actual product IDs
+        const productIDs = [
+          'com.stillness.io.premium.monthly',
+          'com.stillness.io.premium.yearly'
+        ];
+        
+        // Set mock products for development and testing
         this.products = [
           {
-            id: 'premium_monthly',
-            title: 'Premium Subscription',
-            description: 'Unlock all premium features',
+            id: 'com.stillness.io.premium.monthly',
+            title: 'Premium Monthly',
+            description: 'Unlock all premium features with a monthly subscription',
             price: '$2.99',
             priceValue: 2.99,
+            currency: 'USD'
+          },
+          {
+            id: 'com.stillness.io.premium.yearly',
+            title: 'Premium Yearly',
+            description: 'Unlock all premium features with a yearly subscription (2 months free)',
+            price: '$29.99',
+            priceValue: 29.99,
             currency: 'USD'
           }
         ];
@@ -55,11 +72,19 @@ class StoreKitServiceClass {
         // Populate with mock data for non-iOS platforms
         this.products = [
           {
-            id: 'premium_monthly',
-            title: 'Premium Subscription',
-            description: 'Unlock all premium features',
+            id: 'com.stillness.io.premium.monthly',
+            title: 'Premium Monthly',
+            description: 'Unlock all premium features with a monthly subscription',
             price: '$2.99',
             priceValue: 2.99,
+            currency: 'USD'
+          },
+          {
+            id: 'com.stillness.io.premium.yearly',
+            title: 'Premium Yearly',
+            description: 'Unlock all premium features with a yearly subscription (2 months free)',
+            price: '$29.99',
+            priceValue: 29.99,
             currency: 'USD'
           }
         ];
@@ -89,7 +114,14 @@ class StoreKitServiceClass {
     
     if (this.isIOS) {
       // This would verify with Apple's servers in a real implementation
-      return false;
+      // For App Store submission, ensure this properly interacts with StoreKit
+      try {
+        // Implementation when proper StoreKit plugin is added
+        return false; // Default to false for development
+      } catch (error) {
+        console.error('Error checking subscription status:', error);
+        return false;
+      }
     } else {
       // Mock implementation for testing
       return false;
@@ -97,17 +129,18 @@ class StoreKitServiceClass {
   }
   
   // Purchase a subscription by product ID
-  public async purchaseSubscription(productId: string): Promise<boolean> {
+  public async purchaseSubscription(productId: string): Promise<{success: boolean, state: PurchaseState}> {
     console.log(`Purchase initiated for subscription: ${productId}`);
     if (!this.isInitialized) await this.initialize();
     
     if (this.isIOS) {
       // In a real implementation, this would initiate the purchase flow with StoreKit
       console.log('Would initiate StoreKit purchase for:', productId);
-      return false;
+      // For App Store submission, ensure this properly interacts with StoreKit
+      return {success: false, state: 'failed'};
     } else {
       // Mock implementation for testing
-      return false;
+      return {success: false, state: 'failed'};
     }
   }
   
@@ -118,7 +151,14 @@ class StoreKitServiceClass {
     
     if (this.isIOS) {
       // In a real implementation, this would verify the receipt with Apple's servers
-      return false;
+      // For App Store submission, ensure this properly interacts with App Store receipt validation
+      try {
+        // Implement secure server-side validation
+        return false;
+      } catch (error) {
+        console.error('Error verifying receipt:', error);
+        return false;
+      }
     } else {
       // Mock implementation for testing
       return false;
@@ -126,16 +166,39 @@ class StoreKitServiceClass {
   }
   
   // Restore previous purchases
-  public async restorePurchases(): Promise<boolean> {
+  public async restorePurchases(): Promise<{success: boolean, products: string[]}> {
     console.log('Purchase restoration requested');
     if (!this.isInitialized) await this.initialize();
     
     if (this.isIOS) {
       // In a real implementation, this would restore previous purchases
-      return false;
+      // For App Store submission, ensure this properly interacts with StoreKit restore
+      try {
+        // Implementation when proper StoreKit plugin is added
+        return {success: false, products: []};
+      } catch (error) {
+        console.error('Error restoring purchases:', error);
+        return {success: false, products: []};
+      }
     } else {
       // Mock implementation for testing
-      return false;
+      return {success: false, products: []};
+    }
+  }
+  
+  // Handle App Store payments queue updates (required for App Store)
+  public startObservingPaymentQueue(): void {
+    if (this.isIOS) {
+      console.log('Starting to observe payment queue');
+      // Implementation when proper StoreKit plugin is added
+    }
+  }
+  
+  // Stop observing payment queue (cleanup)
+  public stopObservingPaymentQueue(): void {
+    if (this.isIOS) {
+      console.log('Stopping payment queue observation');
+      // Implementation when proper StoreKit plugin is added
     }
   }
 }

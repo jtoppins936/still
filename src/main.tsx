@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { seedCenteringPrayer } from './data/seed-centering-prayer.ts';
 import { Capacitor } from '@capacitor/core';
 import { SplashScreen } from '@capacitor/splash-screen';
+import { StoreKitService } from './services/StoreKitService.ts';
 
 console.log('Main.tsx loading - Application startup');
 console.log('Current environment:', import.meta.env.MODE);
@@ -16,6 +17,13 @@ console.log('Base URL:', import.meta.env.BASE_URL);
 const initializeNativePlatform = async () => {
   if (Capacitor.isNativePlatform()) {
     try {
+      // Initialize StoreKit for iOS
+      if (Capacitor.getPlatform() === 'ios') {
+        await StoreKitService.initialize();
+        // Start observing payment queue (required for App Store)
+        StoreKitService.startObservingPaymentQueue();
+      }
+      
       // Hide splash screen with a slight delay to ensure app is fully rendered
       setTimeout(() => {
         SplashScreen.hide().catch(error => {
@@ -30,6 +38,17 @@ const initializeNativePlatform = async () => {
 
 // Initialize native platform features
 initializeNativePlatform();
+
+// Cleanup function for iOS
+const cleanupIOSResources = () => {
+  if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios') {
+    // Stop observing StoreKit payment queue
+    StoreKitService.stopObservingPaymentQueue();
+  }
+};
+
+// Add cleanup listener
+window.addEventListener('beforeunload', cleanupIOSResources);
 
 // Log detailed environment info only in development
 if (import.meta.env.MODE === 'development') {

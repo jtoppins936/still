@@ -42,9 +42,20 @@ export default defineConfig(({ mode }) => ({
             'lucide-react', 
             '@radix-ui/react-dialog', 
             '@radix-ui/react-toast'
-          ]
+          ],
+          capacitor: ['@capacitor/core', '@capacitor/splash-screen']
         }
       }
+    },
+    // iOS specific optimizations
+    chunkSizeWarningLimit: 1000, // Increase warning limit for iOS bundles
+    assetsInlineLimit: 10000, // Increase inline limit for better iOS performance
+  },
+  // Optimize for iOS WebView
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom', '@capacitor/core'],
+    esbuildOptions: {
+      target: 'es2020', // Target modern iOS versions
     }
   }
 }));
