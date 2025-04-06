@@ -57,7 +57,7 @@ const queryClient = new QueryClient({
       retry: 1,
       retryDelay: 1000,
       staleTime: 5 * 60 * 1000, // 5 minutes
-      cacheTime: 10 * 60 * 1000, // 10 minutes for better mobile performance
+      gcTime: 10 * 60 * 1000, // 10 minutes for better mobile performance (renamed from cacheTime)
     },
   },
 });
